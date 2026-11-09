@@ -2,6 +2,8 @@
 
 Comment tester ez-proto sur une vraie tâche, de bout en bout, dans Cursor comme le feront les devs. Le but est double: obtenir une maquette utile, et noter ce que l'agent rate pour corriger les règles, le catalogue ou les patrons.
 
+Pour un essai fixe, à refaire après chaque ajustement et à comparer d'une fois à l'autre: [`SCENARIO-TEST.md`](SCENARIO-TEST.md).
+
 ## 1. Avant de commencer (5 min)
 
 - **Partir d'un état propre dans git** (`git status` vide). C'est ce qui permet de voir exactement ce que l'agent a créé ou touché (`git status`, `git diff`), et de revenir en arrière au besoin.
