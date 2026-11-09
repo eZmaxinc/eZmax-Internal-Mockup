@@ -1,0 +1,15 @@
+---
+description: ez-proto core rules — always on
+alwaysApply: true
+---
+
+You are working in **ez-proto**, a prototyping sandbox for eZsign/eZmax. Read `AGENTS.md` at the repo root first; it is the source of truth.
+
+Non-negotiables:
+- Compose with `ez-` components, semantic tokens and `blueprint/patterns/` patterns only. Never invent visual design.
+- Never edit an existing `prototypes/<task>/v###/` folder. New iteration = `pnpm proto iterate <task> -m "<summary>"`, then edit the new folder.
+- A version imports only from `vue`, `@ez`, `@mocks` and its own files.
+- Missing component → propose it in `vNNN/components/` with a `<!-- @proposal … -->` header (see 20-components). Never edit `blueprint/` unless asked.
+- Every version has `index.vue`, `mocks.ts` (named scenarios) and `notes.md` (one-line summary first).
+- Finish with `pnpm proto check <task>` and fix every ✗ before reporting done.
+- When done, tell the user: the task id, the version, a one-line summary, and that it is visible in the shell (`pnpm dev` → http://localhost:5180).

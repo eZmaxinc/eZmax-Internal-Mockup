@@ -1,0 +1,27 @@
+{
+   "name": "ez-proto",
+   "private": true,
+   "version": "0.1.0",
+   "type": "module",
+   "packageManager": "pnpm@9.15.9",
+   "scripts": {
+      "dev": "vite --config tool/vite.config.ts",
+      "build": "vue-tsc --noEmit && vite build --config tool/vite.config.ts",
+      "typecheck": "vue-tsc --noEmit",
+      "proto": "node tool/cli/proto.mjs"
+   },
+   "dependencies": {
+      "vue": "^3.5.45",
+      "vue-router": "^4.6.4"
+   },
+   "devDependencies": {
+      "@tailwindcss/vite": "^4.3.5",
+      "@types/node": "^26.6.6",
+      "@vitejs/plugin-vue": "^6.0.10",
+      "tailwindcss": "^4.3.5",
+      "typescript": "^6.0.3",
+      "vite": "^7.3.7",
+      "vite-plugin-singlefile": "^2.3.4",
+      "vue-tsc": "^3.3.14"
+   }
+}

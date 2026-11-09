@@ -1,0 +1,5 @@
+/* ez-proto only: wipe Tailwind's default palette so bg-blue-500 & co. produce nothing.
+ * Loaded before ez-tokens.css, otherwise it would also wipe the semantic colors. */
+@theme {
+   --color-*: initial;
+}

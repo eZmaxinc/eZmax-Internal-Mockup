@@ -1,0 +1,15 @@
+---
+description: Code conventions mirrored from the eZsign production front-end
+globs: "**/*.vue,**/*.ts"
+alwaysApply: false
+---
+
+- Block order in `.vue`: `<template>`, `<script setup lang="ts">`, `<style scoped>`.
+- 3-space indentation.
+- English identifiers and comments. UI text in French through `$gettext('…')` in templates and `gettext('…')` in scripts (from `@ez`). Interpolation: `$gettext('Rappel envoyé à %{name}.', { name })`.
+- Local refs/state named `the*` (`theData`, `theFolder`, `theTargets`). UI state in `theUI` (`{ $isLoading, $dialogs: { … } }`).
+- Business logic stays in the mock objects' methods (`folder.isStateClosed()`, `signer.canBeReminded()`), not re-implemented in templates.
+- Icons: `:icon="ez.icons.send"`.
+- Class strings may use `block-name || utilities` to separate a BEM name from utilities.
+- French copy: no space before a colon.
+- Keep it readable over clever: the team lead prefers simple code.

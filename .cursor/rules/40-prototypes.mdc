@@ -1,0 +1,39 @@
+---
+description: Prototype workflow — creating, iterating, scenarios, notes, export
+globs: prototypes/**
+alwaysApply: false
+---
+
+Workflow:
+1. New task: `pnpm proto new <GoodDay number> <GoodDay link> "Titre"` (optionally `--from list-page|detail-page|edit-form`). Every task has a GoodDay task; the folder is `<number>-<slug>`, like the branch. Fill the task `README.md` with the user's brief before building.
+2. Build `v001/index.vue` and `v001/mocks.ts`. Write `v001/notes.md`.
+3. Feedback → `pnpm proto iterate <task> -m "<summary>"` (or `--variant` for a parallel alternative, `--from vNNN` to branch from an older one). Edit only the new folder.
+4. `pnpm proto check <task>`; fix every ✗.
+   Then look at it in the browser: `pnpm dev` must run in a background terminal; `pnpm proto open <task> <version>` prints the URLs. Open the **Prototype** URL in your browser (Cursor's browser), check every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (390 px), compare with the closest pattern, fix what looks off.
+5. If asked for a file: `pnpm proto export <task> [version]` → `exports/<task>-<version>.html` (single, interactive, offline).
+6. Team decision: `pnpm proto status <task> review|chosen|archived [version]` (never hand-edit `meta.json` for that).
+
+`<task>` = the GoodDay number (`49198`), the folder name, or a unique part of it. See `pnpm proto help`.
+
+Data:
+- `mocks.ts` exports `scenarios = defineScenarios({ … })` from `@ez`. First key = default. Name scenarios in kebab-case by situation (`some-pending`, `all-signed`, `empty`, `error`).
+- In `index.vue`: `const theData = useScenario(scenarios)` — a local ref, mutable, rebuilt when the scenario changes.
+- Use factories from `@mocks` (`makeFolder`, `makeSigner`, `makeFolders`, `daysFromToday`) with explicit overrides for what matters to the story. Data is seeded: same scenario, same render.
+- Interactions are simulated locally (mutate `theData`, `setTimeout` for loading). No network.
+
+`notes.md` format:
+```
+---
+based_on: v001
+date: YYYY-MM-DD
+---
+One-sentence summary of this version.
+
+## Changements
+- …
+
+## Questions ouvertes
+- …
+```
+
+`meta.json`: `status` is `draft | review | chosen | archived`; set `chosen` to the retained version only when the user says so.

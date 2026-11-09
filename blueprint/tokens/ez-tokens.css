@@ -1,0 +1,209 @@
+/*
+ * ez-tokens 1.1.0 — 2026-11-09
+ * Source: ez-proto, blueprint/tokens/ez-tokens.css. Copied by hand into the mono: never edit the copy.
+ * Changes: blueprint/tokens/CHANGELOG.md · Copy procedure: blueprint/tokens/COPY.md
+ *
+ * Two layers, references go one way only (semantic → primitive → raw value):
+ *
+ *   1. Primitives  (--prim-*)   the raw palette. The ONLY place with hex values. Never read by a component.
+ *   2. Semantics   (@theme)     intent, named {role}-{modifier}. Generate the Tailwind utilities
+ *                               (bg-surface, text-foreground-muted, border-border…).
+ *      Dark theme  (.body--dark) the same semantic names, pointing at other primitives. The class is
+ *                               the one Quasar's Dark plugin puts on <body>. Components never test the
+ *                               theme: they read the semantics and follow.
+ *
+ * Component tokens (--btn-height, --card-padding…) are not shared: each project keeps its own,
+ * pointing at these semantics (ez-proto: blueprint/tokens/components.css).
+ *
+ * Self-contained on purpose: no import, no Tailwind palette reset (each project decides).
+ * Load it right after `@import "tailwindcss";`.
+ */
+
+/* ───────────────────────── 1. Primitives ───────────────────────── */
+:root {
+   /* Brand blue — TODO sync with production ($primary in quasar.variables.scss) */
+   --prim-blue-50: #eef4fc;
+   --prim-blue-100: #d6e4f8;
+   --prim-blue-200: #adc9f1;
+   --prim-blue-500: #2f6fd0;
+   --prim-blue-600: #1f5bb8;
+   --prim-blue-700: #184996;
+   --prim-blue-900: #0f2c5a;
+
+   /* Chrome slate — measured on a production capture (nov. 2026) */
+   --prim-slate-800: #2f3547;
+
+   /* Neutrals — TODO sync */
+   --prim-white: #ffffff;
+   --prim-gray-25: #fbfcfd;
+   --prim-gray-50: #f5f7f9;
+   --prim-gray-100: #eceff3;
+   --prim-gray-200: #dde2e8;
+   --prim-gray-300: #c6cdd6;
+   --prim-gray-500: #7a8594;
+   --prim-gray-600: #5c6675;
+   --prim-gray-700: #414a57;
+   --prim-gray-900: #1b2129;
+   --prim-ink: #0f1721; /* shadows and backdrop, always mixed with transparency */
+
+   /* Status — TODO sync ($positive, $negative, $warning, $info) */
+   --prim-green-50: #ecf8f1;
+   --prim-green-600: #1d8a4e;
+   --prim-green-700: #176e3e;
+   --prim-amber-50: #fdf6e7;
+   --prim-amber-600: #b7790b;
+   --prim-amber-700: #8f5e07;
+   --prim-red-50: #fdeeee;
+   --prim-red-600: #c93636;
+   --prim-red-700: #a32727;
+
+   /* Dark theme — provisional, no production reference yet */
+   --prim-gray-750: #2c343e;
+   --prim-gray-800: #222932;
+   --prim-gray-850: #1a2028;
+   --prim-gray-950: #0f1318;
+   --prim-blue-300: #9dbdf0;
+   --prim-blue-400: #5b8fe0;
+   --prim-blue-950: #0d1f3d;
+   --prim-green-300: #8fdcb0;
+   --prim-green-500: #34a96a;
+   --prim-green-950: #0e2a1b;
+   --prim-amber-300: #f0c97a;
+   --prim-amber-500: #d99a26;
+   --prim-amber-950: #3a2a0a;
+   --prim-red-300: #f2a3a3;
+   --prim-red-500: #e05252;
+   --prim-red-950: #3b1515;
+
+   /* Type */
+   --prim-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+   --prim-font-mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+/* ───────────────────────── 2. Semantics ──────────────────────────
+ * The contract: these names exist in every project that loads this file.
+ * A name says what the color is FOR, never what it looks like (no gray-dark) nor a state (no blue-hover):
+ * hover, pressed and disabled are derived in the component with color-mix().
+ *
+ *   role        background · surface · foreground · border · accent · overlay · focus
+ *               positive · negative · warning · info (Quasar's names)
+ *   modifier    emphasis:  -muted (secondary) · -subtle (tertiary, or a pale fill) · -strong (more contrast)
+ *               variant:   -inverse (dark band) · -foreground (text on that role)
+ */
+@theme {
+   /* Breakpoints — production (ezmax-library-quasar, aligned on quasar.variables.scss) */
+   --breakpoint-*: initial;
+   --breakpoint-sm: 37.5rem; /* 600px */
+   --breakpoint-md: 64rem; /* 1024px */
+   --breakpoint-lg: 90rem; /* 1440px */
+   --breakpoint-xl: 120rem; /* 1920px */
+
+   /* Surfaces */
+   --color-background: var(--prim-gray-50); /* the app background, behind pages; one per theme */
+   --color-surface: var(--prim-white); /* cards, dialogs, tables, fields */
+   --color-surface-muted: var(--prim-gray-25); /* inset zones: table header, quiet panels */
+   --color-surface-inverse: var(--prim-slate-800); /* dark band: the app toolbar */
+   --color-overlay: color-mix(in srgb, var(--prim-ink) 45%, transparent); /* dialog backdrop */
+
+   /* Text and icons */
+   --color-foreground: var(--prim-gray-900);
+   --color-foreground-muted: var(--prim-gray-600); /* descriptions, labels */
+   --color-foreground-subtle: var(--prim-gray-500); /* hints, placeholders, metadata */
+   --color-foreground-inverse: var(--prim-white); /* on surface-inverse */
+
+   /* Lines */
+   --color-border: var(--prim-gray-200);
+   --color-border-subtle: var(--prim-gray-100);
+   --color-border-strong: var(--prim-gray-300); /* field outlines */
+   --color-focus: var(--prim-blue-500); /* focus ring */
+
+   /* Brand accent: primary buttons, links, selection */
+   --color-accent: var(--prim-blue-600);
+   --color-accent-subtle: var(--prim-blue-50); /* selected row, active nav item */
+   --color-accent-foreground: var(--prim-white); /* text on accent */
+
+   /* Status: base (icons, borders) · subtle (pale fill) · strong (text on the subtle fill) */
+   --color-positive: var(--prim-green-600);
+   --color-positive-subtle: var(--prim-green-50);
+   --color-positive-strong: var(--prim-green-700);
+   --color-negative: var(--prim-red-600);
+   --color-negative-subtle: var(--prim-red-50);
+   --color-negative-strong: var(--prim-red-700);
+   --color-warning: var(--prim-amber-600);
+   --color-warning-subtle: var(--prim-amber-50);
+   --color-warning-strong: var(--prim-amber-700);
+   --color-info: var(--prim-blue-600);
+   --color-info-subtle: var(--prim-blue-50);
+   --color-info-strong: var(--prim-blue-900);
+
+   /* Type — dense business app */
+   --font-sans: var(--prim-font-sans);
+   --font-mono: var(--prim-font-mono);
+   --text-xs: 0.75rem;
+   --text-xs--line-height: 1rem;
+   --text-sm: 0.8125rem;
+   --text-sm--line-height: 1.25rem;
+   --text-base: 0.875rem;
+   --text-base--line-height: 1.375rem;
+   --text-lg: 1rem;
+   --text-lg--line-height: 1.5rem;
+   --text-xl: 1.25rem;
+   --text-xl--line-height: 1.75rem;
+   --text-2xl: 1.5rem;
+   --text-2xl--line-height: 2rem;
+
+   /* Radius — production */
+   --radius-sm: 0.25rem; /* 4px — chips, badges, icons */
+   --radius-md: 0.375rem; /* 6px — buttons, fields */
+   --radius-lg: 0.5rem; /* 8px — cards, panels, dialogs */
+   --radius-xl: 0.75rem; /* 12px — full-screen modals, floating drawer */
+   --radius-full: 9999px;
+
+   /* Elevation */
+   --shadow-card: 0 1px 2px color-mix(in srgb, var(--prim-ink) 6%, transparent), 0 0 0 1px color-mix(in srgb, var(--prim-ink) 4%, transparent);
+   --shadow-overlay: 0 12px 32px color-mix(in srgb, var(--prim-ink) 18%, transparent), 0 2px 6px color-mix(in srgb, var(--prim-ink) 8%, transparent);
+}
+
+/* ───────────────────────── Dark theme ────────────────────────────
+ * Same semantic names, other primitives. Every color of the @theme is redefined here (proto check).
+ * Turned on by the class Quasar's Dark plugin puts on <body>.
+ */
+.body--dark {
+   color-scheme: dark;
+
+   --color-background: var(--prim-gray-950);
+   --color-surface: var(--prim-gray-850);
+   --color-surface-muted: var(--prim-gray-800);
+   --color-surface-inverse: var(--prim-gray-800);
+   --color-overlay: color-mix(in srgb, var(--prim-ink) 65%, transparent);
+
+   --color-foreground: var(--prim-gray-50);
+   --color-foreground-muted: var(--prim-gray-300);
+   --color-foreground-subtle: var(--prim-gray-500);
+   --color-foreground-inverse: var(--prim-gray-50);
+
+   --color-border: var(--prim-gray-750);
+   --color-border-subtle: var(--prim-gray-800);
+   --color-border-strong: var(--prim-gray-600);
+   --color-focus: var(--prim-blue-400);
+
+   --color-accent: var(--prim-blue-400);
+   --color-accent-subtle: var(--prim-blue-950);
+   --color-accent-foreground: var(--prim-gray-950);
+
+   --color-positive: var(--prim-green-500);
+   --color-positive-subtle: var(--prim-green-950);
+   --color-positive-strong: var(--prim-green-300);
+   --color-negative: var(--prim-red-500);
+   --color-negative-subtle: var(--prim-red-950);
+   --color-negative-strong: var(--prim-red-300);
+   --color-warning: var(--prim-amber-500);
+   --color-warning-subtle: var(--prim-amber-950);
+   --color-warning-strong: var(--prim-amber-300);
+   --color-info: var(--prim-blue-400);
+   --color-info-subtle: var(--prim-blue-950);
+   --color-info-strong: var(--prim-blue-300);
+
+   --shadow-card: 0 1px 2px color-mix(in srgb, var(--prim-ink) 40%, transparent), 0 0 0 1px color-mix(in srgb, var(--prim-white) 6%, transparent);
+   --shadow-overlay: 0 12px 32px color-mix(in srgb, var(--prim-ink) 60%, transparent), 0 0 0 1px color-mix(in srgb, var(--prim-white) 8%, transparent);
+}

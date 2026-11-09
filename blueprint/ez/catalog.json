@@ -1,0 +1,997 @@
+{
+   "generatedBy": "pnpm proto catalog",
+   "components": [
+      {
+         "tag": "ez-app-shell",
+         "name": "EzAppShell",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzAppShell.vue",
+         "description": "Placeholder frame of the production shell (toolbar + left drawer), empty on purpose: it only gives prototypes their real position and width inside the app.",
+         "props": [],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-badge",
+         "name": "EzBadge",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzBadge.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "label",
+               "attr": "label",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "tone",
+               "attr": "tone",
+               "type": "'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'action'",
+               "required": false,
+               "values": [
+                  "neutral",
+                  "info",
+                  "success",
+                  "warning",
+                  "danger",
+                  "action"
+               ],
+               "default": "'neutral'",
+               "doc": "Same tone = same meaning everywhere (see brand.md)"
+            },
+            {
+               "name": "dot",
+               "attr": "dot",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-btn",
+         "name": "EzBtn",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzBtn.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "label",
+               "attr": "label",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "icon",
+               "attr": "icon",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "iconRight",
+               "attr": "icon-right",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "variant",
+               "attr": "variant",
+               "type": "'primary' | 'secondary' | 'flat' | 'danger'",
+               "required": false,
+               "values": [
+                  "primary",
+                  "secondary",
+                  "flat",
+                  "danger"
+               ],
+               "default": "'secondary'",
+               "doc": "primary: one per zone · secondary: default · flat: low emphasis · danger: destructive"
+            },
+            {
+               "name": "size",
+               "attr": "size",
+               "type": "'md' | 'sm'",
+               "required": false,
+               "values": [
+                  "md",
+                  "sm"
+               ],
+               "default": "'md'",
+               "doc": null
+            },
+            {
+               "name": "loading",
+               "attr": "loading",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "disabled",
+               "attr": "disabled",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "block",
+               "attr": "block",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "type",
+               "attr": "type",
+               "type": "'button' | 'submit' | 'reset'",
+               "required": false,
+               "values": [
+                  "button",
+                  "submit",
+                  "reset"
+               ],
+               "default": "'button'",
+               "doc": null
+            },
+            {
+               "name": "ariaLabel",
+               "attr": "aria-label",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Required for icon-only buttons (shown as tooltip)"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": [
+            "ez-icon"
+         ]
+      },
+      {
+         "tag": "ez-card",
+         "name": "EzCard",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzCard.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "subtitle",
+               "attr": "subtitle",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "icon",
+               "attr": "icon",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "flush",
+               "attr": "flush",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "No body padding — for tables and lists that touch the edges"
+            },
+            {
+               "name": "tocId",
+               "attr": "toc-id",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Makes this card a sub-entry of the parent ez-page-section in the TOC"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "header",
+            "actions",
+            "default",
+            "footer"
+         ],
+         "uses": [
+            "ez-icon"
+         ]
+      },
+      {
+         "tag": "ez-dialog",
+         "name": "EzDialog",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzDialog.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "modelValue",
+               "attr": "model-value",
+               "type": "boolean",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "width",
+               "attr": "width",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'var(--dialog-width)'",
+               "doc": null
+            },
+            {
+               "name": "persistent",
+               "attr": "persistent",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Click outside / Escape do not close"
+            }
+         ],
+         "emits": [
+            {
+               "name": "update:modelValue",
+               "args": "[value: boolean]",
+               "doc": null
+            }
+         ],
+         "slots": [
+            "default",
+            "actions"
+         ],
+         "uses": [
+            "ez-btn"
+         ]
+      },
+      {
+         "tag": "ez-empty-state",
+         "name": "EzEmptyState",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzEmptyState.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "text",
+               "attr": "text",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "icon",
+               "attr": "icon",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": "'inbox'",
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "actions"
+         ],
+         "uses": [
+            "ez-icon"
+         ]
+      },
+      {
+         "tag": "ez-field",
+         "name": "EzField",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzField.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "modelValue",
+               "attr": "model-value",
+               "type": "string | number | null",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "label",
+               "attr": "label",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "type",
+               "attr": "type",
+               "type": "'text' | 'email' | 'tel' | 'number' | 'date' | 'password' | 'search' | 'textarea' | 'select'",
+               "required": false,
+               "values": [
+                  "text",
+                  "email",
+                  "tel",
+                  "number",
+                  "date",
+                  "password",
+                  "search",
+                  "textarea",
+                  "select"
+               ],
+               "default": "'text'",
+               "doc": null
+            },
+            {
+               "name": "options",
+               "attr": "options",
+               "type": "EzFieldOption[]",
+               "required": false,
+               "values": null,
+               "default": "() => []",
+               "doc": null
+            },
+            {
+               "name": "placeholder",
+               "attr": "placeholder",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "hint",
+               "attr": "hint",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "error",
+               "attr": "error",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "icon",
+               "attr": "icon",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "rows",
+               "attr": "rows",
+               "type": "number",
+               "required": false,
+               "values": null,
+               "default": "4",
+               "doc": null
+            },
+            {
+               "name": "required",
+               "attr": "required",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "disabled",
+               "attr": "disabled",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "readonly",
+               "attr": "readonly",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            }
+         ],
+         "emits": [
+            {
+               "name": "update:modelValue",
+               "args": "[value: string | number | null]",
+               "doc": null
+            }
+         ],
+         "slots": [],
+         "uses": [
+            "ez-icon"
+         ]
+      },
+      {
+         "tag": "ez-icon",
+         "name": "EzIcon",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzIcon.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "name",
+               "attr": "name",
+               "type": "IconName",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "size",
+               "attr": "size",
+               "type": "number",
+               "required": false,
+               "values": null,
+               "default": "18",
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [],
+         "uses": []
+      },
+      {
+         "tag": "ez-info-list",
+         "name": "EzInfoList",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzInfoList.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "items",
+               "attr": "items",
+               "type": "EzInfoItem[]",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "inline",
+               "attr": "inline",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Label and value side by side"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "value-<…>"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-layout",
+         "name": "EzLayout",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzLayout.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "gap",
+               "attr": "gap",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'var(--card-gap)'",
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-layout-col",
+         "name": "EzLayoutCol",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzLayoutCol.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "cols",
+               "attr": "cols",
+               "type": "Span",
+               "required": false,
+               "values": null,
+               "default": "12",
+               "doc": "Columns out of 12. Number, or per breakpoint: { base: 12, md: 8 } (md ≥ 1024px, lg ≥ 1440px, as in production)"
+            },
+            {
+               "name": "firstBelowMd",
+               "attr": "first-below-md",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Production pattern: right column goes first under md"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-message-important",
+         "name": "EzMessageImportant",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzMessageImportant.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "type",
+               "attr": "type",
+               "type": "'info' | 'success' | 'warning' | 'danger'",
+               "required": false,
+               "values": [
+                  "info",
+                  "success",
+                  "warning",
+                  "danger"
+               ],
+               "default": "'info'",
+               "doc": null
+            },
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default",
+            "actions"
+         ],
+         "uses": [
+            "ez-icon"
+         ]
+      },
+      {
+         "tag": "ez-page",
+         "name": "EzPage",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzPage.vue",
+         "description": null,
+         "props": [],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-page-content",
+         "name": "EzPageContent",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzPageContent.vue",
+         "description": null,
+         "props": [],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-page-header",
+         "name": "EzPageHeader",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzPageHeader.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "subtitle",
+               "attr": "subtitle",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "button",
+               "attr": "button",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Label of the page's primary action (emits `button`)"
+            },
+            {
+               "name": "buttonIcon",
+               "attr": "button-icon",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "refresh",
+               "attr": "refresh",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Shows the refresh action (emits `refresh`)"
+            },
+            {
+               "name": "cancelable",
+               "attr": "cancelable",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Shows the back action (emits `cancel`)"
+            }
+         ],
+         "emits": [
+            {
+               "name": "button",
+               "args": "[]",
+               "doc": null
+            },
+            {
+               "name": "refresh",
+               "args": "[]",
+               "doc": null
+            },
+            {
+               "name": "cancel",
+               "args": "[]",
+               "doc": null
+            }
+         ],
+         "slots": [
+            "meta",
+            "actions"
+         ],
+         "uses": [
+            "ez-btn"
+         ]
+      },
+      {
+         "tag": "ez-page-section",
+         "name": "EzPageSection",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzPageSection.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "id",
+               "attr": "id",
+               "type": "string",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "subtitle",
+               "attr": "subtitle",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
+         "tag": "ez-page-sections",
+         "name": "EzPageSections",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzPageSections.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "toc",
+               "attr": "toc",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": "true",
+               "doc": "Sticky TOC on the right (≥ 1024px)"
+            },
+            {
+               "name": "tocTitle",
+               "attr": "toc-title",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'Sur cette page'",
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": [
+            "ez-page-toc"
+         ]
+      },
+      {
+         "tag": "ez-page-toc",
+         "name": "EzPageToc",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzPageToc.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'Sur cette page'",
+               "doc": null
+            }
+         ],
+         "emits": [],
+         "slots": [],
+         "uses": []
+      },
+      {
+         "tag": "ez-table",
+         "name": "EzTable",
+         "tier": "primitive",
+         "file": "blueprint/ez/primitives/EzTable.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "columns",
+               "attr": "columns",
+               "type": "EzTableColumn[]",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "rows",
+               "attr": "rows",
+               "type": "TRow[]",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "rowKey",
+               "attr": "row-key",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'id'",
+               "doc": null
+            },
+            {
+               "name": "clickable",
+               "attr": "clickable",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "loading",
+               "attr": "loading",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "emptyTitle",
+               "attr": "empty-title",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'Aucun élément'",
+               "doc": null
+            }
+         ],
+         "emits": [
+            {
+               "name": "row-click",
+               "args": "[row: TRow]",
+               "doc": null
+            }
+         ],
+         "slots": [
+            "cell-<…>",
+            "empty"
+         ],
+         "uses": [
+            "ez-empty-state"
+         ]
+      },
+      {
+         "tag": "ez-badge-folder-state",
+         "name": "EzBadgeFolderState",
+         "tier": "domain",
+         "object": "folder",
+         "file": "blueprint/ez/domain/folder/EzBadgeFolderState.vue",
+         "description": "The state of an eZsign folder: same state, same badge, everywhere. Use it instead of <ez-badge :tone=\"folder.stateTone()\" :label=\"folder.stateLabel()\" />.",
+         "props": [
+            {
+               "name": "folder",
+               "attr": "folder",
+               "type": "EzsignFolder",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "dot",
+               "attr": "dot",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Small dot before the label, for dense lists"
+            }
+         ],
+         "emits": [],
+         "slots": [],
+         "uses": [
+            "ez-badge"
+         ]
+      },
+      {
+         "tag": "ez-badge-signer-state",
+         "name": "EzBadgeSignerState",
+         "tier": "domain",
+         "object": "signer",
+         "file": "blueprint/ez/domain/signer/EzBadgeSignerState.vue",
+         "description": "The state of a signer (pending, viewed, signed, refused): same state, same badge, everywhere. Use it instead of <ez-badge :tone=\"signer.stateTone()\" :label=\"signer.stateLabel()\" />.",
+         "props": [
+            {
+               "name": "signer",
+               "attr": "signer",
+               "type": "EzsignSigner",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": null
+            },
+            {
+               "name": "dot",
+               "attr": "dot",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Small dot before the label, for dense lists"
+            }
+         ],
+         "emits": [],
+         "slots": [],
+         "uses": [
+            "ez-badge"
+         ]
+      }
+   ]
+}
