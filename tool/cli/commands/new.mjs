@@ -29,7 +29,13 @@ export async function run(argv) {
    }
 
    const existing = listTasks().find((task) => task.meta.goodday?.number === Number(number))
-   if (existing) fail(`La tâche #${number} a déjà un prototype: prototypes/${existing.id}`, `Nouvelle version: pnpm proto iterate ${number}`)
+   if (existing) {
+      const latest = existing.versions.at(-1) ?? 'aucune version'
+      fail(
+         `La tâche #${number} a déjà un prototype: prototypes/${existing.id} (dernière version: ${latest}).`,
+         `Ne pas réutiliser ni réécrire ses versions. Demander quoi faire; en général: pnpm proto iterate ${number} -m "…"`,
+      )
+   }
 
    if (!url) {
       url = normalizeGoodDayUrl(await ask('Lien de la tâche GoodDay (ex. https://www.goodday.work/t/M2nSjU)', {

@@ -2,7 +2,8 @@
  * pnpm proto proposals [--all]
  * What prototypes ask of the blueprint, for the team to decide:
  *   - components proposed in prototypes (components/ of a version), most requested first
- *   - reports written in notes.md: « Bug primitive: … », « Mock manquant: … », « Composant manquant: … »
+ *   - reports written in notes.md: every bullet of the « Signalements » section (Bug primitive,
+ *     Bug helper, Mock manquant, Composant manquant… or any other), plus those prefixes anywhere
  * --all also shows the components already promoted into blueprint/ez.
  */
 import { existsSync, readFileSync } from 'node:fs'
@@ -11,7 +12,33 @@ import { PROTOTYPES, listDirs, listVersions, parseArgs } from '../lib.mjs'
 import { buildCatalog, catalogMap } from '../catalog-lib.mjs'
 import { groupProposals } from '../proposals-lib.mjs'
 
-const REPORT = /^\s*[-*]?\s*(Bug primitive|Mock manquant|Composant manquant)\s*:\s*(.+)$/
+/** A report written anywhere in the notes with one of the known prefixes */
+const REPORT = /^\s*[-*]?\s*(Bug primitive|Bug helper|Mock manquant|Composant manquant)\s*:\s*(.+)$/
+
+/**
+ * Every bullet of the « ## Signalements » section, whatever its prefix (an agent may write
+ * « Helper: … »), plus known prefixes found elsewhere. Kind = the text before « : » when short.
+ */
+function readReports(markdown) {
+   const reports = []
+   let inSection = false
+   for (const line of markdown.split(/\r?\n/)) {
+      if (/^##\s/.test(line)) {
+         inSection = /^##\s+Signalements\b/i.test(line)
+         continue
+      }
+      const known = line.match(REPORT)
+      if (known) {
+         reports.push({ kind: known[1], text: known[2].trim() })
+         continue
+      }
+      const bullet = inSection && line.match(/^\s*[-*]\s+(.*\S)\s*$/)
+      if (!bullet) continue
+      const prefixed = bullet[1].match(/^([^:]{2,30}):\s*(.+)$/)
+      reports.push(prefixed ? { kind: prefixed[1].trim(), text: prefixed[2].trim() } : { kind: 'Autre', text: bullet[1] })
+   }
+   return reports
+}
 
 export async function run(argv) {
    const { flags } = parseArgs(argv)
@@ -51,12 +78,10 @@ function showReports() {
       for (const version of listVersions(taskId)) {
          const file = join(PROTOTYPES, taskId, version, 'notes.md')
          if (!existsSync(file)) continue
-         for (const line of readFileSync(file, 'utf8').split(/\r?\n/)) {
-            const match = line.match(REPORT)
-            if (!match) continue
-            const list = reports.get(match[1]) ?? []
-            list.push(`${match[2].trim()}  (${taskId}/${version})`)
-            reports.set(match[1], list)
+         for (const { kind, text } of readReports(readFileSync(file, 'utf8'))) {
+            const list = reports.get(kind) ?? []
+            list.push(`${text}  (${taskId}/${version})`)
+            reports.set(kind, list)
          }
       }
    }

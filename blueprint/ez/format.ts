@@ -1,4 +1,5 @@
 /** Small display helpers shared by prototypes (fr-CA). */
+import { PROTO_TODAY } from './today'
 
 const dateFormatter = new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: 'short', day: 'numeric' })
 const dateTimeFormatter = new Intl.DateTimeFormat('fr-CA', {
@@ -22,8 +23,8 @@ export function formatDateTime(value: Date | string | null | undefined): string 
    return dateTimeFormatter.format(new Date(value))
 }
 
-/** « dans 3 jours », « hier »; « — » when empty */
-export function formatRelative(value: Date | string | null | undefined, now = new Date()): string {
+/** « dans 3 jours », « hier », counted from the prototypes' today (PROTO_TODAY); « — » when empty */
+export function formatRelative(value: Date | string | null | undefined, now: Date = PROTO_TODAY): string {
    if (!value) return '—'
    const diffDays = Math.round((new Date(value).getTime() - now.getTime()) / 86_400_000)
    return relativeFormatter.format(diffDays, 'day')

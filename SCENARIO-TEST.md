@@ -16,16 +16,23 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 
 ## 0. Préparer l'essai
 
-1. **Repartir de zéro** (aucune trace d'un essai précédent):
+1. **Repartir de zéro, sur `main` à jour.** Un essai qui part des fichiers d'un essai précédent ne se compare plus à rien (c'est arrivé à l'essai 2):
+   ```bash
+   git switch main && git pull
+   ```
    ```bash
    rm -rf prototypes/90001-* exports/90001-*
    ```
    ```bash
-   git status
+   git status --short
    ```
-   `git status` ne doit rien montrer dans `blueprint/`. Si un essai précédent y a laissé des changements (une promotion, par exemple):
+   **`git status --short` doit être vide.** Sinon, ne pas commencer: un essai précédent a laissé des fichiers. Pour tout remettre comme sur `main` (les changements locaux sont perdus):
    ```bash
-   git restore blueprint/ && git clean -fd blueprint/
+   git restore . && git clean -fd prototypes/ blueprint/
+   ```
+   Puis créer la branche de l'essai, par exemple:
+   ```bash
+   git switch -c essai/3
    ```
 2. **Noter le commit testé**, pour le journal:
    ```bash
@@ -38,7 +45,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 4. **Ouvrir une nouvelle conversation d'agent** dans Cursor, avec `ez-proto` comme dossier racine. Toujours une conversation neuve, et toujours le même modèle, à noter dans le journal.
 5. Démarrer un chronomètre.
 
-**Règle de l'essai**: coller les demandes telles quelles, sans aider l'agent. S'il pose une question, répondre brièvement et compter une **intervention**. S'il se trompe, ne pas corriger à sa place: noter le problème.
+**Règle de l'essai**: jouer **les quatre étapes**, dans la même conversation. Les étapes 2 à 4 testent ce que l'étape 1 ne voit pas (versions immuables, propositions, sélection multiple, export). Coller les demandes telles quelles, sans aider l'agent. S'il pose une question, répondre brièvement et compter une **intervention**. S'il se trompe, ne pas corriger à sa place: noter le problème.
 
 ---
 
@@ -170,4 +177,5 @@ Puis repartir de l'étape 0.
 | Date | Commit | Modèle | Points /32 | Interventions | Durée | Ressemblance /5 | Problème principal | Correction apportée |
 |---|---|---|---|---|---|---|---|---|
 | 2026-11-09 | 5fa3ca0 | (non noté) | 12/12 (étape 1 seulement) | 0 | | | ~40 lectures avant d'écrire (CLI, helpers, sources des primitives); bug d'`ez-dialog` à 390 px contourné dans la proposition sans être signalé | Recette dans `AGENTS.md`, API générée de `@mocks` et des helpers, « Signalements » dans les notes, avertissement sur `blueprint/` modifié, `ez-dialog` corrigé, `daysUntilDue()` |
+| 2026-11-09 | 7ce90ed | (non noté) | 11/12 (étape 1 seulement; 1.1 invérifiable) | 0 | | | Parti des fichiers de l'essai 1 (étape 0 sautée): l'agent a réécrit la v001 existante au lieu de s'arrêter. Son signalement d'un vrai bug (`formatRelative` et la date des mocks) n'a pas été collecté. ~30 lectures, mais plus aucune dans `tool/` | « Aujourd'hui » unique (`PROTO_TODAY`); tous les signalements collectés; tâche existante: s'arrêter (règle + message de `proto new`); `proto check` avertit si une version commitée est modifiée; étape 0 exige un `git status` vide |
 | | | | | | | | | |

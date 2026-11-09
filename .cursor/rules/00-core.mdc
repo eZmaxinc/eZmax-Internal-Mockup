@@ -7,6 +7,7 @@ You are working in **ez-proto**, a prototyping sandbox for eZsign/eZmax. Read `A
 
 Non-negotiables:
 - Compose with `ez-` components, semantic tokens and `blueprint/patterns/` patterns only. Never invent visual design.
+- A task that already has a folder: stop and tell the user; never reuse or rewrite its versions.
 - Never edit an existing `prototypes/<task>/v###/` folder. New iteration = `pnpm proto iterate <task> -m "<summary>"`, then edit the new folder.
 - A version imports only from `vue`, `@ez`, `@mocks` and its own files.
 - Missing component → propose it in `vNNN/components/` with a `<!-- @proposal … -->` header (see 20-components). Never edit `blueprint/` unless asked: report bugs and missing mocks in `notes.md` (« Signalements »).

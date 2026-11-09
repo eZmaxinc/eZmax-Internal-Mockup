@@ -370,7 +370,9 @@ Dans les templates, `$gettext` et `ez.icons` sont disponibles sans import.
 | `useScenario` | `(scenarios: Scenarios<T>): Ref<T>` | Returns the data of the scenario selected in the shell, as local state. Mutating it (e.g. removing a row) is fine: switching scenario rebuilds it. |
 | `formatDate` | `(value: Date \| string \| null \| undefined): string` | « 6 nov. 2026 »; « — » when empty |
 | `formatDateTime` | `(value: Date \| string \| null \| undefined): string` | « 6 nov. 2026, 10 h 00 »; « — » when empty |
-| `formatRelative` | `(value: Date \| string \| null \| undefined, now = new Date()): string` | « dans 3 jours », « hier »; « — » when empty |
+| `formatRelative` | `(value: Date \| string \| null \| undefined, now: Date = PROTO_TODAY): string` | « dans 3 jours », « hier », counted from the prototypes' today (PROTO_TODAY); « — » when empty |
+| `PROTO_TODAY` | `const` | The prototypes' « today »: a fixed date, so a scenario always shows the same dates and delays (« dans 3 jours ») whatever day it is opened. Mock dates (daysFromToday) and formatRelative use it. |
+| `protoToday` | `(): Date` | A copy of PROTO_TODAY, safe to mutate |
 | `gettext` | `(message: string, params?: Record<string, string \| number>): string` | Passthrough stub for production's `$gettext`. Keeps prototype code shaped like production: `$gettext('Envoyer à %{name}', { name })`. |
 
 <!-- api:end -->

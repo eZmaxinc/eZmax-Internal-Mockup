@@ -35,6 +35,7 @@ export async function run(argv) {
 
    checkComponentsAndTemplates(onlyTask, errors, warnings)
    checkBlueprintUntouched(warnings)
+   checkCommittedVersionsUntouched(onlyTask, warnings)
 
    for (const warning of warnings) console.warn(`⚠ ${warning}`)
    for (const error of errors) console.error(`✗ ${error}`)
@@ -129,6 +130,27 @@ function checkBlueprintUntouched(warnings) {
    const files = result.stdout.split('\n').map((line) => line.slice(3).trim()).filter(Boolean)
    if (!files.length) return
    warnings.push(`blueprint/ a des changements non commités: ${files.join(', ')}. Demandé? Sinon: git restore blueprint/ (et git clean -fd blueprint/). Un bug de primitive ou un mock manquant s'écrit dans notes.md, sous « Signalements ».`)
+}
+
+/**
+ * Versions are immutable: a version already committed in git must not change. Uncommitted edits to
+ * tracked files under prototypes/<task>/vNNN/ are flagged (the version being created is untracked).
+ */
+function checkCommittedVersionsUntouched(onlyTask, warnings) {
+   const result = spawnSync('git', ['status', '--porcelain', '--', 'prototypes'], { cwd: ROOT, encoding: 'utf8' })
+   if (result.status !== 0 || result.error) return
+   const touched = new Map()
+   for (const line of result.stdout.split('\n')) {
+      if (!line.trim() || line.startsWith('??')) continue
+      const path = line.slice(3).trim().replace(/^"|"$/g, '').split(' -> ').pop()
+      const match = path.match(/^prototypes\/([^/]+)\/(v\d{3}[a-z]?)\//)
+      if (!match || (onlyTask && match[1] !== onlyTask)) continue
+      const key = `prototypes/${match[1]}/${match[2]}`
+      touched.set(key, [...(touched.get(key) ?? []), path.split('/').pop()])
+   }
+   for (const [version, files] of touched) {
+      warnings.push(`${version} est déjà commitée et a été modifiée (${files.join(', ')}). Versions immuables: git restore ${version}, puis pnpm proto iterate pour une nouvelle version.`)
+   }
 }
 
 /* ───────────── Components: catalog, tiers, templates, proposals ───────────── */

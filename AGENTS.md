@@ -6,7 +6,7 @@ You build **prototypes** of eZsign/eZmax screens: minimal, but indistinguishable
 
 1. **Compose, don't invent.** Only `ez-` components (`blueprint/ez/CATALOG.md`), semantic tokens (`blueprint/tokens/ez-tokens.css`, semantic layer) and the patterns in `blueprint/patterns/`. No raw colors, no Tailwind palette (`bg-blue-500` doesn't exist here), no `--prim-*`. `proto check` rejects an unknown `ez-` component, prop or value, and flags raw `<button>`, `<input>`, `<table>`.
 2. **Two tiers of components.** *Primitives* (`blueprint/ez/primitives/`: `ez-btn`, `ez-card`…) are generic and own the visuals. *Domain components* (`blueprint/ez/domain/<object>/`: `ez-badge-folder-state`, `ez-btn-submit-folder`…) know one business object and only assemble primitives: no colors, borders, shadows or radius of their own. Prefer, in this order: an existing domain component → primitives assembled → **propose** a domain component → (last resort) propose a primitive. A proposal lives in the version (`vNNN/components/EzName.vue`), starts with `<!-- @proposal domain <object>: why -->` and is imported by `index.vue`. Only a human promotes it (`pnpm proto promote`). Never edit `blueprint/ez/` yourself unless asked.
-3. **One prototype = one GoodDay task.** Every task folder is `prototypes/<GoodDay number>-<slug>/`, named like the branch (`feature/49198-la-tache` → `49198-la-tache`), with `goodday: { number, url }` in `meta.json`. No number or link? Ask the user.
+3. **One prototype = one GoodDay task.** Every task folder is `prototypes/<GoodDay number>-<slug>/`, named like the branch (`feature/49198-la-tache` → `49198-la-tache`), with `goodday: { number, url }` in `meta.json`. No number or link? Ask the user. **The task already has a folder** (`proto new` says so, or you find one): stop and tell the user (folder, latest version). Never reuse or rewrite its versions; go on only on their instruction, usually with `pnpm proto iterate`.
 4. **Versions are immutable.** Never edit an existing `v###` folder. Every iteration is a new version created with `pnpm proto iterate`. Exception: the version you are creating in the current turn.
 5. **One version = one folder, self-contained.** It imports only from `vue`, `@ez`, `@mocks` and its own files. Never `../` into another version.
 6. **Data lives in `mocks.ts` as named scenarios** (first = default). Cover at least the main state plus one edge state (empty, error, closed…). Use the business objects from `@mocks` and their methods (`stateLabel()`, `stateTone()`, `isStateClosed()`…).
@@ -98,13 +98,14 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 
 ## Signalements
 - Bug primitive: ez-dialog déborde à 390 px (contourné ici par la prop width).
+- Bug helper: formatRelative ne part pas du même « aujourd'hui » que les mocks.
 - Mock manquant: EzsignFolder.daysUntilDue(), calculé localement.
 
 ## Questions ouvertes
 - …
 ```
 
-**Something is wrong in `blueprint/`** (a primitive bug, a missing mock method): don't fix it there. Work around it inside the version if needed, and write it under « Signalements » as `Bug primitive: …`, `Mock manquant: …` or `Composant manquant: …`. `pnpm proto proposals` collects them for the team.
+**Something is wrong in `blueprint/`** (a primitive bug, a missing mock method): don't fix it there. Work around it inside the version if needed, and write it under « Signalements » as `Bug primitive: …`, `Bug helper: …`, `Mock manquant: …` or `Composant manquant: …`. `pnpm proto proposals` collects them for the team.
 
 ## Commands
 

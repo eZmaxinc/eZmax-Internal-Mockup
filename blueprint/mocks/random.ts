@@ -31,8 +31,10 @@ export const folderNames = [
    'Avenant au contrat',
 ] as const
 
-/** Days offset from a fixed "today" so screenshots stay stable. */
-export const MOCK_TODAY = new Date('2026-11-06T10:00:00')
+import { PROTO_TODAY } from '../ez/today'
+
+/** The prototypes' fixed « today » (PROTO_TODAY of @ez), so screenshots stay stable. */
+export const MOCK_TODAY = PROTO_TODAY
 
 /** A date `days` away from MOCK_TODAY (negative = past). Use it for every date in mocks. */
 export function daysFromToday(days: number): Date {

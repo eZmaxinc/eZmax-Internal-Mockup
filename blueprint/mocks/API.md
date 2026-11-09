@@ -74,5 +74,5 @@ An eZsign folder: documents to sign, signers, a due date.
 | `firstNames` | `const` | Pools of fake names used by the factories |
 | `lastNames` | `const` |  |
 | `folderNames` | `const` |  |
-| `MOCK_TODAY` | `const` | Days offset from a fixed "today" so screenshots stay stable. |
+| `MOCK_TODAY` | `const` | The prototypes' fixed « today » (PROTO_TODAY of |
 | `daysFromToday` | `(days: number): Date` | A date `days` away from MOCK_TODAY (negative = past). Use it for every date in mocks. |

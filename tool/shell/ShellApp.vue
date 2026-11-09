@@ -1,19 +1,8 @@
 <template>
    <div class="shell">
-      <!-- Hidden entirely when closed: the prototype gets all the width. Reopen from the dev bar or with [ -->
+      <!-- Hidden entirely when closed: the prototype gets all the width. Toggled from the dev bar or with [ -->
       <aside v-show="theSidebarOpen" class="shell__sidebar" aria-label="Navigation">
-         <div class="shell__sidebar-top">
-            <router-link to="/" class="shell__heading shell__heading--link">Prototypes</router-link>
-            <ez-btn
-               class="shell__toggle"
-               variant="flat"
-               size="sm"
-               icon="chevronRight"
-               aria-label="Masquer le panneau"
-               title="Masquer le panneau ( [ )"
-               @click="toggleSidebar"
-            />
-         </div>
+         <router-link to="/" class="shell__heading shell__heading--link">Prototypes</router-link>
          <div class="shell__nav">
          <router-link
             v-for="theTask in theTasks"
@@ -85,24 +74,10 @@ onBeforeUnmount(listenSidebarShortcut())
 .shell__sidebar {
    flex: 0 0 248px;
    overflow-y: auto;
-   padding: 12px 12px 16px;
+   padding: 16px 12px;
    background: var(--color-surface);
    border-right: 1px solid var(--color-border);
    font-size: var(--text-sm);
-}
-
-.shell__sidebar-top {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   gap: 4px;
-   margin-bottom: 4px;
-}
-
-/* Chevron pointing left: « hide » */
-.shell__toggle {
-   flex-shrink: 0;
-   transform: rotate(180deg);
 }
 
 .shell__reopen {

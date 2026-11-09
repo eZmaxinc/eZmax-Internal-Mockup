@@ -26,7 +26,7 @@ export const API_END = '<!-- api:end -->'
 export const MOCKS_DIR = join(BLUEPRINT, 'mocks')
 export const MOCKS_API = join(MOCKS_DIR, 'API.md')
 /** The @ez helpers documented with the components (the rest of @ez is the registration) */
-export const HELPER_MODULES = ['scenario.ts', 'format.ts', 'i18n.ts'].map((name) => join(EZ_DIR, name))
+export const HELPER_MODULES = ['scenario.ts', 'format.ts', 'today.ts', 'i18n.ts'].map((name) => join(EZ_DIR, name))
 
 /** Attributes any component accepts without declaring them. */
 const FALLTHROUGH = new Set(['class', 'style', 'id', 'key', 'ref', 'title', 'role', 'tabindex', 'slot', 'is'])

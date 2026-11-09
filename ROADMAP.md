@@ -35,10 +35,16 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [x] `EzsignFolder.daysUntilDue()`, `isDueSoon(days)` paramétrable
   - [x] Section « Signalements » dans les notes (`Bug primitive`, `Mock manquant`, `Composant manquant`), regroupés par `proto proposals`
   - [x] `proto check` avertit quand `blueprint/` a des changements non commités
-- [ ] **Essai 2**: scénario complet (4 étapes), sur une branche `essai/2`
+- [x] **Essai 2** (étape 1 seulement, parti des fichiers de l'essai 1): 11/12. A réécrit la v001 existante; signalement d'un vrai bug non collecté; plus aucune lecture de `tool/`
 - [ ] Mesurer à chaque essai le nombre de lectures avant la première écriture (objectif: moins de 15)
-- [ ] Corrections après l'essai 2
-- [ ] **Essai 3**
+- [x] Corrections après l'essai 2:
+  - [x] Un seul « aujourd'hui » pour les prototypes (`PROTO_TODAY` dans `@ez`), utilisé par les mocks et `formatRelative`
+  - [x] `proto proposals` collecte toute la section « Signalements », quel que soit le préfixe
+  - [x] Tâche existante: l'agent s'arrête et demande (règles, commande `new-proto`, message de `proto new`)
+  - [x] `proto check` avertit quand une version déjà commitée est modifiée
+  - [x] Étape 0 du scénario: `main` à jour, `git status` vide, les quatre étapes obligatoires
+- [ ] **Essai 3**: scénario complet (4 étapes), parti de zéro
+- [ ] Corrections après l'essai 3
 - [ ] Une seule source de règles: `.cursor/rules` et `.agents/skills` renvoient à `AGENTS.md` au lieu de le répéter
 
 **Critère de sortie**: deux essais de suite à **30/32 ou plus**, avec **au plus une intervention**, sans changement non demandé dans `blueprint/`.
