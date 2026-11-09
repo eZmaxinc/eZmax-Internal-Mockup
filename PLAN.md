@@ -69,33 +69,6 @@ Le shell lit au démarrage les `meta.json`, `README.md` et `notes.md`; les compo
 
 Une tâche se désigne par son numéro GoodDay (`49198`, `#49198`), son lien, une partie du nom de son dossier, ou rien depuis son dossier.
 
-## Phases
+## Suite
 
-1. **Fondations** ✅ tokens, Tailwind, brand (valeurs provisoires).
-2. **Composants** ✅ premier lot + galerie.
-3. **Shell** ✅ versions, scénarios, viewport, comparaison, export, lien GoodDay, chargement à la demande.
-4. **Agent** ✅ règles, commandes, patrons, check.
-5. **Structure et CLI** ✅ `blueprint/`, `prototypes/`, `tool/`; tâches GoodDay; CLI `pnpm proto`.
-
-À faire:
-
-- **A. Tokens partagés** ✅ en grande partie (ez-tokens 1.0.0)
-  - ✅ `ez-tokens.css` autonome (primitives + sémantiques), copié tel quel dans le mono; `components.css` reste ici.
-  - ✅ Noms `{rôle}-{modifieur}` du contrat de SUM, statuts de Quasar (`positive`, `negative`, `warning`, `info`); composants, patrons et démo migrés.
-  - ✅ Breakpoints (600 / 1024 / 1440 / 1920) et rayons (4 / 6 / 8 / 12 px) de la prod.
-  - ✅ `proto check` vérifie la hiérarchie, le contrat, les anciens noms et les tokens inconnus; `proto tokens` (version, `bump`, `migrate`); `CHANGELOG.md`, `COPY.md`.
-  - ⏳ **Couleurs de la prod**: reprendre `$primary`, `$positive`… de `quasar.variables.scss` (à fournir), puis `proto tokens bump patch`.
-  - ⏳ Première copie dans le mono (`blueprint/tokens/COPY.md`).
-  - ⚠ À valider sur la prod: le tiroir de l'app masqué sous md (1024), la TOC à droite dès md, l'en-tête de page qui passe à la ligne sous sm (600).
-- **Composants à deux niveaux** ✅ primitives et composants métier; catalogue généré du code (`proto catalog`); `proto check` refuse composant, prop ou valeur inconnus et vérifie les règles de chaque niveau; propositions dans les versions, `proto proposals`, `proto promote` (décision humaine). Premiers composants métier: `ez-badge-folder-state`, `ez-badge-signer-state`.
-- **B. Fidélité à la prod**: `git init`; captures dans `blueprint/brand/screens/`; recaler les composants sur la lib du mono (`ez-info` à la place d'`EzInfoList`, `ez-layout-composition`, émissions d'`ez-page-header`); recaler les 3 patrons.
-- **C. Une seule source de règles pour l'agent**: `AGENTS.md`, avec `.cursor/` et `.agents/` qui y renvoient.
-- **D. Pilote**: 2 ou 3 vraies tâches GoodDay, puis ajuster les règles et le catalogue selon ce que l'agent rate.
-
-## Plus tard (si le besoin se confirme)
-
-- Boutons « Nouvelle version » et « Variante » dans le shell.
-- `proto new` qui préremplit le brief depuis l'API GoodDay (jeton par dev, hors de git).
-- Shell déployé en statique pour partager des liens aux PM.
-- Capture Playwright automatique de chaque version (vignettes, auto-vérification de l'agent).
-- `pnpm proto index` → `prototypes.json` pour des requêtes DuckDB, si le nombre de prototypes explose.
+Le suivi (jalons, checkpoints, critères de sortie) est dans [`ROADMAP.md`](ROADMAP.md).

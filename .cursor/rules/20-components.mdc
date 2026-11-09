@@ -31,3 +31,7 @@ If a needed component doesn't exist, **propose** it in the version, never as raw
 - A domain proposal only assembles `ez-` components: no colors, borders, shadows, radius (CSS or utilities). Layout (`flex`, `gap`) is fine.
 - Import it in `index.vue`: `import EzBtnSubmitFolder from './components/EzBtnSubmitFolder.vue'`.
 - Mention it in `notes.md`. Promotion into `blueprint/ez/` is a human decision (`pnpm proto promote`).
+
+A bug in a primitive or a missing method on a mock: never fix `blueprint/` yourself. Work around it in the version if needed and write it in `notes.md` under « Signalements »: `Bug primitive: …`, `Mock manquant: …`, `Composant manquant: …`. `proto check` warns when `blueprint/` has uncommitted changes.
+
+Business data: `blueprint/mocks/API.md` lists every object, property and method (generated). Read it instead of `blueprint/mocks/*.ts`.

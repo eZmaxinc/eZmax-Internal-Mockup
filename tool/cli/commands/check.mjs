@@ -34,6 +34,7 @@ export async function run(argv) {
    checkTokenNames(tokenFiles, errors)
 
    checkComponentsAndTemplates(onlyTask, errors, warnings)
+   checkBlueprintUntouched(warnings)
 
    for (const warning of warnings) console.warn(`⚠ ${warning}`)
    for (const error of errors) console.error(`✗ ${error}`)
@@ -114,6 +115,20 @@ function checkStructure(onlyTask, errors, warnings) {
    for (const [number, taskIds] of numbers) {
       if (taskIds.length > 1 && (!onlyTask || taskIds.includes(onlyTask))) errors.push(`GoodDay #${number} est utilisé par plusieurs tâches: ${taskIds.join(', ')}`)
    }
+}
+
+/* ───────────── blueprint/ changed while prototyping ───────────── */
+
+/**
+ * A prototype never needs blueprint/ to change. Uncommitted changes there are flagged so a human
+ * decides: keep them (it was asked) or restore them (an agent "fixed" a primitive on its own).
+ */
+function checkBlueprintUntouched(warnings) {
+   const result = spawnSync('git', ['status', '--porcelain', '--', 'blueprint'], { cwd: ROOT, encoding: 'utf8' })
+   if (result.status !== 0 || result.error) return // not a git checkout: nothing to compare with
+   const files = result.stdout.split('\n').map((line) => line.slice(3).trim()).filter(Boolean)
+   if (!files.length) return
+   warnings.push(`blueprint/ a des changements non commités: ${files.join(', ')}. Demandé? Sinon: git restore blueprint/ (et git clean -fd blueprint/). Un bug de primitive ou un mock manquant s'écrit dans notes.md, sous « Signalements ».`)
 }
 
 /* ───────────── Components: catalog, tiers, templates, proposals ───────────── */

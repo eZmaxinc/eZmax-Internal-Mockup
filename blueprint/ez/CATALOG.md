@@ -358,4 +358,19 @@ Construit avec: `ez-badge`
 | `signer` * | `EzsignSigner` |  |  |
 | `dot` | `boolean` |  | Small dot before the label, for dense lists |
 
+### Helpers (`import { … } from '@ez'`)
+
+Dans les templates, `$gettext` et `ez.icons` sont disponibles sans import.
+
+| Nom | Signature | |
+|---|---|---|
+| `scenarioKey` | `: InjectionKey<Ref<string>>` | Provided by the frame: the scenario currently selected in the shell. |
+| `Scenarios` | `Record<string, () => T>` |  |
+| `defineScenarios` | `(scenarios: Scenarios<T>): Scenarios<T>` | Declares a version's data scenarios. The first key is the default. |
+| `useScenario` | `(scenarios: Scenarios<T>): Ref<T>` | Returns the data of the scenario selected in the shell, as local state. Mutating it (e.g. removing a row) is fine: switching scenario rebuilds it. |
+| `formatDate` | `(value: Date \| string \| null \| undefined): string` | « 6 nov. 2026 »; « — » when empty |
+| `formatDateTime` | `(value: Date \| string \| null \| undefined): string` | « 6 nov. 2026, 10 h 00 »; « — » when empty |
+| `formatRelative` | `(value: Date \| string \| null \| undefined, now = new Date()): string` | « dans 3 jours », « hier »; « — » when empty |
+| `gettext` | `(message: string, params?: Record<string, string \| number>): string` | Passthrough stub for production's `$gettext`. Keeps prototype code shaped like production: `$gettext('Envoyer à %{name}', { name })`. |
+
 <!-- api:end -->

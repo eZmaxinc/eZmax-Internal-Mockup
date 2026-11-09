@@ -10,16 +10,19 @@ const dateTimeFormatter = new Intl.DateTimeFormat('fr-CA', {
 })
 const relativeFormatter = new Intl.RelativeTimeFormat('fr-CA', { numeric: 'auto' })
 
+/** « 6 nov. 2026 »; « — » when empty */
 export function formatDate(value: Date | string | null | undefined): string {
    if (!value) return '—'
    return dateFormatter.format(new Date(value))
 }
 
+/** « 6 nov. 2026, 10 h 00 »; « — » when empty */
 export function formatDateTime(value: Date | string | null | undefined): string {
    if (!value) return '—'
    return dateTimeFormatter.format(new Date(value))
 }
 
+/** « dans 3 jours », « hier »; « — » when empty */
 export function formatRelative(value: Date | string | null | undefined, now = new Date()): string {
    if (!value) return '—'
    const diffDays = Math.round((new Date(value).getTime() - now.getTime()) / 86_400_000)

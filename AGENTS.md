@@ -19,10 +19,92 @@ You build **prototypes** of eZsign/eZmax screens: minimal, but indistinguishable
 
 | When | Read |
 |---|---|
-| Always | `blueprint/brand/brand.md`, `blueprint/ez/CATALOG.md` (when to use what + generated API; `catalog.json` is the same API as data) |
+| Always | `blueprint/brand/brand.md`, `blueprint/ez/CATALOG.md` (when to use what + generated API of components and `@ez` helpers) |
+| Using business data | `blueprint/mocks/API.md` (generated: `EzsignFolder`, `EzsignSigner`… their properties and methods, the factories) |
 | Building a page | the closest `blueprint/patterns/*/index.vue` (list, detail with TOC, edit form) |
 | Starting a task | `prototypes/<task>/README.md` (the brief) |
 | Iterating | the source version's `index.vue`, `mocks.ts`, `notes.md` |
+
+That is enough to build. **Don't read `tool/`** (the CLI explains itself: `pnpm proto help`) **nor the source of `blueprint/ez` or `blueprint/mocks`**: the catalog and `API.md` are generated from it. Open a source only when they really don't answer, and then say what was missing in `notes.md`.
+
+## Starter: a version in three files
+
+`pnpm proto new` (or `iterate`) creates them; this is the shape to aim for.
+
+`mocks.ts`: named scenarios, the first is the default. Dates always through `daysFromToday()`; set only what matters to the story, the factories fill the rest.
+
+```ts
+import { defineScenarios } from '@ez'
+import { daysFromToday, makeFolder, type EzsignFolder } from '@mocks'
+
+export const scenarios = defineScenarios({
+   'due-soon': () => ({
+      folders: [
+         makeFolder(1, { state: 'sent', dueAt: daysFromToday(2) }),
+         makeFolder(2, { state: 'completed', dueAt: daysFromToday(1) }), // edge: closed
+      ],
+   }),
+   empty: () => ({ folders: [] as EzsignFolder[] }),
+})
+```
+
+`index.vue`: template first; components without import; local state named `the*`, UI state in `theUI`; text through `$gettext`; interactions simulated on `theData` (no network).
+
+```vue
+<template>
+   <ez-page>
+      <ez-page-header :title="$gettext('Dossiers')" />
+      <ez-page-content>
+         <ez-card flush>
+            <ez-table :columns="columns" :rows="theData.folders" :empty-title="$gettext('Aucun dossier')">
+               <template #cell-state="{ row }">
+                  <ez-badge-folder-state :folder="row" />
+               </template>
+            </ez-table>
+         </ez-card>
+      </ez-page-content>
+   </ez-page>
+</template>
+
+<script setup lang="ts">
+import { reactive } from 'vue'
+import { gettext, useScenario, type EzTableColumn } from '@ez'
+import { scenarios } from './mocks'
+
+const theData = useScenario(scenarios) // rebuilt when the scenario changes in the shell
+const theUI = reactive({ $dialogs: { extend: false } })
+
+const columns: EzTableColumn[] = [
+   { key: 'name', label: gettext('Dossier') },
+   { key: 'state', label: gettext('Statut') },
+]
+</script>
+```
+
+`notes.md`: first line = the one-sentence summary shown in the shell.
+
+```md
+---
+based_on: v001
+date: 2026-11-09
+---
+Liste des dossiers qui expirent bientôt, avec prolongation.
+
+## Changements
+- …
+
+## Propositions
+- `EzBtnExtendFolder` (domain · folder): pourquoi.
+
+## Signalements
+- Bug primitive: ez-dialog déborde à 390 px (contourné ici par la prop width).
+- Mock manquant: EzsignFolder.daysUntilDue(), calculé localement.
+
+## Questions ouvertes
+- …
+```
+
+**Something is wrong in `blueprint/`** (a primitive bug, a missing mock method): don't fix it there. Work around it inside the version if needed, and write it under « Signalements » as `Bug primitive: …`, `Mock manquant: …` or `Composant manquant: …`. `pnpm proto proposals` collects them for the team.
 
 ## Commands
 

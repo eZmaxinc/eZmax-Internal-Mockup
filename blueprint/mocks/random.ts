@@ -17,6 +17,7 @@ export function createRandom(seed = 42) {
    }
 }
 
+/** Pools of fake names used by the factories */
 export const firstNames = ['Marie', 'Jean', 'Sophie', 'Louis', 'Camille', 'Olivier', 'Julie', 'Mathieu', 'Émilie', 'Alexandre'] as const
 export const lastNames = ['Tremblay', 'Gagnon', 'Roy', 'Côté', 'Bouchard', 'Gauthier', 'Morin', 'Lavoie', 'Fortin', 'Gagné'] as const
 export const folderNames = [
@@ -33,6 +34,7 @@ export const folderNames = [
 /** Days offset from a fixed "today" so screenshots stay stable. */
 export const MOCK_TODAY = new Date('2026-11-06T10:00:00')
 
+/** A date `days` away from MOCK_TODAY (negative = past). Use it for every date in mocks. */
 export function daysFromToday(days: number): Date {
    return new Date(MOCK_TODAY.getTime() + days * 86_400_000)
 }

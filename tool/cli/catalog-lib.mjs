@@ -13,6 +13,7 @@ import { basename, join, relative } from 'node:path'
 import ts from 'typescript'
 import { parse as parseSfc } from 'vue/compiler-sfc'
 import { BLUEPRINT } from '../paths.mjs'
+import { extractModule, renderModules } from './modules-lib.mjs'
 
 export const EZ_DIR = join(BLUEPRINT, 'ez')
 export const PRIMITIVES_DIR = join(EZ_DIR, 'primitives')
@@ -22,6 +23,10 @@ export const REGISTRATION_FILE = join(EZ_DIR, 'components.generated.ts')
 export const CATALOG_MD = join(EZ_DIR, 'CATALOG.md')
 export const API_START = '<!-- api:start — généré par pnpm proto catalog, ne pas modifier à la main -->'
 export const API_END = '<!-- api:end -->'
+export const MOCKS_DIR = join(BLUEPRINT, 'mocks')
+export const MOCKS_API = join(MOCKS_DIR, 'API.md')
+/** The @ez helpers documented with the components (the rest of @ez is the registration) */
+export const HELPER_MODULES = ['scenario.ts', 'format.ts', 'i18n.ts'].map((name) => join(EZ_DIR, name))
 
 /** Attributes any component accepts without declaring them. */
 const FALLTHROUGH = new Set(['class', 'style', 'id', 'key', 'ref', 'title', 'role', 'tabindex', 'slot', 'is'])
@@ -252,6 +257,11 @@ export function renderApiMarkdown(catalog) {
       '',
       ...section('primitive', 'Primitives'),
       ...section('domain', 'Composants métier'),
+      '### Helpers (`import { … } from \'@ez\'`)',
+      '',
+      'Dans les templates, `$gettext` et `ez.icons` sont disponibles sans import.',
+      '',
+      renderModules(HELPER_MODULES.map(extractModule), { headingLevel: 4 }).replace(/^#### Fonctions, constantes et types\n\n/, ''),
       API_END,
       '',
    ].join('\n')
@@ -266,14 +276,32 @@ export function renderCatalogMarkdown(current, catalog) {
    return `${current.trimEnd()}\n\n${api}`
 }
 
-/** The three generated files, as they should be. */
+/** The generated files, as they should be. */
 export function expectedFiles(catalog = buildCatalog()) {
    const markdown = existsSync(CATALOG_MD) ? readFileSync(CATALOG_MD, 'utf8') : '# Catalogue `ez-`\n'
    return [
       { file: CATALOG_JSON, content: renderCatalogJson(catalog) },
       { file: REGISTRATION_FILE, content: renderRegistration(catalog) },
       { file: CATALOG_MD, content: renderCatalogMarkdown(markdown, catalog) },
+      { file: MOCKS_API, content: renderMocksApi() },
    ]
+}
+
+/** blueprint/mocks/API.md: the business objects and factories of @mocks. */
+export function renderMocksApi() {
+   const modules = readdirSync(MOCKS_DIR)
+      .filter((name) => name.endsWith('.ts') && name !== 'index.ts')
+      .sort()
+      .map((name) => extractModule(join(MOCKS_DIR, name)))
+   return [
+      '# API de `@mocks`',
+      '',
+      '> Généré par `pnpm proto catalog` à partir de `blueprint/mocks/*.ts`. Ne pas modifier à la main: documenter le code (JSDoc), puis régénérer.',
+      '',
+      'Les objets métier des prototypes et leurs fabriques. Toutes les dates passent par `daysFromToday()`, pour qu\'un scénario s\'affiche toujours pareil. Une règle métier qui revient dans plusieurs tâches (un calcul, un état) appartient ici, pas dans un prototype: la noter « Mock manquant: … » dans `notes.md`.',
+      '',
+      renderModules(modules, { headingLevel: 2 }),
+   ].join('\n')
 }
 
 /* ───────────── Validating a template against the catalog ───────────── */

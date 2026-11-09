@@ -18,6 +18,19 @@
       </div>
 
       <footer class="proto-viewer__devbar">
+         <!-- Always here: hides or shows the shell's left panel (chevron left = hide) -->
+         <ez-btn
+            class="proto-viewer__sidebar-toggle"
+            :class="{ 'is-open': theSidebarOpen }"
+            variant="flat"
+            size="sm"
+            icon="chevronRight"
+            :aria-label="theSidebarOpen ? 'Masquer le panneau' : 'Afficher le panneau'"
+            :aria-expanded="theSidebarOpen"
+            :title="`${theSidebarOpen ? 'Masquer' : 'Afficher'} le panneau ( [ )`"
+            @click="toggleSidebar"
+         />
+
          <div class="proto-viewer__segmented" role="group" aria-label="Largeur">
             <button
                v-for="theViewport in viewports"
@@ -62,6 +75,9 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { useSidebar } from './sidebar'
+
+const { theSidebarOpen, toggleSidebar } = useSidebar()
 
 const props = defineProps<{
    /** Frame hash paths, e.g. ["p/my-task/v002"] — two entries = side-by-side compare */
@@ -154,6 +170,10 @@ function frameUrl(path: string) {
    background: var(--color-surface);
    border-top: 1px solid var(--color-border);
    font-size: var(--text-sm);
+}
+
+.proto-viewer__sidebar-toggle.is-open {
+   transform: rotate(180deg);
 }
 
 .proto-viewer__control {

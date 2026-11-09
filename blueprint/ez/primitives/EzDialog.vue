@@ -65,6 +65,8 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    inset: 0;
    z-index: 100;
    display: grid;
+   /* One column as wide as the screen: without it, the column takes the panel's width and max-width: 100% never applies */
+   grid-template-columns: minmax(0, 1fr);
    place-items: center;
    padding: 16px;
    background: var(--color-overlay);

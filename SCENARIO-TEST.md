@@ -169,4 +169,5 @@ Puis repartir de l'étape 0.
 
 | Date | Commit | Modèle | Points /32 | Interventions | Durée | Ressemblance /5 | Problème principal | Correction apportée |
 |---|---|---|---|---|---|---|---|---|
+| 2026-11-09 | 5fa3ca0 | (non noté) | 12/12 (étape 1 seulement) | 0 | | | ~40 lectures avant d'écrire (CLI, helpers, sources des primitives); bug d'`ez-dialog` à 390 px contourné dans la proposition sans être signalé | Recette dans `AGENTS.md`, API générée de `@mocks` et des helpers, « Signalements » dans les notes, avertissement sur `blueprint/` modifié, `ez-dialog` corrigé, `daysUntilDue()` |
 | | | | | | | | | |

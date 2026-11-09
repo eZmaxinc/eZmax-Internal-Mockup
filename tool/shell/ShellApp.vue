@@ -1,7 +1,20 @@
 <template>
    <div class="shell">
-      <aside class="shell__sidebar">
-         <router-link to="/" class="shell__heading shell__heading--link">Prototypes</router-link>
+      <!-- Hidden entirely when closed: the prototype gets all the width. Reopen from the dev bar or with [ -->
+      <aside v-show="theSidebarOpen" class="shell__sidebar" aria-label="Navigation">
+         <div class="shell__sidebar-top">
+            <router-link to="/" class="shell__heading shell__heading--link">Prototypes</router-link>
+            <ez-btn
+               class="shell__toggle"
+               variant="flat"
+               size="sm"
+               icon="chevronRight"
+               aria-label="Masquer le panneau"
+               title="Masquer le panneau ( [ )"
+               @click="toggleSidebar"
+            />
+         </div>
+         <div class="shell__nav">
          <router-link
             v-for="theTask in theTasks"
             :key="theTask.id"
@@ -29,19 +42,37 @@
          <router-link to="/gallery" class="shell__item">
             <span class="shell__item-label">Galerie des composants</span>
          </router-link>
+         </div>
       </aside>
 
       <main class="shell__main">
          <router-view />
       </main>
+
+      <!-- Pages without a dev bar (the home page) keep a way back to the panel -->
+      <ez-btn
+         v-if="!theSidebarOpen && $route.path === '/'"
+         class="shell__reopen"
+         variant="secondary"
+         size="sm"
+         icon="chevronRight"
+         aria-label="Afficher le panneau"
+         title="Afficher le panneau ( [ )"
+         @click="toggleSidebar"
+      />
    </div>
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount } from 'vue'
 import { listPatterns, listTasks } from '@/registry'
+import { listenSidebarShortcut, useSidebar } from './sidebar'
 
 const theTasks = listTasks()
 const theExamples = listPatterns()
+
+const { theSidebarOpen, toggleSidebar } = useSidebar()
+onBeforeUnmount(listenSidebarShortcut())
 </script>
 
 <style scoped>
@@ -54,10 +85,31 @@ const theExamples = listPatterns()
 .shell__sidebar {
    flex: 0 0 248px;
    overflow-y: auto;
-   padding: 16px 12px;
+   padding: 12px 12px 16px;
    background: var(--color-surface);
    border-right: 1px solid var(--color-border);
    font-size: var(--text-sm);
+}
+
+.shell__sidebar-top {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 4px;
+   margin-bottom: 4px;
+}
+
+/* Chevron pointing left: « hide » */
+.shell__toggle {
+   flex-shrink: 0;
+   transform: rotate(180deg);
+}
+
+.shell__reopen {
+   position: fixed;
+   bottom: 12px;
+   left: 12px;
+   z-index: 20;
 }
 
 .shell__heading {
