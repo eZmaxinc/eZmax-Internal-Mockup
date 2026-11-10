@@ -66,7 +66,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 |---|---|---|
 | 1.1 | Lance `pnpm proto new 90001 https://www.goodday.work/t/TEST01 "…"`, avec `--from list-page` | |
 | 1.2 | Le dossier se nomme `prototypes/90001-<slug>/` | |
-| 1.3 | `README.md` est rempli: contexte, ce qu'on veut voir, contraintes, hors portée | |
+| 1.3 | `README.md` garde le lien GoodDay et les deux contraintes données, sans paraphraser la demande | |
 | 1.4 | `mocks.ts` a au moins 2 scénarios, dont un sans dossier qui expire (état vide) et des dossiers complétés ou refusés | |
 | 1.5 | Le statut des dossiers passe par `<ez-badge-folder-state>`, pas par `<ez-badge :tone="…stateTone()">` | |
 | 1.6 | La prolongation passe par `ez-dialog` + `ez-field type="select"` (7, 14, 30 jours) | |
@@ -97,7 +97,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 | 2.4 | Elle est nommée `ez-badge-…` ou `ez-folder-…`, et importée dans `index.vue` | |
 | 2.5 | Elle n'a ni couleur, ni bordure, ni ombre à elle: l'urgence passe par le `tone` d'`ez-badge` | |
 | 2.6 | La sélection de plusieurs lignes **n'existe pas** dans `ez-table`. Attendu: soit une alternative avec les composants existants (par exemple « Prolonger les N qui expirent » en un clic), soit une proposition de primitive bien justifiée. Dans les deux cas, c'est écrit dans `notes.md`. **Échec**: des cases à cocher en `<input>` brut | |
-| 2.7 | `notes.md` de `v002`: résumé en première ligne, changements, propositions, questions ouvertes | |
+| 2.7 | `notes.md` de `v002`: résumé en première ligne, puis seulement les signalements et les questions nouveaux de cette version (ni liste de changements, ni liste de propositions) | |
 | 2.8 | `pnpm proto check 90001` passe, et la proposition apparaît en ⚠ | |
 | 2.9 | Vérification dans le navigateur refaite | |
 

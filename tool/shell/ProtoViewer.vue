@@ -12,7 +12,7 @@
                />
             </div>
          </div>
-         <aside v-if="$slots.panel" class="proto-viewer__panel">
+         <aside v-if="$slots.panel" class="proto-viewer__panel" :class="{ 'is-closed': !theNotesOpen }" :inert="!theNotesOpen">
             <slot name="panel" />
          </aside>
       </div>
@@ -66,16 +66,34 @@
             </select>
          </label>
 
-         <slot name="devbar-end" :scenario="theScenario" />
+         <!-- Right end of the bar: what leaves the page (export), then the notes toggle -->
+         <div class="proto-viewer__devbar-end">
+            <slot name="devbar-end" :scenario="theScenario" />
+
+            <!-- Mirror of the left toggle, at the right end: chevron right = hide the notes, left = show them -->
+            <ez-btn
+               v-if="$slots.panel"
+               class="proto-viewer__notes-toggle"
+               :class="{ 'is-closed': !theNotesOpen }"
+               variant="flat"
+               size="sm"
+               icon="chevronRight"
+               :aria-label="theNotesOpen ? 'Masquer les notes' : 'Afficher les notes'"
+               :aria-expanded="theNotesOpen"
+               :title="`${theNotesOpen ? 'Masquer' : 'Afficher'} les notes ( ] )`"
+               @click="toggleNotes"
+            />
+         </div>
       </footer>
    </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { useSidebar } from './sidebar'
+import { useNotes, useSidebar } from './sidebar'
 
 const { theSidebarOpen, toggleSidebar } = useSidebar()
+const { theNotesOpen, toggleNotes } = useNotes()
 
 const props = defineProps<{
    /** Frame hash paths, e.g. ["p/my-task/v002"] — two entries = side-by-side compare */
@@ -174,6 +192,17 @@ function frameUrl(path: string) {
    transform: rotate(180deg);
 }
 
+.proto-viewer__devbar-end {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   margin-left: auto;
+}
+
+.proto-viewer__notes-toggle.is-closed {
+   transform: rotate(180deg);
+}
+
 .proto-viewer__control {
    display: flex;
    align-items: center;
@@ -221,6 +250,7 @@ function frameUrl(path: string) {
    display: flex;
    flex: 1;
    min-height: 0;
+   overflow: hidden;
 }
 
 .proto-viewer__stage {
@@ -271,11 +301,18 @@ function frameUrl(path: string) {
    background: var(--color-surface);
    border-left: 1px solid var(--color-border);
    font-size: var(--text-sm);
-}
 
-@media (max-width: 1100px) {
-   .proto-viewer__panel {
-      display: none;
+   /* Slides out of the layout instead of vanishing: the prototype grows as the drawer leaves */
+   transition: margin-right 180ms ease, visibility 0s;
+
+   &.is-closed {
+      margin-right: -320px;
+      visibility: hidden;
+      transition: margin-right 180ms ease, visibility 0s 180ms;
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+      transition: none;
    }
 }
 </style>

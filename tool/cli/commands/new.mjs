@@ -93,15 +93,6 @@ export async function run(argv) {
       '---',
       'Première version.',
       '',
-      '## Ce que ça montre',
-      '- ',
-      '',
-      '## Signalements',
-      '- ',
-      '',
-      '## Questions ouvertes',
-      '- ',
-      '',
    ].join('\n'))
 
    console.log(`✓ Prototype créé: prototypes/${taskId}/v001 (départ: ${from})`)
@@ -109,7 +100,7 @@ export async function run(argv) {
    console.log(`  Branche, si le travail continue dans le mono: feature/${taskId}`)
    console.log('')
    console.log('  Ensuite:')
-   console.log(`   1. Écrire le brief dans prototypes/${taskId}/README.md`)
+   console.log(`   1. Le brief est la tâche GoodDay: n'ajouter à prototypes/${taskId}/README.md que les contraintes données`)
    console.log('   2. Construire v001/index.vue et v001/mocks.ts')
    console.log(`   3. pnpm proto check ${number}`)
    console.log(`   4. pnpm proto open ${number}`)

@@ -13,6 +13,23 @@
                </template>
             </ez-table>
          </ez-card>
+
+         <ez-layout class="mt-4">
+            <ez-layout-col :cols="{ base: 12, md: 8 }">
+               <ez-card title="Références" subtitle="Les patrons de page dont partent les prototypes." flush>
+                  <ez-table :columns="patternColumns" :rows="thePatterns" clickable @row-click="openPattern">
+                     <template #cell-id="{ row }">
+                        <strong>{{ row.id }}</strong>
+                     </template>
+                  </ez-table>
+               </ez-card>
+            </ez-layout-col>
+            <ez-layout-col :cols="{ base: 12, md: 4 }">
+               <ez-card title="Système" subtitle="Les composants ez- et les tokens, tels qu'ils s'affichent.">
+                  <ez-btn variant="secondary" icon="eye" label="Galerie des composants" @click="theRouter.push('/gallery')" />
+               </ez-card>
+            </ez-layout-col>
+         </ez-layout>
       </ez-page-content>
    </ez-page>
 </template>
@@ -21,12 +38,9 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { EzTableColumn } from '@ez'
-import { listTasks, type ProtoStatus } from '@/registry'
+import { STATUS_LABEL as statusLabel, STATUS_TONE as statusTone, listPatterns, listTasks, type ProtoStatus } from '@/registry'
 
 const theRouter = useRouter()
-
-const statusLabel: Record<ProtoStatus, string> = { draft: 'Brouillon', review: 'En revue', chosen: 'Retenu', archived: 'Archivé' }
-const statusTone = { draft: 'neutral', review: 'info', chosen: 'success', archived: 'neutral' } as const
 
 const columns: EzTableColumn[] = [
    { key: 'goodday', label: 'GoodDay' },
@@ -46,6 +60,17 @@ const theRows = computed(() => listTasks().map((task) => ({
    chosen: task.meta.chosen ?? '—',
    owner: task.meta.owner ?? '—',
 })))
+
+const patternColumns: EzTableColumn[] = [
+   { key: 'id', label: 'Patron' },
+   { key: 'summary', label: 'Ce qu\'il montre' },
+]
+
+const thePatterns = computed(() => listPatterns().map((pattern) => ({ id: pattern.id, summary: pattern.notes.summary })))
+
+function openPattern(row: { id: string }) {
+   theRouter.push(`/e/${row.id}`)
+}
 
 function open(row: { id: string }) {
    theRouter.push(`/p/${row.id}`)

@@ -1,66 +1,81 @@
 <template>
    <div class="shell">
-      <!-- Hidden entirely when closed: the prototype gets all the width. Toggled from the dev bar or with [ -->
-      <aside v-show="theSidebarOpen" class="shell__sidebar" aria-label="Navigation">
-         <router-link to="/" class="shell__heading shell__heading--link">Prototypes</router-link>
-         <div class="shell__nav">
-         <router-link
-            v-for="theTask in theTasks"
-            :key="theTask.id"
-            :to="`/p/${theTask.id}`"
-            class="shell__item"
-            :class="{ 'is-active': $route.params.taskId === theTask.id }"
-         >
-            <span class="shell__dot" :class="`shell__dot--${theTask.meta.status}`" />
-            <span class="shell__item-label">{{ theTask.meta.title }}</span>
-            <span class="shell__count">{{ theTask.versions.length }}</span>
-         </router-link>
-         <p v-if="!theTasks.length" class="shell__empty">pnpm proto new</p>
-
-         <p class="shell__heading">Références</p>
-         <router-link
-            v-for="theExample in theExamples"
-            :key="theExample.id"
-            :to="`/e/${theExample.id}`"
-            class="shell__item"
-         >
-            <span class="shell__item-label">{{ theExample.id }}</span>
+      <!--
+         The left panel follows what is on screen. The dashboard has none: it lists everything itself.
+         A prototype: the way back, the task, its versions. A reference or the gallery: the way back and the others.
+         Slides away when closed: the prototype gets all the width. Toggled from the dev bar or with [
+      -->
+      <aside v-if="!isHome" class="shell__sidebar" :class="{ 'is-closed': !theSidebarOpen }" :inert="!theSidebarOpen" aria-label="Navigation">
+         <router-link to="/" class="shell__back">
+            <ez-icon name="back" :size="16" />
+            <span>Prototypes</span>
          </router-link>
 
-         <p class="shell__heading">Système</p>
-         <router-link to="/gallery" class="shell__item">
-            <span class="shell__item-label">Galerie des composants</span>
-         </router-link>
+         <template v-if="theTask">
+            <header class="shell__task">
+               <h1>{{ theTask.meta.title }}</h1>
+               <div class="shell__task-meta">
+                  <ez-badge :tone="STATUS_TONE[theTask.meta.status]" :label="STATUS_LABEL[theTask.meta.status]" />
+                  <a v-if="theTask.meta.goodday" :href="theTask.meta.goodday.url" target="_blank" rel="noopener">GoodDay #{{ theTask.meta.goodday.number }} ↗</a>
+                  <ez-badge v-else-if="theTask.meta.demo" tone="neutral" label="Démo" />
+               </div>
+            </header>
+
+            <p class="shell__heading">Versions</p>
+            <nav class="shell__versions" aria-label="Versions">
+               <router-link
+                  v-for="theItem in theTask.versions"
+                  :key="theItem.id"
+                  class="shell__version"
+                  :class="{ 'is-active': theItem.id === theVersion?.id, 'is-chosen': theItem.id === theTask.meta.chosen }"
+                  :to="`/p/${theTask.id}/${theItem.id}`"
+               >
+                  <span class="shell__version-id">{{ theItem.id }}</span>
+                  <span v-if="theItem.id === theTask.meta.chosen" class="shell__chosen">retenue</span>
+                  <span class="shell__version-summary">{{ theItem.notes.summary || '—' }}</span>
+               </router-link>
+            </nav>
+            <code class="shell__path">prototypes/{{ theTask.id }}/{{ theVersion?.id }}</code>
+         </template>
+
+         <div v-else class="shell__nav">
+            <p class="shell__heading">Références</p>
+            <router-link
+               v-for="theExample in theExamples"
+               :key="theExample.id"
+               :to="`/e/${theExample.id}`"
+               class="shell__item"
+            >
+               <span class="shell__item-label">{{ theExample.id }}</span>
+            </router-link>
+
+            <p class="shell__heading">Système</p>
+            <router-link to="/gallery" class="shell__item">
+               <span class="shell__item-label">Galerie des composants</span>
+            </router-link>
          </div>
       </aside>
 
       <main class="shell__main">
          <router-view />
       </main>
-
-      <!-- Pages without a dev bar (the home page) keep a way back to the panel -->
-      <ez-btn
-         v-if="!theSidebarOpen && $route.path === '/'"
-         class="shell__reopen"
-         variant="secondary"
-         size="sm"
-         icon="chevronRight"
-         aria-label="Afficher le panneau"
-         title="Afficher le panneau ( [ )"
-         @click="toggleSidebar"
-      />
    </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount } from 'vue'
-import { listPatterns, listTasks } from '@/registry'
+import { computed, onBeforeUnmount } from 'vue'
+import { useRoute } from 'vue-router'
+import { STATUS_LABEL, STATUS_TONE, currentVersion, getTask, listPatterns } from '@/registry'
 import { listenSidebarShortcut, useSidebar } from './sidebar'
 
-const theTasks = listTasks()
+const route = useRoute()
 const theExamples = listPatterns()
 
-const { theSidebarOpen, toggleSidebar } = useSidebar()
+const isHome = computed(() => route.path === '/')
+const theTask = computed(() => (typeof route.params.taskId === 'string' ? getTask(route.params.taskId) : undefined))
+const theVersion = computed(() => currentVersion(theTask.value, typeof route.params.versionId === 'string' ? route.params.versionId : undefined))
+
+const { theSidebarOpen } = useSidebar()
 onBeforeUnmount(listenSidebarShortcut())
 </script>
 
@@ -78,13 +93,19 @@ onBeforeUnmount(listenSidebarShortcut())
    background: var(--color-surface);
    border-right: 1px solid var(--color-border);
    font-size: var(--text-sm);
-}
 
-.shell__reopen {
-   position: fixed;
-   bottom: 12px;
-   left: 12px;
-   z-index: 20;
+   /* Slides out of the layout instead of vanishing: the prototype grows as the drawer leaves */
+   transition: margin-left 180ms ease, visibility 0s;
+
+   &.is-closed {
+      margin-left: -248px;
+      visibility: hidden;
+      transition: margin-left 180ms ease, visibility 0s 180ms;
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+      transition: none;
+   }
 }
 
 .shell__heading {
@@ -95,15 +116,6 @@ onBeforeUnmount(listenSidebarShortcut())
    font-weight: 600;
    text-transform: uppercase;
    letter-spacing: 0.04em;
-}
-
-.shell__heading--link {
-   margin-top: 0;
-   text-decoration: none;
-
-   &:hover {
-      color: var(--color-foreground);
-   }
 }
 
 .shell__item {
@@ -135,32 +147,100 @@ onBeforeUnmount(listenSidebarShortcut())
    text-overflow: ellipsis;
 }
 
-.shell__count {
-   color: var(--color-foreground-subtle);
-   font-size: var(--text-xs);
+.shell__back {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   margin: 0 0 12px;
+   padding: 4px 8px;
+   border-radius: var(--radius-md);
+   color: var(--color-foreground-muted);
+   font-weight: 600;
+   text-decoration: none;
+
+   &:hover {
+      background: color-mix(in srgb, var(--color-foreground) 4%, var(--color-surface));
+      color: var(--color-foreground);
+   }
 }
 
-.shell__dot {
-   flex-shrink: 0;
-   width: 8px;
-   height: 8px;
-   border-radius: var(--radius-full);
-   background: var(--color-border-strong);
+.shell__task {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+   margin: 0 8px 4px;
+
+   h1 {
+      margin: 0;
+      font-size: var(--text-lg);
+      line-height: var(--text-lg--line-height);
+   }
 }
 
-.shell__dot--review {
-   background: var(--color-info);
+.shell__task-meta {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   gap: 8px;
 }
 
-.shell__dot--chosen {
-   background: var(--color-positive);
+.shell__versions {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+   margin: 0 8px;
 }
 
-.shell__empty {
-   margin: 4px 8px;
-   color: var(--color-foreground-subtle);
+.shell__version {
+   display: grid;
+   grid-template-columns: auto auto;
+   align-items: center;
+   gap: 2px 6px;
+   padding: 8px 10px;
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-md);
+   color: var(--color-foreground);
+   text-decoration: none;
+
+   &:hover {
+      border-color: var(--color-border-strong);
+   }
+
+   &.is-active {
+      border-color: var(--color-accent);
+      background: var(--color-surface-accent);
+   }
+
+   &.is-chosen .shell__version-id::before {
+      content: "★ ";
+      color: var(--color-positive);
+   }
+}
+
+.shell__version-id {
    font-family: var(--font-mono);
    font-size: var(--text-xs);
+   font-weight: 700;
+}
+
+.shell__chosen {
+   justify-self: end;
+   color: var(--color-foreground-positive);
+   font-size: var(--text-xs);
+}
+
+.shell__version-summary {
+   grid-column: 1 / -1;
+   color: var(--color-foreground-muted);
+   font-size: var(--text-xs);
+}
+
+.shell__path {
+   display: block;
+   margin: 12px 8px 0;
+   color: var(--color-foreground-subtle);
+   font-size: var(--text-xs);
+   overflow-wrap: anywhere;
 }
 
 .shell__main {

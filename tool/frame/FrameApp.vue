@@ -6,6 +6,8 @@
       :chrome="theTarget.chrome"
       :label="theTarget.label"
       :theme="theRoute.theme"
+      :shell-url="theTarget.shellUrl"
+      :newer="theTarget.newer"
       @update:scenario="(name: string) => setParam('scenario', name)"
       @update:theme="(theme: FrameTheme) => setParam('theme', theme === 'dark' ? 'dark' : '')"
    />
@@ -46,8 +48,12 @@ const theTarget = computed(() => {
    const [kind, id, version] = theRoute.value.segments
 
    if (kind === 'p' && id && version) {
-      const meta: Partial<ProtoMeta> = getTask(id)?.meta ?? {}
+      const task = getTask(id)
+      const meta: Partial<ProtoMeta> = task?.meta ?? {}
+      const latest = task?.versions.at(-1)?.id
       return {
+         shellUrl: `/#/p/${id}/${version}`,
+         newer: latest && latest !== version ? { id: latest, url: `#/p/${id}/${latest}` } : null,
          key: `p/${id}/${version}`,
          load: () => loadModule(`prototypes/${id}/${version}`),
          chrome: theRoute.value.chrome ?? meta.chrome ?? 'app',
@@ -57,6 +63,8 @@ const theTarget = computed(() => {
 
    if (kind === 'e' && id) {
       return {
+         shellUrl: `/#/e/${id}`,
+         newer: null,
          key: `e/${id}`,
          load: () => loadModule(`blueprint/patterns/${id}`),
          chrome: theRoute.value.chrome ?? 'app',
@@ -65,6 +73,8 @@ const theTarget = computed(() => {
    }
 
    return {
+      shellUrl: '/#/gallery',
+      newer: null,
       key: 'gallery',
       load: async () => ({ component: GalleryPage, scenarios: { default: () => ({}) } }),
       chrome: 'none' as ProtoChrome,

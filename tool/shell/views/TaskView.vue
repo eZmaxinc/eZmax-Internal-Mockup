@@ -2,31 +2,7 @@
    <div v-if="!theTask" class="task-view__missing">Prototype introuvable: {{ taskId }}</div>
 
    <div v-else class="task-view">
-      <header class="task-view__header">
-         <div class="task-view__titles">
-            <h1>{{ theTask.meta.title }}</h1>
-            <ez-badge :tone="statusTone[theTask.meta.status]" :label="statusLabel[theTask.meta.status]" />
-            <a v-if="theTask.meta.goodday" :href="theTask.meta.goodday.url" target="_blank" rel="noopener">GoodDay #{{ theTask.meta.goodday.number }} ↗</a>
-            <ez-badge v-else-if="theTask.meta.demo" tone="neutral" label="Démo" />
-         </div>
-         <code class="task-view__id">prototypes/{{ theTask.id }}/{{ theVersion?.id }}</code>
-      </header>
-
-      <nav class="task-view__timeline" aria-label="Versions">
-         <router-link
-            v-for="theItem in theTask.versions"
-            :key="theItem.id"
-            class="task-view__version"
-            :class="{ 'is-active': theItem.id === theVersion?.id, 'is-chosen': theItem.id === theTask.meta.chosen }"
-            :to="`/p/${theTask.id}/${theItem.id}`"
-            :title="theItem.notes.summary"
-         >
-            <span class="task-view__version-id">{{ theItem.id }}</span>
-            <span v-if="theItem.id === theTask.meta.chosen" class="task-view__chosen">retenue</span>
-            <span class="task-view__version-summary">{{ theItem.notes.summary || '—' }}</span>
-         </router-link>
-      </nav>
-
+      <!-- The task and its versions are in the shell's left panel; the notes in the panel on the right -->
       <proto-viewer v-if="theVersion" :frames="theFrames" :scenario-names="theScenarioNames">
          <template #devbar-start>
             <label class="task-view__compare">
@@ -73,7 +49,7 @@ import { computed, ref, watch } from 'vue'
 import ProtoViewer from '../ProtoViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
-import { getTask, type ProtoStatus } from '@/registry'
+import { currentVersion, getTask } from '@/registry'
 
 const props = defineProps<{
    taskId: string
@@ -82,18 +58,9 @@ const props = defineProps<{
 
 const isDev = import.meta.env.DEV
 
-const statusLabel: Record<ProtoStatus, string> = { draft: 'Brouillon', review: 'En revue', chosen: 'Retenu', archived: 'Archivé' }
-const statusTone = { draft: 'neutral', review: 'info', chosen: 'success', archived: 'neutral' } as const
-
 const theTask = computed(() => getTask(props.taskId))
 
-/** Default: requested version, else the chosen one, else the latest. */
-const theVersion = computed(() => {
-   const versions = theTask.value?.versions ?? []
-   return versions.find((version) => version.id === props.versionId)
-      ?? versions.find((version) => version.id === theTask.value?.meta.chosen)
-      ?? versions[versions.length - 1]
-})
+const theVersion = computed(() => currentVersion(theTask.value, props.versionId))
 
 const theScenarioNames = useScenarioNames(() => theVersion.value && `prototypes/${props.taskId}/${theVersion.value.id}`)
 
@@ -117,89 +84,6 @@ const theFrames = computed(() => {
 
 .task-view__missing {
    padding: 24px;
-}
-
-.task-view__header {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   gap: 16px;
-   padding: 14px 16px 8px;
-   background: var(--color-surface);
-}
-
-.task-view__titles {
-   display: flex;
-   align-items: center;
-   gap: 10px;
-   font-size: var(--text-sm);
-
-   h1 {
-      margin: 0;
-      font-size: var(--text-lg);
-   }
-}
-
-.task-view__id {
-   color: var(--color-foreground-subtle);
-   font-size: var(--text-xs);
-}
-
-.task-view__timeline {
-   display: flex;
-   gap: 6px;
-   padding: 0 16px 10px;
-   overflow-x: auto;
-   background: var(--color-surface);
-}
-
-.task-view__version {
-   display: grid;
-   grid-template-columns: auto auto;
-   align-items: center;
-   gap: 0 6px;
-   flex: 0 0 auto;
-   max-width: 220px;
-   padding: 6px 10px;
-   border: 1px solid var(--color-border);
-   border-radius: var(--radius-md);
-   color: var(--color-foreground);
-   text-decoration: none;
-
-   &:hover {
-      border-color: var(--color-border-strong);
-   }
-
-   &.is-active {
-      border-color: var(--color-accent);
-      background: var(--color-surface-accent);
-   }
-
-   &.is-chosen .task-view__version-id::before {
-      content: "★ ";
-      color: var(--color-positive);
-   }
-}
-
-.task-view__version-id {
-   font-family: var(--font-mono);
-   font-size: var(--text-xs);
-   font-weight: 700;
-}
-
-.task-view__chosen {
-   justify-self: end;
-   color: var(--color-foreground-positive);
-   font-size: var(--text-xs);
-}
-
-.task-view__version-summary {
-   grid-column: 1 / -1;
-   overflow: hidden;
-   color: var(--color-foreground-muted);
-   font-size: var(--text-xs);
-   white-space: nowrap;
-   text-overflow: ellipsis;
 }
 
 .task-view__compare {

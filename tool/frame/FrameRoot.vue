@@ -8,9 +8,14 @@
       <component :is="theModule.component" v-else :key="theRenderKey" />
    </template>
 
-   <!-- Standalone (new tab or exported HTML): small floating bar to switch scenarios -->
+   <!--
+      Standalone (new tab or exported HTML): small floating bar to switch scenarios.
+      This page stays on the version it was opened at, so it says when a later one exists and links back to
+      the shell: someone left on an old version would otherwise wait for changes that went into the next one.
+   -->
    <div v-if="isStandalone && theModule" class="frame-root__bar">
       <span class="frame-root__label">{{ label }}</span>
+      <a v-if="newer" class="frame-root__chip frame-root__chip--active" :href="newer.url">Dernière version: {{ newer.id }} →</a>
       <template v-if="theScenarioNames.length > 1">
          <button
             v-for="theName in theScenarioNames"
@@ -31,6 +36,7 @@
       >
          {{ theme === 'dark' ? 'Clair' : 'Sombre' }}
       </button>
+      <a v-if="shellUrl" class="frame-root__chip" :href="shellUrl" title="Voir cette version dans le shell, avec les autres versions et les notes">Shell ↗</a>
    </div>
 </template>
 
@@ -48,6 +54,10 @@ const props = defineProps<{
    chrome: 'app' | 'none'
    label: string
    theme: FrameTheme
+   /** Dev only: where this version lives in the shell */
+   shellUrl?: string
+   /** Dev only: the latest version of the task, when this page shows an earlier one */
+   newer?: { id: string, url: string } | null
 }>()
 
 const emit = defineEmits<{
@@ -120,7 +130,10 @@ watch(() => props.targetKey, async () => {
 }
 
 .frame-root__chip {
+   display: inline-flex;
+   align-items: center;
    height: 24px;
+   text-decoration: none;
    padding: 0 10px;
    border: none;
    border-radius: var(--radius-full);

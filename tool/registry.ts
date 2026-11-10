@@ -131,6 +131,17 @@ export function listTasks(): ProtoTask[] {
       || (b.meta.goodday?.number ?? 0) - (a.meta.goodday?.number ?? 0))
 }
 
+export const STATUS_LABEL: Record<ProtoStatus, string> = { draft: 'Brouillon', review: 'En revue', chosen: 'Retenu', archived: 'Archivé' }
+export const STATUS_TONE = { draft: 'neutral', review: 'info', chosen: 'success', archived: 'neutral' } as const
+
+/** The version on screen: the requested one, else the chosen one, else the latest. */
+export function currentVersion(task: ProtoTask | undefined, versionId?: string): ProtoVersion | undefined {
+   const versions = task?.versions ?? []
+   return versions.find((version) => version.id === versionId)
+      ?? versions.find((version) => version.id === task?.meta.chosen)
+      ?? versions[versions.length - 1]
+}
+
 export function getTask(id: string): ProtoTask | undefined {
    return listTasks().find((task) => task.id === id)
 }

@@ -49,21 +49,12 @@ export async function run(argv) {
       '---',
       summary,
       '',
-      '## Changements',
-      '- ',
-      '',
-      '## Signalements',
-      '- ',
-      '',
-      '## Questions ouvertes',
-      '- ',
-      '',
    ].join('\n'))
 
    console.log(`✓ ${flags.variant ? 'Variante' : 'Version'} créée: prototypes/${taskId}/${target} (copie de ${source})`)
    console.log(`  Fichiers: ${readdirSync(targetDir).join(', ')}`)
    console.log('')
-   console.log(`  Ensuite: modifier ${target}/ seulement (jamais ${source}/), compléter ${target}/notes.md,`)
+   console.log(`  Ensuite: modifier ${target}/ seulement (jamais ${source}/), tenir ${target}/notes.md à jour (résumé, signalements et questions nouveaux),`)
    console.log(`  puis pnpm proto check ${taskId}`)
    await notifyDevServer(`${taskId}/${target}`)
 }
