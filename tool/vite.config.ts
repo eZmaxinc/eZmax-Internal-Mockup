@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { spawnSync } from 'node:child_process'
 import { readFileSync, existsSync } from 'node:fs'
 import { basename, join } from 'node:path'
-import { DEV_PORT, ROOT, TOOL, aliases } from './paths.mjs'
+import { BLUEPRINT, DEV_PORT, PROTOTYPES, ROOT, TOOL, aliases } from './paths.mjs'
 
 /**
  * Dev-only endpoint used by the shell's "Export HTML" button.
@@ -47,9 +47,24 @@ function protoExportEndpoint(): Plugin {
    }
 }
 
+/**
+ * Vite's root is tool/, so by default it only watches tool/. Without this, a prototype created while
+ * the dev server runs (pnpm proto new / iterate) stays « Introuvable » until a restart: the registry's
+ * import.meta.glob never hears about the new files.
+ */
+function watchContentFolders(): Plugin {
+   return {
+      name: 'ez-proto-watch-content',
+      apply: 'serve',
+      configureServer(server) {
+         server.watcher.add([PROTOTYPES, BLUEPRINT])
+      },
+   }
+}
+
 export default defineConfig({
    root: TOOL,
-   plugins: [vue(), tailwindcss(), protoExportEndpoint()],
+   plugins: [vue(), tailwindcss(), protoExportEndpoint(), watchContentFolders()],
    resolve: { alias: aliases },
    server: {
       port: DEV_PORT,
