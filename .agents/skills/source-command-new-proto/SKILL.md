@@ -21,4 +21,4 @@ Create a new prototype task from the user's brief.
 5. Build `v001/index.vue` and `v001/mocks.ts` (at least two scenarios), then `v001/notes.md`.
 6. Run `pnpm proto check <task>` and fix every ✗.
    Look at it in the browser: `pnpm dev` must run in a background terminal; `pnpm proto open <task> <version>` prints the URLs. Open the **Prototype** URL in your browser (Cursor's browser), check every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (390 px), compare with the closest pattern, fix what looks off.
-7. Report: task id, version, one-line summary, open questions.
+7. Report: task id, version, one-line summary, scenarios, « Propositions » and « Signalements » (or « aucun »), open questions.

@@ -67,8 +67,6 @@
          </label>
 
          <slot name="devbar-end" :scenario="theScenario" />
-
-         <a class="proto-viewer__link" :href="frameUrl(frames[0])" target="_blank" rel="noopener">Ouvrir ↗</a>
       </footer>
    </div>
 </template>
@@ -218,11 +216,6 @@ function frameUrl(path: string) {
    }
 }
 
-.proto-viewer__link {
-   margin-left: auto;
-   font-weight: 600;
-   text-decoration: none;
-}
 
 .proto-viewer__body {
    display: flex;

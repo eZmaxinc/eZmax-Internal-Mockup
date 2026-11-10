@@ -43,8 +43,15 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [x] Tâche existante: l'agent s'arrête et demande (règles, commande `new-proto`, message de `proto new`)
   - [x] `proto check` avertit quand une version déjà commitée est modifiée
   - [x] Étape 0 du scénario: `main` à jour, `git status` vide, les quatre étapes obligatoires
-- [ ] **Essai 3**: scénario complet (4 étapes), parti de zéro
-- [ ] Corrections après l'essai 3
+- [x] **Essai 4** (étape 1 seulement): 12/12, aucune intervention, ~17 lectures, rien de touché hors du prototype. Bloqué par un bug du serveur de dev (contourné seul); a signalé un vrai bug d'`ez-message-important`
+- [x] Corrections après l'essai 4:
+  - [x] Le serveur de dev surveille `prototypes/` et `blueprint/` (un prototype créé pendant `pnpm dev` n'est plus « Introuvable »)
+  - [x] `ez-message-important`: en étroit, les actions passent sous le texte au lieu de l'écraser
+  - [x] `EzsignFolder.extendDueDate(days)` (la mécanique; quels états se prolongent reste une décision produit)
+  - [x] Shell: plus de lien « Ouvrir ↗ », « Exporter HTML » devient « Exporter »
+  - [x] Le compte rendu final reprend « Propositions » et « Signalements »; un bug de primitive vient avec la correction suggérée
+- [ ] **Essai 5**: scénario complet, **les quatre étapes** dans la même conversation, poussé seulement après l'étape 4
+- [ ] Corrections après l'essai 5
 - [ ] Une seule source de règles: `.cursor/rules` et `.agents/skills` renvoient à `AGENTS.md` au lieu de le répéter
 
 **Critère de sortie**: deux essais de suite à **30/32 ou plus**, avec **au plus une intervention**, sans changement non demandé dans `blueprint/`.

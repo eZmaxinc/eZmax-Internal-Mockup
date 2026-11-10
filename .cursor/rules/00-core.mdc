@@ -14,4 +14,5 @@ Non-negotiables:
 - Don't read `tool/` nor the source of `blueprint/`: `pnpm proto help`, `blueprint/ez/CATALOG.md` and `blueprint/mocks/API.md` answer.
 - Every version has `index.vue`, `mocks.ts` (named scenarios) and `notes.md` (one-line summary first).
 - Finish with `pnpm proto check <task>` and fix every ✗ before reporting done.
-- When done, tell the user: the task id, the version, a one-line summary, and that it is visible in the shell (`pnpm dev` → http://localhost:5180).
+- When done, tell the user: the task id, the version, a one-line summary, the scenarios, the « Propositions » and « Signalements » of `notes.md` (or « aucun »), the open questions, and that it is visible in the shell (`pnpm dev` → http://localhost:5180).
+- A `Bug primitive` / `Bug helper` comes with the fix you suggest (file, what to change); never apply it to `blueprint/` yourself.

@@ -44,7 +44,8 @@
                class="task-view__export"
                :href="`/__proto/export?task=${theTask.id}&version=${theVersion.id}`"
                :download="`${theTask.id}-${theVersion.id}.html`"
-            >Exporter HTML</a>
+               title="Télécharger cette version en un fichier HTML autonome et interactif"
+            >Exporter</a>
          </template>
 
          <template #panel>

@@ -9,7 +9,7 @@ pnpm install
 pnpm dev        # http://localhost:5180
 ```
 
-Le shell montre les prototypes, leurs versions et notes, les patrons de référence et la galerie des composants. Pour chaque version: bascule de scénario de données, largeur (bureau, tablette, mobile), comparaison côte à côte, ouverture plein écran et export HTML. Le panneau de gauche se masque (touche `[`) pour donner toute la largeur au prototype.
+Le shell montre les prototypes, leurs versions et notes, les patrons de référence et la galerie des composants. Pour chaque version: bascule de scénario de données, largeur (bureau, tablette, mobile), comparaison côte à côte et export HTML. Le prototype seul (pour l'annoter ou le voir en pleine page): l'adresse « Prototype » de `pnpm proto open <tâche>`. Le panneau de gauche se masque (touche `[`) pour donner toute la largeur au prototype.
 
 ## Un prototype = une tâche GoodDay
 

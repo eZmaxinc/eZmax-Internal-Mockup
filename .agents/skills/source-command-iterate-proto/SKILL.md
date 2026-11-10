@@ -19,4 +19,4 @@ Create the next version of an existing prototype from the user's feedback.
 4. Update the new `notes.md`: changes and open questions.
 5. Run `pnpm proto check <task>` and fix every ✗.
    Look at it in the browser: `pnpm dev` must run in a background terminal; `pnpm proto open <task> <version>` prints the URLs. Open the **Prototype** URL in your browser (Cursor's browser), check every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (390 px), compare with the closest pattern, fix what looks off.
-6. Report the new version id and what changed.
+6. Report the new version id, what changed, « Propositions » and « Signalements » (or « aucun »), open questions.

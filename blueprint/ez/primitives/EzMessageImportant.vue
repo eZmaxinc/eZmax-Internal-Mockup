@@ -31,10 +31,15 @@ const iconByType: Record<string, IconName> = {
 </script>
 
 <style scoped>
+/*
+ * Text and actions share the line while there is room. When there isn't (narrow screen, 4/12 column),
+ * the actions wrap below the text instead of crushing it: the body never goes under 14rem.
+ */
 .ez-message-important {
    display: flex;
+   flex-wrap: wrap;
    align-items: flex-start;
-   gap: 12px;
+   gap: 8px 12px;
    padding: 12px 16px;
    border: 1px solid;
    border-radius: var(--radius-md);
@@ -46,7 +51,7 @@ const iconByType: Record<string, IconName> = {
 }
 
 .ez-message-important__body {
-   flex: 1;
+   flex: 1 1 14rem;
    min-width: 0;
 }
 
@@ -55,10 +60,14 @@ const iconByType: Record<string, IconName> = {
    font-weight: 600;
 }
 
+/* Right-aligned on the text's line; on their own line when wrapped, still right-aligned, and wrapping between buttons if needed */
 .ez-message-important__actions {
    display: flex;
+   flex-wrap: wrap;
+   justify-content: flex-end;
    gap: 8px;
-   flex-shrink: 0;
+   max-width: 100%;
+   margin-left: auto;
 }
 
 .ez-message-important--info {

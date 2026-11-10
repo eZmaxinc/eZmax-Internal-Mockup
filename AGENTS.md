@@ -105,7 +105,9 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 - …
 ```
 
-**Something is wrong in `blueprint/`** (a primitive bug, a missing mock method): don't fix it there. Work around it inside the version if needed, and write it under « Signalements » as `Bug primitive: …`, `Bug helper: …`, `Mock manquant: …` or `Composant manquant: …`. `pnpm proto proposals` collects them for the team.
+**Something is wrong in `blueprint/`** (a primitive bug, a missing mock method): don't fix it there. Work around it inside the version if needed, and write it under « Signalements » as `Bug primitive: …`, `Bug helper: …`, `Mock manquant: …` or `Composant manquant: …`. `pnpm proto proposals` collects them for the team. For a `Bug primitive` or `Bug helper`, add **the fix you suggest** (which file, what to change, e.g. « `EzMessageImportant.vue`: `flex-wrap` on the container, body `flex: 1 1 14rem` »), so the reviewer only has to validate it; and work around it in the version so the prototype stays presentable.
+
+**Your final message** always gives: the task, the version, a one-line summary, the scenarios, the « Propositions » and « Signalements » (or « aucun »), and the open questions. A report left only in `notes.md` goes unseen.
 
 ## Commands
 

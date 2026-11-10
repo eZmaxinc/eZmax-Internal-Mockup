@@ -113,6 +113,16 @@ export class EzsignFolder {
       return Math.ceil((this.dueAt.getTime() - now.getTime()) / 86_400_000)
    }
 
+   /**
+    * Pushes the due date `days` days later (from the current due date, or from today without one).
+    * The mechanics only: which states may be extended is a product decision, left to the prototype.
+    */
+   extendDueDate(days: number): Date {
+      const from = this.dueAt ?? daysFromToday(0)
+      this.dueAt = new Date(from.getTime() + days * 86_400_000)
+      return this.dueAt
+   }
+
    /** Still open and due within `days` days (3 by default), today included */
    isDueSoon(days = 3, now = daysFromToday(0)) {
       const left = this.daysUntilDue(now)

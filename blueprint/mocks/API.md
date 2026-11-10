@@ -56,6 +56,7 @@ An eZsign folder: documents to sign, signers, a due date.
 | `signedCount()` | `()` | Number of signers who signed |
 | `pendingSigners()` | `()` | Signers who still have to sign |
 | `daysUntilDue()` | `(now = daysFromToday(0)): number \| null` | Days left before the due date (negative once past), null without a due date |
+| `extendDueDate()` | `(days: number): Date` | Pushes the due date `days` days later (from the current due date, or from today without one). The mechanics only: which states may be extended is a product decision, left to the prototype. |
 | `isDueSoon()` | `(days = 3, now = daysFromToday(0))` | Still open and due within `days` days (3 by default), today included |
 | `stateLabel()` | `()` | French label of the state (« En signature »…) |
 | `stateTone()` | `(): BadgeTone` | ez-badge tone of the state; prefer `<ez-badge-folder-state>` |
