@@ -38,10 +38,11 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
    ```bash
    git rev-parse --short HEAD
    ```
-3. **Lancer le shell** dans un terminal de Cursor, et le laisser tourner:
+3. **Un seul shell.** Fermer les terminaux des essais précédents, puis lancer le shell dans un terminal de Cursor, et le laisser tourner:
    ```bash
    pnpm dev
    ```
+   Le port est fixe (5180). Si `pnpm dev` répond que le port est pris, un ancien shell tourne encore: le fermer d'abord. À l'essai 7, cinq vieux shells traînaient et l'agent en a lancé trois de plus.
 4. **Ouvrir une nouvelle conversation d'agent** dans Cursor, avec `ez-proto` comme dossier racine. Toujours une conversation neuve, et toujours le même modèle, à noter dans le journal.
 5. Démarrer un chronomètre.
 
@@ -179,4 +180,5 @@ Puis repartir de l'étape 0.
 | 2026-11-09 | 5fa3ca0 | (non noté) | 12/12 (étape 1 seulement) | 0 | | | ~40 lectures avant d'écrire (CLI, helpers, sources des primitives); bug d'`ez-dialog` à 390 px contourné dans la proposition sans être signalé | Recette dans `AGENTS.md`, API générée de `@mocks` et des helpers, « Signalements » dans les notes, avertissement sur `blueprint/` modifié, `ez-dialog` corrigé, `daysUntilDue()` |
 | 2026-11-09 | 7ce90ed | (non noté) | 11/12 (étape 1 seulement; 1.1 invérifiable) | 0 | | | Parti des fichiers de l'essai 1 (étape 0 sautée): l'agent a réécrit la v001 existante au lieu de s'arrêter. Son signalement d'un vrai bug (`formatRelative` et la date des mocks) n'a pas été collecté. ~30 lectures, mais plus aucune dans `tool/` | « Aujourd'hui » unique (`PROTO_TODAY`); tous les signalements collectés; tâche existante: s'arrêter (règle + message de `proto new`); `proto check` avertit si une version commitée est modifiée; étape 0 exige un `git status` vide |
 | 2026-11-10 | c974936 | (non noté) | 12/12 (étape 1 seulement) | 0 | | | Bloqué par un bug de l'outil (prototype « Introuvable » tant que `pnpm dev` n'était pas relancé), contourné seul avec un 2e serveur. ~17 lectures. A trouvé et signalé un vrai bug d'`ez-message-important` à 390 px, sans toucher `blueprint/` | Serveur de dev qui surveille `prototypes/` et `blueprint/`; `ez-message-important` passe les actions sous le texte en étroit; `EzsignFolder.extendDueDate(days)` |
+| 2026-11-10 | 411472e | (non noté) | 25/27 (étapes 1 à 3; étape 4 absente du transcript) | 1 (« c'est visible sur quel port? ») | ~35 min | | Un nouveau shell lancé à chaque version (ports 5185, 5186, 5187): la version créée n'apparaissait pas dans le shell ouvert, sur un dépôt en `G:\`. 22 lectures avant d'écrire, dont 9 de terminaux pour trouver le shell et 4 de la démo. Seul le scénario par défaut ouvert dans le navigateur. Commité sur `main` au lieu d'une branche `essai/7` | `proto new` et `proto iterate` préviennent le shell (la version s'affiche sans le relancer, même sans événements de fichiers); port fixe strict; `PROTO_POLL=1` pour un lecteur sans événements; étape 0: un seul shell |
 | | | | | | | | | |

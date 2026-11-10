@@ -52,6 +52,14 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [x] Le compte rendu final reprend « Propositions » et « Signalements »; un bug de primitive vient avec la correction suggérée
 - [ ] **Essai 5** (après le jalon 2, pour ne pas ajuster l'agent sur des couleurs et des noms provisoires): scénario complet, **les quatre étapes** dans la même conversation, poussé seulement après l'étape 4
 - [ ] Corrections après l'essai 5
+- [x] **Essai 7** (étapes 1 à 3): 25/27, 1 intervention. Un shell relancé à chaque version (dépôt en `G:\`), 22 lectures avant d'écrire, `v001` trop riche, tableau de `v002` trop large pour sa carte
+- [ ] Corrections après l'essai 7:
+  - [x] `proto new` et `proto iterate` préviennent le shell; port fixe strict; `PROTO_POLL=1`; un seul shell à l'étape 0
+  - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
+  - [ ] `AGENTS.md`: ne pas lire les autres prototypes; ouvrir chaque scénario par son URL; la `v001` est la plus petite réponse au brief
+  - [ ] `ez-card`: l'en-tête passe à la ligne quand `#actions` a plusieurs boutons (signalé à l'essai 7, avec le correctif)
+  - [ ] `ez-table`: sélection de lignes (demandée par l'essai 7)
+  - [ ] Sortir le commit de l'essai 7 de `main` (branche `essai/7`), sinon l'étape 0 ne donne plus un `git status` vide
 - [x] Une seule source de règles: `.cursor/rules`, `.cursor/commands` et `.agents/skills` renvoient à `AGENTS.md` au lieu de le répéter (les flux `new`, `iterate`, `variant`, `export` y sont décrits)
 - [ ] Essayer le « click and comment » du navigateur de Cursor sur un prototype: l'agent retrouve-t-il la bonne ligne de `index.vue`? Sinon, ajouter en dev un attribut qui donne le fichier et la ligne de chaque élément
 

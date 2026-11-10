@@ -7,7 +7,7 @@
  */
 import { cpSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { PROTOTYPES, VERSION_PATTERN, ask, fail, flagString, isInteractive, listVersions, parseArgs, resolveTask, today } from '../lib.mjs'
+import { PROTOTYPES, VERSION_PATTERN, ask, fail, flagString, isInteractive, listVersions, notifyDevServer, parseArgs, resolveTask, today } from '../lib.mjs'
 
 const USAGE = 'Usage: pnpm proto iterate <tâche> -m "Résumé" [--from v001] [--variant]'
 
@@ -65,4 +65,5 @@ export async function run(argv) {
    console.log('')
    console.log(`  Ensuite: modifier ${target}/ seulement (jamais ${source}/), compléter ${target}/notes.md,`)
    console.log(`  puis pnpm proto check ${taskId}`)
+   await notifyDevServer(`${taskId}/${target}`)
 }

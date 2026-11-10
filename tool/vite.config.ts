@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { spawnSync } from 'node:child_process'
-import { readFileSync, existsSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { BLUEPRINT, DEV_PORT, PROTOTYPES, ROOT, TOOL, aliases } from './paths.mjs'
 
@@ -62,13 +62,55 @@ function watchContentFolders(): Plugin {
    }
 }
 
+/**
+ * GET /__proto/refresh?dir=<task>[/<version>] — called by `proto new` and `proto iterate` right after they
+ * write files. On some drives (network or mapped ones) the watcher never hears about a new folder; this
+ * tells Vite itself, so the new version shows up without restarting the server.
+ */
+function protoRefreshEndpoint(): Plugin {
+   return {
+      name: 'ez-proto-refresh-endpoint',
+      apply: 'serve',
+      configureServer(server) {
+         server.middlewares.use('/__proto/refresh', (req, res) => {
+            const dir = new URL(req.url ?? '', 'http://localhost').searchParams.get('dir') ?? ''
+            const target = join(PROTOTYPES, dir)
+
+            res.setHeader('Content-Type', 'application/json')
+            if (!/^[\w-]+(\/v\d{3}[a-z]?)?$/.test(dir) || !existsSync(target)) {
+               res.statusCode = 400
+               res.end('{"ok":false}')
+               return
+            }
+
+            const files = walk(target)
+            files.forEach((file) => server.watcher.emit('add', file))
+            server.ws.send({ type: 'full-reload' })
+            res.end(JSON.stringify({ ok: true, files: files.length }))
+         })
+      },
+   }
+}
+
+function walk(dir: string): string[] {
+   return readdirSync(dir).flatMap((name) => {
+      const path = join(dir, name)
+      return statSync(path).isDirectory() ? walk(path) : [path]
+   })
+}
+
 export default defineConfig({
    root: TOOL,
-   plugins: [vue(), tailwindcss(), protoExportEndpoint(), watchContentFolders()],
+   plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), watchContentFolders()],
    resolve: { alias: aliases },
    server: {
       port: DEV_PORT,
+      // One shell at a time: a second `pnpm dev` says the port is taken instead of starting on 5181,
+      // where nobody looks (an agent then tests an old server, or starts a third one).
+      strictPort: true,
       fs: { allow: [ROOT] },
+      // PROTO_POLL=1 pnpm dev — for a drive that sends no file events at all (edits never show up)
+      watch: process.env.PROTO_POLL ? { usePolling: true, interval: 300 } : undefined,
    },
    build: {
       outDir: join(ROOT, 'dist'),

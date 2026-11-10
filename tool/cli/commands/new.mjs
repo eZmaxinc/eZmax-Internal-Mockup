@@ -6,7 +6,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node
 import { join } from 'node:path'
 import {
    GOODDAY_NUMBER, GOODDAY_URL, PATTERNS, PROTOTYPES, TEMPLATES,
-   ask, choose, fail, flagString, gitUserName, isInteractive, listPatterns, listTasks, normalizeGoodDayUrl, parseArgs, slugify, today, writeMeta,
+   ask, choose, fail, flagString, gitUserName, isInteractive, listPatterns, listTasks, normalizeGoodDayUrl, notifyDevServer, parseArgs, slugify, today, writeMeta,
 } from '../lib.mjs'
 
 const USAGE = 'Usage: pnpm proto new <numéro GoodDay> <lien GoodDay> "Titre" [--from <patron>]'
@@ -113,4 +113,5 @@ export async function run(argv) {
    console.log('   2. Construire v001/index.vue et v001/mocks.ts')
    console.log(`   3. pnpm proto check ${number}`)
    console.log(`   4. pnpm proto open ${number}`)
+   await notifyDevServer(taskId)
 }

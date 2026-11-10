@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { join, relative, sep } from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { createInterface } from 'node:readline/promises'
-import { PATTERNS, PROTOTYPES, ROOT } from '../paths.mjs'
+import { DEV_PORT, PATTERNS, PROTOTYPES, ROOT } from '../paths.mjs'
 
 export * from '../paths.mjs'
 
@@ -206,4 +206,22 @@ export function gitUserName() {
 export function normalizeGoodDayUrl(value) {
    const id = value.match(GOODDAY_URL)?.[1]
    return id ? `https://www.goodday.work/t/${id}` : null
+}
+
+/**
+ * Tells the running shell that files were just written under prototypes/<dir>, so they show up without a
+ * restart even where the file watcher is deaf. Silent when no shell runs; says so when the shell that
+ * answers is too old to know the endpoint (started before an update: it must be restarted).
+ */
+export async function notifyDevServer(dir) {
+   const origin = `http://localhost:${DEV_PORT}`
+   try {
+      const response = await fetch(`${origin}/__proto/refresh?dir=${encodeURIComponent(dir)}`, { signal: AbortSignal.timeout(1500) })
+      const answer = response.ok ? await response.json().catch(() => null) : null
+      if (answer?.ok) console.log(`  Shell prévenu (${origin}): la version est visible sans le relancer.`)
+      else console.log(`  ⚠ Le shell sur ${origin} date d'avant une mise à jour: l'arrêter et relancer pnpm dev.`)
+   }
+   catch {
+      // No shell running: nothing to tell
+   }
 }

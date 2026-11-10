@@ -9,6 +9,8 @@ pnpm install
 pnpm dev        # http://localhost:5180
 ```
 
+Un seul shell à la fois: le port est fixe, et un deuxième `pnpm dev` répond qu'il est pris au lieu de démarrer ailleurs. `pnpm proto new` et `pnpm proto iterate` préviennent le shell, donc une nouvelle version s'affiche sans le relancer. Sur un lecteur réseau où les modifications n'apparaissent pas du tout: `PROTO_POLL=1 pnpm dev`. Un autre port (deuxième copie du dépôt): `PROTO_PORT=5190 pnpm dev`.
+
 Le shell montre les prototypes, leurs versions et notes, les patrons de référence et la galerie des composants. Pour chaque version: bascule de scénario de données, largeur (bureau, tablette, mobile), comparaison côte à côte et export HTML. Le prototype seul (pour l'annoter ou le voir en pleine page): l'adresse « Prototype » de `pnpm proto open <tâche>`. Le panneau de gauche se masque (touche `[`) pour donner toute la largeur au prototype.
 
 ## Un prototype = une tâche GoodDay
