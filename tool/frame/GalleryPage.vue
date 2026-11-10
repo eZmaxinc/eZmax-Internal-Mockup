@@ -141,9 +141,9 @@ import { makeFolders } from '@mocks'
 
 const colorTokens = [
    'background', 'surface', 'surface-muted', 'surface-inverse',
-   'foreground', 'foreground-muted', 'foreground-subtle', 'border', 'border-strong',
-   'accent', 'accent-subtle', 'positive', 'positive-subtle', 'negative', 'negative-subtle',
-   'warning', 'warning-subtle', 'info', 'info-subtle',
+   'foreground', 'foreground-muted', 'foreground-subtle', 'border', 'border-muted', 'border-strong',
+   'accent', 'surface-accent', 'positive', 'surface-positive', 'negative', 'surface-negative',
+   'warning', 'surface-warning', 'info', 'surface-info',
 ]
 const textSizes = ['xs', 'sm', 'base', 'lg', 'xl', '2xl']
 const tones = ['neutral', 'info', 'success', 'warning', 'danger', 'action'] as const

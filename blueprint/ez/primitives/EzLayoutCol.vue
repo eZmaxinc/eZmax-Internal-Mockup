@@ -31,10 +31,11 @@ const spanBase = computed(() => span.value.base ?? 12)
 </script>
 
 <style scoped>
+/* Self-contained: copies into the mono as is, with EzLayout.vue. Override the gap with --card-gap. */
 .ez-layout-col {
    display: flex;
    flex-direction: column;
-   gap: var(--card-gap);
+   gap: var(--card-gap, var(--space-gap-md));
    min-width: 0;
    grid-column: span var(--span-base) / span var(--span-base);
 }

@@ -195,7 +195,7 @@ function frameUrl(path: string) {
    display: inline-flex;
    padding: 2px;
    border-radius: var(--radius-md);
-   background: var(--color-border-subtle);
+   background: var(--color-border-muted);
 
    button {
       height: 26px;
@@ -230,7 +230,7 @@ function frameUrl(path: string) {
    min-width: 0;
    padding: 16px;
    overflow: auto;
-   background: var(--color-border-subtle);
+   background: var(--color-border-muted);
 }
 
 .proto-viewer__slot {

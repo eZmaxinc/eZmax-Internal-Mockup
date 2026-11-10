@@ -121,7 +121,7 @@ onBeforeUnmount(listenSidebarShortcut())
 
    &.is-active,
    &.router-link-exact-active {
-      background: var(--color-accent-subtle);
+      background: var(--color-surface-accent);
       color: var(--color-accent);
       font-weight: 600;
    }

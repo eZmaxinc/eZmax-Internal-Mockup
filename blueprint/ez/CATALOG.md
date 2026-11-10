@@ -36,7 +36,7 @@ Toute page commence ainsi.
 
 ### `ez-layout` + `ez-layout-col`
 Grille de 12 colonnes (breakpoints de la prod: sm ≥ 600px, md ≥ 1024px, lg ≥ 1440px).
-- `ez-layout` `gap` (défaut `var(--card-gap)`)
+- `ez-layout` `gap` (défaut `var(--card-gap, var(--space-gap-md))`)
 - `ez-layout-col` `cols`: nombre ou `{ base, md, lg }`; `first-below-md`: la colonne passe en premier sous md
 
 Patron prod: principale `:cols="{ base: 12, md: 8 }"`, droite `:cols="{ base: 12, md: 4 }" first-below-md`.
@@ -245,7 +245,7 @@ Slots: `#value-<…>`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `gap` | `string` | `'var(--card-gap)'` |  |
+| `gap` | `string` | `'var(--card-gap, var(--space-gap-md))'` |  |
 
 Slots: `défaut`
 

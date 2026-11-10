@@ -30,6 +30,20 @@ export const TOKEN_RENAMES = {
       'danger-subtle': 'negative-subtle',
       'danger-strong': 'negative-strong',
    },
+   // One meaning per modifier: a tinted fill is a surface, the text on it a foreground; -subtle and -strong stay emphasis only.
+   '2.0.0': {
+      'accent-subtle': 'surface-accent',
+      'positive-subtle': 'surface-positive',
+      'positive-strong': 'foreground-positive',
+      'negative-subtle': 'surface-negative',
+      'negative-strong': 'foreground-negative',
+      'warning-subtle': 'surface-warning',
+      'warning-strong': 'foreground-warning',
+      'info-subtle': 'surface-info',
+      'info-strong': 'foreground-info',
+      'border-subtle': 'border-muted',
+      'focus': 'accent',
+   },
 }
 
 export const REMOVED_HINTS = {
@@ -37,8 +51,11 @@ export const REMOVED_HINTS = {
    'action-hover': 'les états ne sont pas des tokens: color-mix(in srgb, var(--color-accent) 85%, var(--color-foreground))',
 }
 
-/** All renames, flattened (old → new). */
+/** All renames, flattened (old → newest name): a name renamed twice goes straight to its latest name. */
 export const ALL_RENAMES = Object.assign({}, ...Object.values(TOKEN_RENAMES))
+for (const old of Object.keys(ALL_RENAMES)) {
+   while (ALL_RENAMES[old] && ALL_RENAMES[old] in ALL_RENAMES) ALL_RENAMES[old] = ALL_RENAMES[ALL_RENAMES[old]]
+}
 
 const UTILITY_PREFIXES = 'bg|text|border|border-[trblxy]|ring|ring-offset|outline|fill|stroke|divide|decoration|placeholder|caret|from|via|to|shadow'
 

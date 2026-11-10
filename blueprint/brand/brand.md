@@ -12,7 +12,7 @@ Un outil de travail sérieux et dense, pour des gens qui traitent des dossiers �
 1. **La tâche d'abord**: chaque écran répond à « qu'est-ce que je dois faire ici? ». L'action principale est unique et évidente (un seul bouton primaire par zone).
 2. **Dense mais respirable**: texte de base à 14px, beaucoup d'info par écran, mais des groupes clairement séparés (cartes, sections).
 3. **Le statut se lit d'un coup d'œil**: badges de statut cohérents partout (même couleur = même sens).
-4. **Sobre**: surfaces blanches sur fond gris très pâle, une seule couleur d'accent (le bleu d'action), pas de dégradés, pas d'illustrations décoratives.
+4. **Sobre**: surfaces blanches sur fond gris pâle, une seule couleur d'accent (l'ardoise bleutée des boutons), pas de dégradés, pas d'illustrations décoratives.
 5. **Prévisible**: mêmes structures de page partout (en-tête de page, contenu, colonne de droite). L'utilisateur ne réapprend rien d'un écran à l'autre.
 
 ## Structure type d'une page
@@ -32,13 +32,13 @@ Un outil de travail sérieux et dense, pour des gens qui traitent des dossiers �
 
 | Sens | Token | Usage |
 |---|---|---|
-| Action | `action` | boutons primaires, liens, sélection |
+| Action | `accent` | boutons primaires, liens, sélection |
 | Succès | `positive` | complété, signé |
 | Avertissement | `warning` | en attente, expire bientôt |
 | Danger | `negative` | refusé, expiré, suppression |
 | Info | `info` | messages neutres importants |
 
-Les valeurs vivent dans `blueprint/tokens/ez-tokens.css`, la source partagée avec le mono. TODO: reprendre les vraies couleurs de la prod (voir `SYNC.md`).
+Les valeurs vivent dans `blueprint/tokens/ez-tokens.css`, la source partagée avec le mono. Elles partent des couleurs de la marque (charbon, marine, accent, et les quatre couleurs de statut); un aplat teinté est `surface-{sens}`, le texte posé dessus `foreground-{sens}`.
 
 ## Do / don't
 

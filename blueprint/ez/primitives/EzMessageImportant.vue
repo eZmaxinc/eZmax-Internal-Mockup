@@ -71,26 +71,26 @@ const iconByType: Record<string, IconName> = {
 }
 
 .ez-message-important--info {
-   background: var(--color-info-subtle);
+   background: var(--color-surface-info);
    border-color: color-mix(in srgb, var(--color-info) 25%, transparent);
-   color: var(--color-info-strong);
+   color: var(--color-foreground-info);
 }
 
 .ez-message-important--success {
-   background: var(--color-positive-subtle);
+   background: var(--color-surface-positive);
    border-color: color-mix(in srgb, var(--color-positive) 25%, transparent);
-   color: var(--color-positive-strong);
+   color: var(--color-foreground-positive);
 }
 
 .ez-message-important--warning {
-   background: var(--color-warning-subtle);
+   background: var(--color-surface-warning);
    border-color: color-mix(in srgb, var(--color-warning) 30%, transparent);
-   color: var(--color-warning-strong);
+   color: var(--color-foreground-warning);
 }
 
 .ez-message-important--danger {
-   background: var(--color-negative-subtle);
+   background: var(--color-surface-negative);
    border-color: color-mix(in srgb, var(--color-negative) 25%, transparent);
-   color: var(--color-negative-strong);
+   color: var(--color-foreground-negative);
 }
 </style>

@@ -172,7 +172,7 @@ const theFrames = computed(() => {
 
    &.is-active {
       border-color: var(--color-accent);
-      background: var(--color-accent-subtle);
+      background: var(--color-surface-accent);
    }
 
    &.is-chosen .task-view__version-id::before {
@@ -189,7 +189,7 @@ const theFrames = computed(() => {
 
 .task-view__chosen {
    justify-self: end;
-   color: var(--color-positive-strong);
+   color: var(--color-foreground-positive);
    font-size: var(--text-xs);
 }
 

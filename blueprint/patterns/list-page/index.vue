@@ -37,7 +37,7 @@
                      {{ row.signedCount() }} / {{ row.signers.length }}
                   </template>
                   <template #cell-dueAt="{ row }">
-                     <span :class="{ 'text-warning-strong font-semibold': row.isDueSoon() }">{{ formatDate(row.dueAt) }}</span>
+                     <span :class="{ 'text-foreground-warning font-semibold': row.isDueSoon() }">{{ formatDate(row.dueAt) }}</span>
                   </template>
                   <template #empty>
                      <ez-empty-state

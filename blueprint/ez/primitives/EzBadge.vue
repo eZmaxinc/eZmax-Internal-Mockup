@@ -37,28 +37,28 @@ withDefaults(defineProps<{
 }
 
 .ez-badge--neutral {
-   background: var(--color-border-subtle);
+   background: var(--color-border-muted);
    color: var(--color-foreground-muted);
 }
 
 .ez-badge--info,
 .ez-badge--action {
-   background: var(--color-info-subtle);
-   color: var(--color-info-strong);
+   background: var(--color-surface-info);
+   color: var(--color-foreground-info);
 }
 
 .ez-badge--success {
-   background: var(--color-positive-subtle);
-   color: var(--color-positive-strong);
+   background: var(--color-surface-positive);
+   color: var(--color-foreground-positive);
 }
 
 .ez-badge--warning {
-   background: var(--color-warning-subtle);
-   color: var(--color-warning-strong);
+   background: var(--color-surface-warning);
+   color: var(--color-foreground-warning);
 }
 
 .ez-badge--danger {
-   background: var(--color-negative-subtle);
-   color: var(--color-negative-strong);
+   background: var(--color-surface-negative);
+   color: var(--color-foreground-negative);
 }
 </style>

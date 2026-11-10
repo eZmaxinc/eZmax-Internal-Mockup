@@ -44,11 +44,24 @@ defineProps<{
 </script>
 
 <style scoped>
+/*
+ * Self-contained: copies into the mono as is. Needs only ez-tokens.css, EzIcon.vue and icons.ts.
+ * Its knob is read here with a scale step as fallback, never defined; a project sets --card-padding (and
+ * the app's --sizing-toolbar-height) on :root or a parent only to change it.
+ */
 .ez-card {
+   --_padding: var(--card-padding, var(--space-inset-lg));
+
    background: var(--color-surface);
    border-radius: var(--radius-lg);
    box-shadow: var(--shadow-card);
-   scroll-margin-top: calc(var(--sizing-toolbar-height) + 16px);
+   scroll-margin-top: calc(var(--sizing-toolbar-height, 50px) + 16px);
+}
+
+@media (width < 37.5rem) { /* below sm */
+   .ez-card {
+      --_padding: var(--card-padding, var(--space-inset-md));
+   }
 }
 
 .ez-card__header {
@@ -56,7 +69,7 @@ defineProps<{
    align-items: flex-start;
    justify-content: space-between;
    gap: 12px;
-   padding: var(--card-padding) var(--card-padding) 0;
+   padding: var(--_padding) var(--_padding) 0;
 }
 
 .ez-card--flush .ez-card__header {
@@ -64,7 +77,7 @@ defineProps<{
 }
 
 .ez-card--header-only .ez-card__header {
-   padding-bottom: var(--card-padding);
+   padding-bottom: var(--_padding);
 }
 
 .ez-card__title {
@@ -94,7 +107,7 @@ defineProps<{
 }
 
 .ez-card__body {
-   padding: var(--card-padding);
+   padding: var(--_padding);
 }
 
 .ez-card--flush .ez-card__body {
@@ -105,7 +118,7 @@ defineProps<{
    display: flex;
    justify-content: flex-end;
    gap: 8px;
-   padding: 12px var(--card-padding);
-   border-top: 1px solid var(--color-border-subtle);
+   padding: 12px var(--_padding);
+   border-top: 1px solid var(--color-border-muted);
 }
 </style>

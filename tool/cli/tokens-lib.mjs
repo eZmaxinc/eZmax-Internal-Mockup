@@ -11,10 +11,13 @@ export const COMPONENT_FILE = join(TOKENS_DIR, 'components.css')
 export const CHANGELOG_FILE = join(TOKENS_DIR, 'CHANGELOG.md')
 
 /** The color contract: {role}-{modifier}. Roles first, then emphasis or variant. */
-export const COLOR_ROLES = ['background', 'surface', 'foreground', 'border', 'accent', 'overlay', 'focus', 'positive', 'negative', 'warning', 'info']
-export const COLOR_MODIFIERS = ['muted', 'subtle', 'strong', 'inverse', 'foreground']
+export const COLOR_ROLES = ['background', 'surface', 'foreground', 'border', 'accent', 'overlay', 'positive', 'negative', 'warning', 'info']
+/** Emphasis (one axis), then variants (surface-{variant} and foreground-{variant} come in pairs), then accent-foreground. */
+export const COLOR_EMPHASIS = ['strong', 'muted', 'subtle']
+export const COLOR_VARIANTS = ['inverse', 'accent', 'positive', 'negative', 'warning', 'info']
+export const COLOR_MODIFIERS = [...COLOR_EMPHASIS, ...COLOR_VARIANTS, 'foreground']
 /** Other @theme namespaces the shared file may define */
-export const THEME_NAMESPACES = ['breakpoint', 'font', 'text', 'radius', 'shadow']
+export const THEME_NAMESPACES = ['breakpoint', 'font', 'text', 'radius', 'space', 'size', 'shadow']
 
 export const HEADER = /ez-tokens (\d+)\.(\d+)\.(\d+) — (\d{4}-\d{2}-\d{2})/
 

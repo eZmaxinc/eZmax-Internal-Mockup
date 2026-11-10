@@ -95,7 +95,7 @@ th {
    height: 36px;
    padding: 0 16px;
    background: var(--color-surface-muted);
-   border-top: 1px solid var(--color-border-subtle);
+   border-top: 1px solid var(--color-border-muted);
    border-bottom: 1px solid var(--color-border);
    color: var(--color-foreground-muted);
    font-size: var(--text-xs);
@@ -108,7 +108,7 @@ th {
 td {
    height: var(--table-row-height);
    padding: 0 16px;
-   border-bottom: 1px solid var(--color-border-subtle);
+   border-bottom: 1px solid var(--color-border-muted);
    vertical-align: middle;
 }
 
@@ -131,7 +131,7 @@ tbody tr:last-child td {
    width: 70%;
    height: 10px;
    border-radius: var(--radius-sm);
-   background: var(--color-border-subtle);
+   background: var(--color-border-muted);
    animation: ez-pulse 1.2s ease-in-out infinite;
 }
 

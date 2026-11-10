@@ -4,7 +4,7 @@ Les **tokens** partent maintenant d'ez-proto vers le mono (voir `blueprint/token
 
 ## Une seule fois: les vraies couleurs
 
-Les couleurs de `ez-tokens.css` sont provisoires. Relever dans le mono les variables Quasar (`$primary`, `$secondary`, `$positive`, `$negative`, `$warning`, `$info`, `$dark`…, dans `quasar.variables.scss`) et les reporter dans les **primitives** (`--prim-*`) de `blueprint/tokens/ez-tokens.css`. Ne pas toucher aux noms sémantiques. Puis `pnpm proto tokens bump patch -m "Couleurs de la prod"`.
+Fait dans `ez-tokens` 2.0.0. On n'a pas recopié `quasar.variables.scss`: on en a gardé les couleurs d'ancrage (marquées ◆ dans les primitives de `ez-tokens.css`: charbon, marine, accent, gris de fond, `positive`, `negative`, `warning`, `info`) et dérivé le reste. Ses rampes générées (`$primary-1` à `-9`) et ses variantes sombres en `rgba` ne sont pas reprises. Reste à valider à l'œil, contre des captures de prod: la police, le thème sombre.
 
 ## À chaque changement visible en prod
 

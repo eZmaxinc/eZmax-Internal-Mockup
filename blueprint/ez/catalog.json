@@ -559,7 +559,7 @@
                "type": "string",
                "required": false,
                "values": null,
-               "default": "'var(--card-gap)'",
+               "default": "'var(--card-gap, var(--space-gap-md))'",
                "doc": null
             }
          ],

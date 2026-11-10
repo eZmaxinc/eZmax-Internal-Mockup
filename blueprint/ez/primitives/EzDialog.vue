@@ -73,6 +73,8 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 }
 
 .ez-dialog__panel {
+   --_padding: var(--card-padding, var(--space-inset-lg));
+
    display: flex;
    flex-direction: column;
    max-width: 100%;
@@ -82,12 +84,18 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    box-shadow: var(--shadow-overlay);
 }
 
+@media (width < 37.5rem) { /* below sm */
+   .ez-dialog__panel {
+      --_padding: var(--card-padding, var(--space-inset-md));
+   }
+}
+
 .ez-dialog__header {
    display: flex;
    align-items: center;
    justify-content: space-between;
    gap: 12px;
-   padding: 16px 16px 0 var(--card-padding);
+   padding: 16px 16px 0 var(--_padding);
 }
 
 .ez-dialog__title {
@@ -97,7 +105,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 }
 
 .ez-dialog__body {
-   padding: 16px var(--card-padding);
+   padding: 16px var(--_padding);
    overflow-y: auto;
 }
 
@@ -105,7 +113,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    display: flex;
    justify-content: flex-end;
    gap: 8px;
-   padding: 12px var(--card-padding) var(--card-padding);
+   padding: 12px var(--_padding) var(--_padding);
 }
 
 .ez-dialog-enter-active,

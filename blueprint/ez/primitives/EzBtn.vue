@@ -46,13 +46,22 @@ const isIconOnly = computed(() => !props.label && !theSlots.default && !!props.i
 </script>
 
 <style scoped>
+/*
+ * Self-contained: copies into the mono as is. Needs only ez-tokens.css, EzIcon.vue and icons.ts.
+ * Its knobs are read here with a scale step as fallback, never defined; a project sets --btn-* on :root
+ * or a parent only to change them.
+ */
 .ez-btn {
+   --_height: var(--btn-height, var(--size-control-md));
+   --_height-sm: var(--btn-height-sm, var(--size-control-sm));
+   --_padding-x: var(--btn-padding-x, 14px);
+
    display: inline-flex;
    align-items: center;
    justify-content: center;
    gap: 6px;
-   height: var(--btn-height);
-   padding: 0 var(--btn-padding-x);
+   height: var(--_height);
+   padding: 0 var(--_padding-x);
    border: 1px solid transparent;
    border-radius: var(--radius-md);
    font: inherit;
@@ -69,17 +78,17 @@ const isIconOnly = computed(() => !props.label && !theSlots.default && !!props.i
 }
 
 .ez-btn--sm {
-   height: var(--btn-height-sm);
+   height: var(--_height-sm);
    padding: 0 10px;
    font-size: var(--text-xs);
 }
 
 .ez-btn--icon-only {
-   width: var(--btn-height);
+   width: var(--_height);
    padding: 0;
 
    &.ez-btn--sm {
-      width: var(--btn-height-sm);
+      width: var(--_height-sm);
    }
 }
 
@@ -111,7 +120,7 @@ const isIconOnly = computed(() => !props.label && !theSlots.default && !!props.i
    color: var(--color-accent);
 
    &:hover:not(:disabled) {
-      background: var(--color-accent-subtle);
+      background: var(--color-surface-accent);
    }
 }
 
@@ -120,7 +129,7 @@ const isIconOnly = computed(() => !props.label && !theSlots.default && !!props.i
    color: var(--color-foreground-inverse);
 
    &:hover:not(:disabled) {
-      background: var(--color-negative-strong);
+      background: var(--color-foreground-negative);
    }
 }
 

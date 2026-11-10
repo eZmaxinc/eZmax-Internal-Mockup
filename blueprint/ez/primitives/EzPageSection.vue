@@ -61,6 +61,6 @@ onBeforeUnmount(() => theContext?.unregister(props.id))
 .ez-page-section__body {
    display: flex;
    flex-direction: column;
-   gap: var(--card-gap);
+   gap: var(--card-gap, var(--space-gap-md));
 }
 </style>

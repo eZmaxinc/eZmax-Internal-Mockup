@@ -2,6 +2,31 @@
 
 Le plus récent en haut. `pnpm proto tokens bump` ajoute les entrées. Copie vers le mono: `COPY.md`.
 
+## 2.0.1 — 2026-11-10
+
+- Fond de l'app: le gris de la prod (`#e2e5e8`, `$background-main`) au lieu du gris de marque (`#f1f3f4`).
+
+## 2.0.0 — 2026-11-10
+
+- Réécriture: un seul sens par modifieur, échelles d'espace et de taille, couleurs ancrées sur la marque.
+- Un seul sens par modifieur. L'emphase: `-strong`, `-muted`, `-subtle`. La variante: `-inverse`, `-accent`, `-positive`, `-negative`, `-warning`, `-info`, toujours en paire: `surface-{variante}` est l'aplat teinté, `foreground-{variante}` le texte posé dessus.
+- Nouvelles échelles: `--space-gap-{sm,md,lg}` (entre les éléments), `--space-inset-{sm,md,lg,xl}` (dans une surface), `--size-control-{sm,md}` (hauteur des boutons et des champs).
+- Réglages de composant: lus avec une marche d'échelle en repli (`var(--card-padding, var(--space-inset-lg))`), jamais définis par le composant.
+- Couleurs: les primitives partent des couleurs de la marque (charbon `#415364`, accent `#475574`, marine `#2d3648`, gris `#f1f3f4`, et les `positive`, `negative`, `warning`, `info` de la prod); les autres marches en sont dérivées. Le bleu provisoire disparaît. Thème sombre toujours provisoire.
+- Nouveau: `foreground-accent` (le texte sur `surface-accent`).
+
+Renommés (ancien → nouveau):
+
+| Ancien | Nouveau |
+|---|---|
+| `accent-subtle` | `surface-accent` |
+| `positive-subtle`, `negative-subtle`, `warning-subtle`, `info-subtle` | `surface-positive`, `surface-negative`, `surface-warning`, `surface-info` |
+| `positive-strong`, `negative-strong`, `warning-strong`, `info-strong` | `foreground-positive`, `foreground-negative`, `foreground-warning`, `foreground-info` |
+| `border-subtle` | `border-muted` |
+| `focus` | `accent` |
+
+Les primitives changent de noms (`--prim-gray-*` → `--prim-slate-*`, `--prim-blue-*` → `--prim-indigo-*` et `--prim-cyan-*`): sans effet, aucun composant ne les lit.
+
 ## 1.1.0 — 2026-11-09
 
 - Thème sombre: les mêmes noms sémantiques redéfinis sous .body--dark (la classe du mode sombre de Quasar), avec leurs primitives. Valeurs provisoires.

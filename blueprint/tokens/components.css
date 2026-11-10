@@ -1,24 +1,20 @@
 /*
  * Component tokens — ez-proto only, NOT copied into the mono.
  * Knobs for the ez- components. Names follow production when they exist there.
- * Values are sizes, or references to the semantics of ez-tokens.css: never a hex, never a --prim-*.
+ * A self-contained component reads its knobs in its own file, with a scale step of ez-tokens.css as fallback:
+ * --btn-height, --btn-height-sm, --btn-padding-x (ez-btn), --card-padding (ez-card, ez-dialog), --card-gap
+ * (ez-layout, ez-layout-col, ez-page-section). Set one here only to change it everywhere.
+ * Values are scale steps or semantics of ez-tokens.css when one fits, sizes otherwise: never a hex, never a --prim-*.
  */
 :root {
    /* Names shared with production */
    --sizing-toolbar-height: 50px;
-   --inset-page: 24px;
+   --inset-page: var(--space-inset-xl);
 
    --nav-width: 250px;
    --page-max-width: 1280px;
 
-   --btn-height: 36px;
-   --btn-height-sm: 28px;
-   --btn-padding-x: 14px;
-
-   --field-height: 36px;
-
-   --card-padding: 20px;
-   --card-gap: 16px;
+   --field-height: var(--size-control-md);
 
    --table-row-height: 44px;
 
@@ -28,7 +24,6 @@
 /* Below sm (600px) */
 @media (width < 37.5rem) {
    :root {
-      --inset-page: 16px;
-      --card-padding: 16px;
+      --inset-page: var(--space-inset-md);
    }
 }
