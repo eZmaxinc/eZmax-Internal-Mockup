@@ -17,8 +17,9 @@ Tout ce qui sort de ces couches est refusé par `pnpm proto check`, pas seulemen
 | Sujet | Décision |
 |---|---|
 | Stack | Vue 3 + Vite + TypeScript + Tailwind v4. **Pas de Quasar**: le plus lean possible. |
-| Composants | Réimplémentation légère avec **la même API que la prod** (noms, props principales, slots). Une certaine duplication avec le mono est voulue. |
-| Tokens | **La source vit dans ez-proto** (`blueprint/tokens/`). Le mono en recopie le fichier **à la main** pour le moment. Noms alignés sur le contrat de couleurs de SUM (voir phase A). |
+| Source de vérité | **ez-proto le devient, avec le temps**, pour le brand et les composants. Aucun lien avec la librairie du mono (ni dépendance, ni génération): la prod s'observe une fois pour partir juste, puis le sens est ez-proto → mono. |
+| Composants | Réécrits ici, **« barebone »**: ce qu'il faut pour une maquette, pas plus. Un dev les **recopie** ensuite dans le mono (voir « Vers le mono »). |
+| Tokens | **La source vit dans ez-proto** (`blueprint/tokens/`). Le mono en recopie le fichier **à la main** pour le moment. Trois couches à sens unique (primitives → sémantiques → composants). Couleurs `{rôle}-{modifieur}` du contrat de SUM, un seul sens par modifieur; tailles et espaces sur des échelles; un réglage de composant se lit avec une marche en repli et ne se définit jamais. |
 | Stockage | **Fichiers seulement, aucune base de données.** JSON pour ce qu'on interroge (`meta.json`), Markdown pour ce qu'on lit, Vue/TS pour ce qu'on exécute. Pas de DuckDB pour l'instant: il pourra lire les `meta.json` tels quels si le besoin vient. |
 | Tâches | **Un prototype = une tâche GoodDay.** Le dossier porte le nom de la branche: `feature/49198-la-tache` → `prototypes/49198-la-tache/`. `meta.json` garde `goodday: { number, url }`. |
 | Historique | Dossiers de version immuables `v001`, `v002`, variantes `v002b` (comparables côte à côte dans le shell) + git (qui a changé quoi). |
@@ -50,6 +51,16 @@ tool/                     le shell, le frame (iframe) et le CLI proto; on n'y to
 ```
 
 Le shell lit au démarrage les `meta.json`, `README.md` et `notes.md`; les composants et les scénarios d'une version ne sont chargés qu'à son ouverture, pour rester rapide quand les prototypes s'accumulent.
+
+## Vers le mono
+
+Le modèle est la copie de fichiers, pas la dépendance.
+
+- **Tokens**: `blueprint/tokens/ez-tokens.css`, un fichier de variables CSS autonome, copié tel quel (`blueprint/tokens/COPY.md`).
+- **Composants copiables** (bouton, badge, carte, message…): le fichier `.vue` va tel quel dans le mono. Pour ça il se suffit à lui-même: il ne lit que `ez-tokens.css` et garde ses réglages dans son propre fichier (ex. `ez-btn`: `var(--btn-height, 36px)`).
+- **Composants « maquette seulement »** (dialogue, select, datagrid…): la version d'ici suffit pour un prototype, pas pour la prod (focus, clavier, accessibilité, volumes). ez-proto en fixe l'API et le rendu; le mono garde son implémentation derrière la même API.
+- **La copie reste lean et ne se modifie jamais dans le mono.** Un besoin spécifique est un composant qui enveloppe la copie, comme les composants métier enveloppent les primitives ici.
+- **À décider avec le mono**: la collision de noms avec ses `ez-` existants, et sa dette de migration (`q-btn` utilisé directement).
 
 ## CLI `pnpm proto`
 
