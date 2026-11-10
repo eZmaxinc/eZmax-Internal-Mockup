@@ -8,7 +8,7 @@ Pour un essai fixe, à refaire après chaque ajustement et à comparer d'une foi
 
 - **Partir d'un état propre dans git** (`git status` vide). C'est ce qui permet de voir exactement ce que l'agent a créé ou touché (`git status`, `git diff`), et de revenir en arrière au besoin.
 - **Choisir une vraie tâche GoodDay**, ni triviale ni énorme: un écran ou une interaction, idéalement une tâche où la maquette aurait vraiment servi. Noter son numéro (`#49198`) et son lien court (`https://www.goodday.work/t/…`).
-- **Ouvrir `ez-proto` comme dossier racine dans Cursor**, et pas le mono, pour que `AGENTS.md` et `.cursor/rules` soient chargés.
+- **Ouvrir `ez-proto` comme dossier racine dans Cursor**, et pas le mono, pour que `AGENTS.md` soit chargé.
 - **Lancer le shell dans un terminal de Cursor**, et le laisser tourner:
   ```bash
   pnpm dev
@@ -66,7 +66,7 @@ Chaque erreur de l'agent se corrige à un endroit précis:
 
 | L'agent… | On corrige… |
 |---|---|
-| ne suit pas une consigne | `AGENTS.md` (ou `.cursor/rules/`) |
+| ne suit pas une consigne | `AGENTS.md` |
 | utilise mal un composant | sa fiche « quand l'utiliser » dans `blueprint/ez/CATALOG.md` |
 | assemble mal une page | un patron dans `blueprint/patterns/` (ou un nouveau) |
 | contourne une règle sans que rien ne le signale | `pnpm proto check` (`tool/cli/commands/check.mjs`) |
@@ -89,5 +89,5 @@ Chaque erreur de l'agent se corrige à un endroit précis:
 
 ## À savoir avant l'essai
 
-- **Les couleurs sont encore provisoires.** Le prototype aura la bonne structure, mais pas exactement les bonnes teintes tant que les valeurs de `quasar.variables.scss` ne sont pas reprises dans `blueprint/tokens/ez-tokens.css`.
+- **Les couleurs partent de la marque, mais ne sont pas encore validées contre la prod.** Les teintes d'ancrage sont les bonnes; le fond de l'app, la police et le thème sombre restent à comparer à de vraies captures.
 - **Il n'y a que trois patrons** (liste, fiche, formulaire), et ils sont inventés. Si la tâche ressemble à un écran sans patron, l'agent aura moins de repères: c'est une bonne information pour la suite.

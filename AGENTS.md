@@ -21,7 +21,7 @@ You build **prototypes** of eZsign/eZmax screens: minimal, but indistinguishable
 |---|---|
 | Always | `blueprint/brand/brand.md`, `blueprint/ez/CATALOG.md` (when to use what + generated API of components and `@ez` helpers) |
 | Using business data | `blueprint/mocks/API.md` (generated: `EzsignFolder`, `EzsignSigner`… their properties and methods, the factories) |
-| Building a page | the closest `blueprint/patterns/*/index.vue` (list, detail with TOC, edit form) |
+| Building a page | the closest `blueprint/patterns/*/index.vue`: a list → `list-page` (filters above, table in `<ez-card flush>`); a long detail → `detail-page` (`ez-page-sections`, TOC on the right, cards with `toc-id`); edit or create → `edit-form` (`ez-layout` 8/4, right column `first-below-md`, buttons in the summary card `#footer`) |
 | Starting a task | `prototypes/<task>/README.md` (the brief) |
 | Iterating | the source version's `index.vue`, `mocks.ts`, `notes.md` |
 
@@ -109,6 +109,33 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 
 **Your final message** always gives: the task, the version, a one-line summary, the scenarios, the « Propositions » and « Signalements » (or « aucun »), and the open questions. A report left only in `notes.md` goes unseen.
 
+## Workflows
+
+This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` and `.agents/skills` point here. Every workflow ends the same way: golden rule 8 (check, then the browser), then the final message described above.
+
+**New** (`/new-proto`)
+1. Get the GoodDay number and link (ask if either is missing). Use the French title of the GoodDay task. Pick the closest pattern if one fits.
+2. `pnpm proto new <number> <link> "<Titre>" [--from <pattern>]`. The task already has a prototype: stop (golden rule 3).
+3. Fill `prototypes/<task>/README.md`, the brief, from the user's request: context, what to show, constraints, out of scope. Ask only if something blocking is missing.
+4. Build `v001/index.vue`, `v001/mocks.ts` (at least two scenarios) and `v001/notes.md`.
+
+**Iterate** (`/iterate-proto`)
+1. Identify the task (ask if ambiguous). Read the latest version's `index.vue`, `mocks.ts`, `notes.md`, and the task `README.md`.
+2. `pnpm proto iterate <task> -m "<one-line summary>"` (`--from vNNN` to start from an older version).
+3. Edit only the new folder: apply the feedback, keep everything else identical. Update its `notes.md`.
+
+**Variant** (`/variant-proto`): an alternative next to a version (`v002` → `v002b`), not a replacement.
+1. Read the source version and the task `README.md`.
+2. `pnpm proto iterate <task> -m "Variante: <summary>" --variant [--from vNNN]`.
+3. Change only what the alternative is about, so the two compare cleanly in the shell (« Comparer avec »). In `notes.md`, say what the variant tries and which question it should answer.
+
+**Export** (`/export-proto`)
+1. Identify the task and version (default: the `chosen` version, else the latest).
+2. `pnpm proto check <task>`, fix every ✗, then `pnpm proto export <task> [version]`.
+3. Report the path, `exports/<task>-<version>.html`: one file, offline, with the scenario switcher.
+
+**Team decision**: `pnpm proto status <task> review|chosen|archived [vNNN]`. Set `chosen` only when the user says which version is retained.
+
 ## Commands
 
 One CLI, `pnpm proto` (`pnpm proto help` for everything). In a non-interactive shell it never prompts: pass every argument.
@@ -137,10 +164,17 @@ pnpm proto open [task] [version]                         # shell on http://local
 - `.vue`: `<template>` first, then `<script setup lang="ts">`, then `<style scoped>` (only if needed — prefer utilities and component props).
 - 3-space indentation. English identifiers and comments; **UI text in French** through `$gettext('…')` / `gettext('…')`, interpolation `%{name}`.
 - Refs and local state named `the*` (`theData`, `theFolder`); UI state in a `theUI` object (`$isLoading`, `$dialogs`).
+- Business logic stays in the mock objects' methods (`folder.isStateClosed()`, `signer.canBeReminded()`), not re-implemented in templates.
+- Scenarios are named in kebab-case after the situation (`some-pending`, `all-signed`, `empty`, `error`). Loading is simulated with `setTimeout`.
 - Icons through `ez.icons.<key>` (or the key string).
 - Utility classes: `block-name || utilities` when a BEM name helps.
-- Semantic utilities: `bg-surface`, `bg-background`, `text-foreground`, `text-foreground-muted`, `text-foreground-subtle`, `border-border`, `text-accent`, `text-positive-strong`, `bg-warning-subtle`… (any `--color-*` in the semantic layer).
+- Semantic utilities: `bg-surface`, `bg-background`, `text-foreground`, `text-foreground-muted`, `text-foreground-subtle`, `border-border`, `text-accent`, `bg-surface-warning`, `text-foreground-positive`… (any `--color-*` in the semantic layer). A tinted fill is `surface-{variant}` and the text on it `foreground-{variant}` (`accent`, `positive`, `negative`, `warning`, `info`); the bare name (`positive`) is the solid, for an icon, a dot or an outline.
+- Sizes and spaces in a scoped style come from the scales: `--space-gap-*` between things, `--space-inset-*` inside a surface, `--size-control-*` for the height of a button or a field, `--radius-*`. A component knob is read with a step as fallback and never defined: `var(--card-padding, var(--space-inset-lg))`.
+- Tailwind layout and spacing utilities are fine (`flex`, `gap-3`, `grid`, `p-4`, `text-sm`, `font-semibold`). Avoid arbitrary pixel values and inline styles: use component props and tokens.
+- Dark theme: the same semantic names change value under `.body--dark`, so a prototype that only uses semantic tokens works in both. Never test the theme, never use `dark:`.
+- No raw HTML in `index.vue` for something a component should be: propose the component (golden rule 2).
 - French copy: no space before a colon (« Statut: Complété »).
+- Readable over clever: the team lead prefers simple code.
 
 ## Repository map
 

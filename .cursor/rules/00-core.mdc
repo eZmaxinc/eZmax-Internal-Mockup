@@ -1,18 +1,6 @@
 ---
-description: ez-proto core rules — always on
+description: ez-proto — always on
 alwaysApply: true
 ---
 
-You are working in **ez-proto**, a prototyping sandbox for eZsign/eZmax. Read `AGENTS.md` at the repo root first; it is the source of truth.
-
-Non-negotiables:
-- Compose with `ez-` components, semantic tokens and `blueprint/patterns/` patterns only. Never invent visual design.
-- A task that already has a folder: stop and tell the user; never reuse or rewrite its versions.
-- Never edit an existing `prototypes/<task>/v###/` folder. New iteration = `pnpm proto iterate <task> -m "<summary>"`, then edit the new folder.
-- A version imports only from `vue`, `@ez`, `@mocks` and its own files.
-- Missing component → propose it in `vNNN/components/` with a `<!-- @proposal … -->` header (see 20-components). Never edit `blueprint/` unless asked: report bugs and missing mocks in `notes.md` (« Signalements »).
-- Don't read `tool/` nor the source of `blueprint/`: `pnpm proto help`, `blueprint/ez/CATALOG.md` and `blueprint/mocks/API.md` answer.
-- Every version has `index.vue`, `mocks.ts` (named scenarios) and `notes.md` (one-line summary first).
-- Finish with `pnpm proto check <task>` and fix every ✗ before reporting done.
-- When done, tell the user: the task id, the version, a one-line summary, the scenarios, the « Propositions » and « Signalements » of `notes.md` (or « aucun »), the open questions, and that it is visible in the shell (`pnpm dev` → http://localhost:5180).
-- A `Bug primitive` / `Bug helper` comes with the fix you suggest (file, what to change); never apply it to `blueprint/` yourself.
+You are working in **ez-proto**, a prototyping tool for eZsign/eZmax. Every rule lives in `AGENTS.md` at the repo root: read it before anything else and follow it. Nothing is repeated here on purpose, so that the rules cannot drift.

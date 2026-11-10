@@ -165,7 +165,7 @@ Où corriger quoi:
 
 | L'agent… | On corrige… |
 |---|---|
-| ne suit pas une consigne | `AGENTS.md` (ou `.cursor/rules/`) |
+| ne suit pas une consigne | `AGENTS.md` |
 | utilise mal un composant | sa fiche « quand l'utiliser » dans `blueprint/ez/CATALOG.md` |
 | assemble mal une page | un patron dans `blueprint/patterns/` |
 | contourne une règle sans que rien ne le signale | `pnpm proto check` (`tool/cli/commands/check.mjs`) |
