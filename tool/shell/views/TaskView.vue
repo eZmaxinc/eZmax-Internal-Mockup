@@ -5,10 +5,10 @@
       <!-- The task and its versions are in the shell's left panel; the notes in the panel on the right -->
       <proto-viewer v-if="theVersion" :frames="theFrames" :scenario-names="theScenarioNames">
          <template #devbar-start>
-            <label class="task-view__compare">
-               <span>Comparer avec</span>
+            <label v-if="otherVersions.length" class="shell-field">
+               <span>Comparer</span>
                <select v-model="theCompareWith">
-                  <option value="">—</option>
+                  <option value="">aucune</option>
                   <option v-for="theItem in otherVersions" :key="theItem.id" :value="theItem.id">{{ theItem.id }}</option>
                </select>
             </label>
@@ -17,24 +17,28 @@
          <template #devbar-end>
             <a
                v-if="isDev"
-               class="task-view__export"
+               class="shell-btn shell-btn--icon"
                :href="`/__proto/export?task=${theTask.id}&version=${theVersion.id}`"
                :download="`${theTask.id}-${theVersion.id}.html`"
-               title="Télécharger cette version en un fichier HTML autonome et interactif"
-            >Exporter</a>
+               aria-label="Exporter"
+               title="Exporter: télécharger cette version en un fichier HTML autonome et interactif"
+            >
+               <ez-icon name="download" :size="16" />
+            </a>
          </template>
 
          <template #panel>
             <section class="task-view__notes">
-               <h2>Notes · {{ theVersion.id }}</h2>
-               <p class="task-view__meta">
-                  <span v-if="theVersion.notes.date">{{ theVersion.notes.date }}</span>
-                  <span v-if="theVersion.notes.basedOn">· à partir de {{ theVersion.notes.basedOn }}</span>
-               </p>
-               <div class="markdown" v-html="renderMarkdown(theVersion.notes.body || '_Pas de notes._')" />
+               <h2 class="shell-heading">
+                  Notes <span class="shell-mono">{{ theVersion.id }}</span>
+                  <span class="task-view__meta">{{ theNotesMeta }}</span>
+               </h2>
+               <p class="task-view__summary">{{ theVersion.notes.summary || 'Sans résumé.' }}</p>
+               <div v-if="theNotesRest" class="markdown" v-html="renderMarkdown(theNotesRest)" />
+               <p v-else class="task-view__none">Aucun signalement, aucune question ouverte.</p>
             </section>
             <section class="task-view__notes">
-               <h2>Brief</h2>
+               <h2 class="shell-heading">Brief</h2>
                <div class="markdown" v-html="renderMarkdown(theTask.brief || 'Pas de brief (README.md).')" />
             </section>
          </template>
@@ -67,6 +71,19 @@ const theScenarioNames = useScenarioNames(() => theVersion.value && `prototypes/
 const theCompareWith = ref('')
 watch(() => props.taskId, () => (theCompareWith.value = ''))
 
+/** "2026-11-10 · depuis v001": when the version was made and what it started from. */
+const theNotesMeta = computed(() => {
+   const notes = theVersion.value?.notes
+   return [notes?.date, notes?.basedOn && `depuis ${notes.basedOn}`].filter(Boolean).join(' · ')
+})
+
+/** The notes without their first line: the summary is shown on its own, above. */
+const theNotesRest = computed(() => {
+   const notes = theVersion.value?.notes
+   if (!notes) return ''
+   return notes.summary && notes.body.startsWith(notes.summary) ? notes.body.slice(notes.summary.length).trim() : notes.body
+})
+
 const otherVersions = computed(() => theTask.value?.versions.filter((version) => version.id !== theVersion.value?.id) ?? [])
 
 const theFrames = computed(() => {
@@ -86,41 +103,31 @@ const theFrames = computed(() => {
    padding: 24px;
 }
 
-.task-view__compare {
-   display: flex;
-   align-items: center;
-   gap: 6px;
-   color: var(--color-foreground-muted);
-
-   select {
-      height: 30px;
-      border: 1px solid var(--color-border-strong);
-      border-radius: var(--radius-md);
-      background: var(--color-surface);
-      font: inherit;
-   }
-}
-
-.task-view__export {
-   font-weight: 600;
-   text-decoration: none;
-}
-
 .task-view__notes {
-   margin-bottom: 24px;
+   & + & {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--shell-border);
+   }
 
    h2 {
-      margin: 0 0 4px;
-      font-size: var(--text-sm);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-foreground-subtle);
+      margin-bottom: 8px;
    }
 }
 
 .task-view__meta {
-   margin: 0 0 8px;
-   color: var(--color-foreground-subtle);
-   font-size: var(--text-xs);
+   margin-left: auto;
+   font-weight: 400;
+}
+
+.task-view__summary {
+   margin: 0 0 12px;
+   color: var(--shell-fg);
+   font-weight: 500;
+}
+
+.task-view__none {
+   margin: 0;
+   color: var(--shell-fg-subtle);
 }
 </style>

@@ -19,32 +19,34 @@
 
       <footer class="proto-viewer__devbar">
          <!-- Always here: hides or shows the shell's left panel -->
-         <ez-btn
-            class="proto-viewer__drawer-toggle"
-            variant="flat"
-            size="sm"
+         <button
+            type="button"
+            class="shell-btn shell-btn--icon"
             :aria-label="theSidebarOpen ? 'Masquer le panneau' : 'Afficher le panneau'"
             :aria-expanded="theSidebarOpen"
             :title="`${theSidebarOpen ? 'Masquer' : 'Afficher'} le panneau ( [ )`"
             @click="toggleSidebar"
          >
             <panel-icon side="left" :open="theSidebarOpen" />
-         </ez-btn>
+         </button>
 
-         <div class="proto-viewer__segmented" role="group" aria-label="Largeur">
+         <span class="proto-viewer__divider" />
+
+         <div class="shell-segmented" role="group" aria-label="Largeur">
             <button
                v-for="theViewport in viewports"
                :key="theViewport.key"
                type="button"
                :class="{ 'is-active': theViewport.key === theViewportKey }"
-               :title="theViewport.width ? `${theViewport.width}px` : 'Largeur disponible'"
+               :aria-pressed="theViewport.key === theViewportKey"
+               :title="theViewport.width ? `${theViewport.width} px` : 'Largeur disponible'"
                @click="theViewportKey = theViewport.key"
             >
                {{ theViewport.label }}
             </button>
          </div>
 
-         <div class="proto-viewer__segmented" role="group" aria-label="Thème">
+         <div class="shell-segmented" role="group" aria-label="Thème du prototype">
             <button
                v-for="theOption in themes"
                :key="theOption.key"
@@ -57,32 +59,31 @@
             </button>
          </div>
 
-         <slot name="devbar-start" />
-
-         <label v-if="scenarioNames.length > 1" class="proto-viewer__control">
+         <label v-if="scenarioNames.length > 1" class="shell-field">
             <span>Scénario</span>
             <select v-model="theScenario">
                <option v-for="theName in scenarioNames" :key="theName" :value="theName">{{ theName }}</option>
             </select>
          </label>
 
+         <slot name="devbar-start" />
+
          <!-- Right end of the bar: what leaves the page (export), then the notes toggle -->
          <div class="proto-viewer__devbar-end">
             <slot name="devbar-end" :scenario="theScenario" />
 
             <!-- Mirror of the left toggle, at the right end -->
-            <ez-btn
+            <button
                v-if="$slots.panel"
-               class="proto-viewer__drawer-toggle"
-               variant="flat"
-               size="sm"
+               type="button"
+               class="shell-btn shell-btn--icon"
                :aria-label="theNotesOpen ? 'Masquer les notes' : 'Afficher les notes'"
                :aria-expanded="theNotesOpen"
                :title="`${theNotesOpen ? 'Masquer' : 'Afficher'} les notes ( ] )`"
                @click="toggleNotes"
             >
                <panel-icon side="right" :open="theNotesOpen" />
-            </ez-btn>
+            </button>
          </div>
       </footer>
    </div>
@@ -182,67 +183,24 @@ function frameUrl(path: string) {
    display: flex;
    align-items: center;
    flex-wrap: wrap;
-   gap: 12px;
-   padding: 8px 16px;
-   background: var(--color-surface);
-   border-top: 1px solid var(--color-border);
-   font-size: var(--text-sm);
+   gap: 8px;
+   padding: 6px 8px;
+   background: var(--shell-surface);
+   border-top: 1px solid var(--shell-border);
 }
 
-.proto-viewer__drawer-toggle {
-   width: var(--size-control-sm);
-   padding: 0;
+.proto-viewer__divider {
+   width: 1px;
+   height: 16px;
+   background: var(--shell-border);
 }
 
 .proto-viewer__devbar-end {
    display: flex;
    align-items: center;
-   gap: 12px;
+   gap: 4px;
    margin-left: auto;
 }
-
-.proto-viewer__control {
-   display: flex;
-   align-items: center;
-   gap: 6px;
-   color: var(--color-foreground-muted);
-
-   select {
-      height: 30px;
-      padding: 0 8px;
-      border: 1px solid var(--color-border-strong);
-      border-radius: var(--radius-md);
-      background: var(--color-surface);
-      color: var(--color-foreground);
-      font: inherit;
-   }
-}
-
-.proto-viewer__segmented {
-   display: inline-flex;
-   padding: 2px;
-   border-radius: var(--radius-md);
-   background: var(--color-border-muted);
-
-   button {
-      height: 26px;
-      padding: 0 10px;
-      border: none;
-      border-radius: var(--radius-sm);
-      background: transparent;
-      color: var(--color-foreground-muted);
-      font: inherit;
-      cursor: pointer;
-   }
-
-   .is-active {
-      background: var(--color-surface);
-      color: var(--color-foreground);
-      font-weight: 600;
-      box-shadow: var(--shadow-card);
-   }
-}
-
 
 .proto-viewer__body {
    display: flex;
@@ -254,11 +212,11 @@ function frameUrl(path: string) {
 .proto-viewer__stage {
    display: flex;
    flex: 1;
-   gap: 16px;
+   gap: 12px;
    min-width: 0;
-   padding: 16px;
+   padding: 12px;
    overflow: auto;
-   background: var(--color-border-muted);
+   background: var(--shell-bg);
 }
 
 .proto-viewer__slot {
@@ -275,30 +233,30 @@ function frameUrl(path: string) {
 }
 
 .proto-viewer__slot-label {
-   margin: 0 0 8px;
-   color: var(--color-foreground-muted);
-   font-size: var(--text-xs);
-   font-weight: 700;
-   text-transform: uppercase;
+   align-self: flex-start;
+   margin: 0 0 6px 2px;
+   color: var(--shell-fg-muted);
+   font-family: var(--font-mono);
+   font-size: 12px;
+   font-weight: 600;
 }
 
 .proto-viewer__frame {
    flex: 1;
    max-width: none;
    min-height: 480px;
-   border: none;
-   border-radius: var(--radius-md);
+   border: 1px solid var(--shell-border);
+   border-radius: 8px;
    background: var(--color-background);
-   box-shadow: var(--shadow-overlay);
+   box-shadow: var(--shell-shadow);
 }
 
 .proto-viewer__panel {
    flex: 0 0 320px;
    overflow-y: auto;
-   padding: 16px 20px;
-   background: var(--color-surface);
-   border-left: 1px solid var(--color-border);
-   font-size: var(--text-sm);
+   padding: 16px;
+   background: var(--shell-surface);
+   border-left: 1px solid var(--shell-border);
 
    /* Slides out of the layout instead of vanishing: the prototype grows as the drawer leaves */
    transition: margin-right 180ms ease, visibility 0s;
