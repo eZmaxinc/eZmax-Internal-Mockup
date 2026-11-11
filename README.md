@@ -1,6 +1,8 @@
 # ez-proto
 
-Prototypes rapides d'écrans eZsign/eZmax, fidèles au brand et aux composants de prod, faits par les devs avec leur agent. Projet distinct du mono: c'est le blueprint de l'UI. Le plan complet est dans [`PLAN.md`](PLAN.md). Pour un premier essai sur une vraie tâche: [`GUIDE-ESSAI.md`](GUIDE-ESSAI.md).
+Un outil de prototypage pour l'agent de Cursor, à la manière des Artifacts: on décrit un écran eZsign/eZmax, l'agent le construit, on le voit tout de suite dans le navigateur et on l'ajuste en parlant. Les prototypes suivent nos styles et nos composants, se rangent par tâche GoodDay et gardent leurs versions.
+
+Projet distinct du mono, sans lien avec sa librairie. `blueprint/` est le relevé de notre UI (tokens, composants, patrons); un dev reporte à la main dans l'app ce qui mérite d'y aller.
 
 ## Démarrer
 
@@ -9,21 +11,25 @@ pnpm install
 pnpm dev        # http://localhost:5180
 ```
 
-Un seul shell à la fois: le port est fixe, et un deuxième `pnpm dev` répond qu'il est pris au lieu de démarrer ailleurs. `pnpm proto new` et `pnpm proto iterate` préviennent le shell, donc une nouvelle version s'affiche sans le relancer. Sur un lecteur réseau où les modifications n'apparaissent pas du tout: `PROTO_POLL=1 pnpm dev`. Un autre port (deuxième copie du dépôt): `PROTO_PORT=5190 pnpm dev`.
+Ouvrir `ez-proto` comme dossier racine dans Cursor (pas le mono), le shell dans le navigateur de Cursor, puis demander:
 
-Le tableau de bord liste les prototypes, les patrons de référence et la galerie des composants. Dans un prototype, le panneau de gauche montre la tâche, ses versions et le retour au tableau de bord. Pour chaque version: bascule de scénario de données, largeur (bureau, tablette, mobile), comparaison côte à côte et export HTML. Le prototype seul (pour l'annoter ou le voir en pleine page): l'adresse « Prototype » de `pnpm proto open <tâche>`. Le panneau de gauche se masque (touche `[`) pour donner toute la largeur au prototype; les notes de la version, à droite, sont fermées par défaut et s'ouvrent avec le chevron au bout de la barre du bas ou la touche `]`.
+> Nouveau prototype pour la tâche #49198 (https://www.goodday.work/t/M2nSjU): permettre au propriétaire de relancer les signataires en retard depuis la fiche du dossier.
 
-## Un prototype = une tâche GoodDay
+Un seul shell à la fois: le port est fixe. Une version créée s'affiche sans le relancer. Sur un lecteur réseau où les modifications n'apparaissent pas: `PROTO_POLL=1 pnpm dev`. Un autre port: `PROTO_PORT=5190 pnpm dev`.
 
-Chaque prototype part d'une tâche GoodDay, et son dossier porte le même nom que la branche: `feature/49198-relance-signataires` → `prototypes/49198-relance-signataires/`.
+## Comment ça marche
 
-```bash
-pnpm proto new 49198 https://www.goodday.work/t/M2nSjU "Relance des signataires" --from detail-page
-pnpm proto iterate 49198 -m "Relance groupée avec message"
-pnpm proto open 49198
-```
+- **Un prototype = une tâche GoodDay.** Son dossier porte le nom de la branche: `feature/49198-relance-signataires` → `prototypes/49198-relance-signataires/`.
+- **L'agent réutilise ce qui existe et invente le reste dans le même genre.** Un composant `ez-` quand il y en a un, les tokens pour toute couleur. Ce qui n'existe pas (une ligne du temps, un canevas) se construit dans la version. Il peut aussi rehausser un composant existant, dans une copie locale.
+- **Le dev marque les versions.** Un retour s'applique en place dans la dernière version; une nouvelle version (`v002`) ou une variante (`v002b`) se demande.
+- **Le check à chaque fois, le navigateur quand ça paie.** `pnpm proto check` garde la conformité (couleurs, composants, types) en quelques secondes. L'agent ne refait pas le tour du navigateur à chaque retouche: tu regardes la même page que lui.
+- **L'humain synchronise.** `pnpm proto proposals` montre ce que les prototypes ont créé, rehaussé ou proposé; `pnpm proto promote` le fait entrer dans `blueprint/`. Rien de ça ne bloque un prototype.
 
-Sans arguments, `pnpm proto new` pose les questions. Une tâche se désigne par son numéro GoodDay, son lien, une partie du nom de son dossier, ou rien du tout quand on est dans son dossier.
+Les règles de l'agent sont dans [`AGENTS.md`](AGENTS.md), et seulement là: `.cursor/` et `.agents/` y renvoient. Commandes prêtes dans Cursor: `/new-proto`, `/iterate-proto`, `/variant-proto`, `/export-proto`.
+
+## Le shell
+
+Le tableau de bord liste les prototypes, les patrons de référence et la galerie des composants. Dans un prototype: les versions à gauche (touche `[`), les notes à droite (touche `]`), et en bas le scénario de données, la largeur, clair ou sombre, la comparaison côte à côte et l'export. L'adresse porte ces choix: `?scenario=<nom>&theme=dark&width=mobile`.
 
 ## Commandes
 
@@ -31,43 +37,53 @@ Sans arguments, `pnpm proto new` pose les questions. Une tâche se désigne par 
 |---|---|
 | `pnpm proto new <numéro> <lien> "Titre"` | Nouvelle tâche + `v001` (`--from list-page`, `detail-page` ou `edit-form`) |
 | `pnpm proto iterate <tâche> -m "Résumé"` | Version suivante copiée de la dernière (`--from v001`, `--variant`) |
+| `pnpm proto check [tâche]` | Couleurs, composants et props connus, structure, imports, types |
+| `pnpm proto open [tâche] [version]` | Donne l'adresse du shell |
+| `pnpm proto diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |
 | `pnpm proto status <tâche> <statut> [version]` | `draft`, `review`, `chosen` (avec la version retenue) ou `archived` |
 | `pnpm proto list` | Les tâches et leur état (`--status review`, `--mine`, `--all`) |
-| `pnpm proto diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |
-| `pnpm proto open [tâche] [version]` | Ouvre le shell, et le démarre au besoin |
-| `pnpm proto check [tâche]` | Règles de brand, structure, lien GoodDay, imports, types |
-| `pnpm proto export <tâche> [version]` | `exports/<tâche>-<version>.html`, autonome et interactif |
-| `pnpm proto proposals` | Composants proposés dans les prototypes, les plus demandés d'abord |
-| `pnpm proto promote <tâche> <version> <Nom>` | Fait entrer dans `blueprint/ez` un composant créé, rehaussé ou proposé dans une version (décision humaine). Un composant rehaussé remplace l'original |
+| `pnpm proto export <tâche> [version]` | `exports/<tâche>-<version>.html`, un seul fichier, interactif |
+| `pnpm proto proposals` | Ce que les prototypes ont créé, rehaussé ou proposé, et leurs signalements |
+| `pnpm proto promote <tâche> <version> <Nom>` | Fait entrer un composant d'une version dans `blueprint/ez` (un rehaussé remplace l'original) |
 | `pnpm proto catalog` | Régénère le catalogue après un changement dans `blueprint/ez` |
-| `pnpm proto tokens` | Version des tokens partagés (`bump patch\|minor\|major -m …`, `migrate`) |
+| `pnpm proto tokens` | Version des tokens (`bump patch\|minor\|major -m …`) |
 
-## Avec l'agent
-
-Les règles sont dans `AGENTS.md`, et seulement là: `.cursor/rules/`, `.cursor/commands/` et `.agents/skills/` y renvoient. Commandes prêtes à l'emploi dans `.cursor/commands/`: `new-proto`, `iterate-proto`, `variant-proto`, `export-proto`. Un retour donné à l'agent se fait en place dans la dernière version; c'est le dev qui marque une nouvelle version, en la demandant (`/iterate-proto`).
-
-Exemple de demande: « Nouveau prototype pour la tâche #49198 (https://www.goodday.work/t/M2nSjU): permettre au propriétaire de relancer les signataires en retard depuis la fiche du dossier. »
+Une tâche se désigne par son numéro GoodDay, son lien ou une partie du nom de son dossier. Sans arguments, dans un terminal, `pnpm proto new` pose les questions.
 
 ## Structure
 
 ```
-blueprint/     le blueprint de l'UI: tokens, composants ez-, patrons, brand, mocks
-prototypes/    le travail de l'équipe: un dossier par tâche GoodDay
-tool/          le shell, le frame et le CLI proto (on n'y touche pas pour prototyper)
+blueprint/             le relevé de notre UI
+  tokens/                ez-tokens.css (primitives → sémantiques), CHANGELOG, COPY
+  ez/primitives/         composants génériques, qui portent le visuel
+  ez/domain/<objet>/     composants métier, qui assemblent des primitives
+  ez/CATALOG.md          quand utiliser quoi + API générée du code
+  patterns/              pages de référence: liste, fiche, formulaire
+  brand/                 principes, captures de prod annotées
+  mocks/                 objets métier et fabriques, à graine fixe
+prototypes/<tâche>/    meta.json, v001/{index.vue, mocks.ts, notes.md, components/}
+tool/                  le shell, le cadre et le CLI; on n'y touche pas pour prototyper
 ```
 
-Tout est en fichiers, sans base de données: JSON pour ce qu'on interroge (`meta.json`), Markdown pour ce qu'on lit, git et les dossiers de version pour l'historique.
+Tout est en fichiers, sans base de données: JSON pour ce qu'on interroge, Markdown pour ce qu'on lit, git et les dossiers de version pour l'historique. Vue 3, Vite, TypeScript et Tailwind v4, sans Quasar.
 
 ## Où modifier quoi
 
 | Besoin | Fichier |
 |---|---|
-| Couleurs, typo, rayons, breakpoints | `blueprint/tokens/ez-tokens.css`, puis `pnpm proto tokens bump` et copie dans le mono (`blueprint/tokens/COPY.md`) |
-| Ton, principes visuels | `blueprint/brand/brand.md` |
-| Ajouter un composant | `blueprint/ez/primitives/` ou `blueprint/ez/domain/<objet>/`, puis `pnpm proto catalog` (enregistrement et API générés), sa fiche dans `CATALOG.md` et la galerie. Ou promouvoir une proposition: `pnpm proto promote` |
+| L'agent ne suit pas une consigne | `AGENTS.md` |
+| Il utilise mal un composant | sa fiche dans `blueprint/ez/CATALOG.md` |
+| Il assemble mal une page | un patron dans `blueprint/patterns/` |
+| Il contourne une règle sans que rien ne le dise | `tool/cli/commands/check.mjs` |
+| Couleurs, typo, rayons | `blueprint/tokens/ez-tokens.css`, puis `pnpm proto tokens bump` |
+| Ton, principes visuels, captures | `blueprint/brand/` |
+| Un composant | `blueprint/ez/`, puis `pnpm proto catalog`; ou `pnpm proto promote` depuis un prototype |
 | Objets métier partagés | `blueprint/mocks/` |
-| Patron de page de référence | `blueprint/patterns/` |
 
-## Prochaines étapes
+## Vers le mono
 
-Voir [`ROADMAP.md`](ROADMAP.md): jalons et checkpoints.
+De la copie de fichiers, jamais une dépendance. `ez-tokens.css` se copie tel quel (`blueprint/tokens/COPY.md`). Un composant simple (bouton, badge, carte) peut se recopier; un composant complexe (dialogue, tableau) fixe ici l'API et le rendu, et le mono garde son implémentation. Rien n'a encore été copié.
+
+## Suite
+
+[`ROADMAP.md`](ROADMAP.md): ce qu'il reste à faire. [`ESSAI.md`](ESSAI.md): comment essayer l'outil et mesurer s'il tient sa promesse.
