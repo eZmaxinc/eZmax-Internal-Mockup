@@ -32,7 +32,7 @@ Référence: les captures de `blueprint/brand/screens/`.
 - [ ] Une première vraie promotion (`pnpm proto promote`) d'un composant créé ou rehaussé
 - [ ] Faire valider par le team lead: c'est le dev qui marque les versions; l'agent peut inventer avec les tokens
 - [ ] Décider où vivent les prototypes: ce dépôt sur `main`, ou une branche par tâche
-- [ ] Sortir le prototype de l'essai 7 (90001) de `main`, ou l'assumer comme démo
+- [x] Sortir les prototypes d'essai (90001, 90002, démo) de `main`
 
 ## 4. Ménage de l'outil
 
