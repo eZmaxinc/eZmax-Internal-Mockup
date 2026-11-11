@@ -35,7 +35,8 @@ Ne pas en dire plus que ce qu'un dev aurait sous la main: le but est de voir si 
 
 Donner 2 ou 3 retours, comme dans une vraie revue:
 
-- **« Déplace X, ajoute Y »**: il doit créer une `v002` avec `proto iterate`, sans toucher à `v001`. Pour une retouche, il ne refait pas la tournée complète: le check, puis un coup d'œil au scénario par défaut et à ce que le changement touche.
+- **« Déplace X, ajoute Y »**: il retouche la dernière version en place, sans en créer une. Il ne refait pas la tournée complète: le check, puis un coup d'œil au scénario par défaut et à ce que le changement touche.
+- **« Fais une nouvelle version: … »**: c'est toi qui marques l'étape. Il crée `v002` avec `proto iterate`; `v001` est alors figée et ne bouge plus.
 - **« Montre une autre approche »**: il doit créer une variante, `v002b`.
 - **Un besoin qu'aucun composant actuel ne couvre**: c'est le test du parcours des propositions. Il doit créer `components/EzQuelqueChose.vue` avec l'en-tête `<!-- @proposal … -->`, pas du HTML brut dans `index.vue`.
 
@@ -56,7 +57,7 @@ pnpm proto proposals
 | Question | Où regarder |
 |---|---|
 | Est-ce que ça ressemble à eZsign? | Le prototype à côté de la vraie app |
-| A-t-il respecté les versions immuables? | `git diff` sur les versions précédentes |
+| A-t-il laissé les versions figées intactes, et créé une version seulement sur demande? | `git diff` sur les versions précédentes, les ⚠ de `pnpm proto check` |
 | A-t-il inventé du visuel ou contourné une règle? | `git diff`, et les ⚠ de `pnpm proto check` |
 | Ses propositions sont-elles au bon niveau, avec un bon nom? | `pnpm proto proposals` |
 | Combien de retours avant un résultat utilisable? | Le ressenti, et le nombre de versions |

@@ -7,8 +7,8 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, sep } from 'node:path'
 import { spawnSync } from 'node:child_process'
 import {
-   BLUEPRINT, DEMO_FOLDER, GOODDAY_URL, PATTERNS, PROTOTYPES, ROOT, STATUSES, TASK_FOLDER, TOOL, VERSION_PATTERN,
-   findTask, listDirs, listVersions, parseArgs, rel, taskFromCwd,
+   BLUEPRINT, DEMO_FOLDER, GOODDAY_URL, PATTERNS, PROTOTYPES, ROOT, STATUSES, STATUS_LABELS, TASK_FOLDER, TOOL, VERSION_PATTERN,
+   findTask, listDirs, listVersions, parseArgs, readMeta, rel, taskFromCwd,
 } from '../lib.mjs'
 import { ALL_RENAMES, REMOVED_HINTS, renamePattern } from '../token-renames.mjs'
 import { CHANGELOG_FILE, COMPONENT_FILE, SHARED_FILE, checkComponents, checkShared, definedColors } from '../tokens-lib.mjs'
@@ -133,8 +133,9 @@ function checkBlueprintUntouched(warnings) {
 }
 
 /**
- * Versions are immutable: a version already committed in git must not change. Uncommitted edits to
- * tracked files under prototypes/<task>/vNNN/ are flagged (the version being created is untracked).
+ * Only the working version changes: the latest one of a draft task. Uncommitted edits to tracked files
+ * of a frozen version are flagged: an older version, the chosen one, or any version of a task that left
+ * draft (teammates have looked at it).
  */
 function checkCommittedVersionsUntouched(onlyTask, warnings) {
    const result = spawnSync('git', ['status', '--porcelain', '--', 'prototypes'], { cwd: ROOT, encoding: 'utf8' })
@@ -149,8 +150,26 @@ function checkCommittedVersionsUntouched(onlyTask, warnings) {
       touched.set(key, [...(touched.get(key) ?? []), path.split('/').pop()])
    }
    for (const [version, files] of touched) {
-      warnings.push(`${version} est déjà commitée et a été modifiée (${files.join(', ')}). Versions immuables: git restore ${version}, puis pnpm proto iterate pour une nouvelle version.`)
+      const [, taskId, versionId] = version.split('/')
+      const reason = frozenReason(taskId, versionId)
+      if (reason) warnings.push(`${version} est figée (${reason}) et a été modifiée (${files.join(', ')}). Demandé? Sinon: git restore ${version}, puis pnpm proto iterate pour une nouvelle version.`)
    }
+}
+
+/** Why a version must not change any more, or '' for the working version (the latest of a draft task). */
+function frozenReason(taskId, versionId) {
+   let meta = {}
+   try {
+      meta = readMeta(taskId)
+   }
+   catch {
+      // unreadable meta.json: checkStructure reports it
+   }
+   if (meta.chosen === versionId) return 'version retenue'
+   if (meta.status && meta.status !== 'draft') return `la tâche n'est plus un brouillon: ${STATUS_LABELS[meta.status] ?? meta.status}`
+   const latest = listVersions(taskId).at(-1)
+   if (latest !== versionId) return `${latest} existe`
+   return ''
 }
 
 /* ───────────── Components: catalog, tiers, templates, proposals ───────────── */

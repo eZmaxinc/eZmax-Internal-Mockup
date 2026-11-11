@@ -44,7 +44,7 @@ Sans arguments, `pnpm proto new` pose les questions. Une tâche se désigne par 
 
 ## Avec l'agent
 
-Les règles sont dans `AGENTS.md`, et seulement là: `.cursor/rules/`, `.cursor/commands/` et `.agents/skills/` y renvoient. Commandes prêtes à l'emploi dans `.cursor/commands/`: `new-proto`, `iterate-proto`, `variant-proto`, `export-proto`.
+Les règles sont dans `AGENTS.md`, et seulement là: `.cursor/rules/`, `.cursor/commands/` et `.agents/skills/` y renvoient. Commandes prêtes à l'emploi dans `.cursor/commands/`: `new-proto`, `iterate-proto`, `variant-proto`, `export-proto`. Un retour donné à l'agent se fait en place dans la dernière version; c'est le dev qui marque une nouvelle version, en la demandant (`/iterate-proto`).
 
 Exemple de demande: « Nouveau prototype pour la tâche #49198 (https://www.goodday.work/t/M2nSjU): permettre au propriétaire de relancer les signataires en retard depuis la fiche du dossier. »
 

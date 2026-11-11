@@ -46,7 +46,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 4. **Ouvrir une nouvelle conversation d'agent** dans Cursor, avec `ez-proto` comme dossier racine. Toujours une conversation neuve, et toujours le même modèle, à noter dans le journal.
 5. Démarrer un chronomètre.
 
-**Règle de l'essai**: jouer **les quatre étapes**, dans la même conversation. Les étapes 2 à 4 testent ce que l'étape 1 ne voit pas (versions immuables, propositions, sélection multiple, export). Coller les demandes telles quelles, sans aider l'agent. S'il pose une question, répondre brièvement et compter une **intervention**. S'il se trompe, ne pas corriger à sa place: noter le problème.
+**Règle de l'essai**: jouer **les quatre étapes**, dans la même conversation. Les étapes 2 à 4 testent ce que l'étape 1 ne voit pas (retouche en place ou nouvelle version, versions figées, propositions, sélection multiple, export). Coller les demandes telles quelles, sans aider l'agent. S'il pose une question, répondre brièvement et compter une **intervention**. S'il se trompe, ne pas corriger à sa place: noter le problème.
 
 ---
 
@@ -85,7 +85,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 
 **Coller:**
 
-> Retour: l'échéance doit se voir d'un coup d'œil dans le tableau, avec le nombre de jours restants, et une couleur selon l'urgence (moins de 3 jours = urgent). Et je veux pouvoir prolonger plusieurs dossiers d'un coup.
+> Fais une nouvelle version. Retour: l'échéance doit se voir d'un coup d'œil dans le tableau, avec le nombre de jours restants, et une couleur selon l'urgence (moins de 3 jours = urgent). Et je veux pouvoir prolonger plusieurs dossiers d'un coup.
 
 **Attendu:**
 
@@ -100,6 +100,16 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 | 2.7 | `notes.md` de `v002`: résumé en première ligne, puis seulement les signalements et les questions nouveaux de cette version (ni liste de changements, ni liste de propositions) | |
 | 2.8 | `pnpm proto check 90001` passe, et la proposition apparaît en ⚠ | |
 | 2.9 | Coup d'œil dans le navigateur: le scénario par défaut et ce que le changement touche, sans refaire la tournée complète; l'agent dit lequel il a fait | |
+
+**Coller ensuite** (une retouche, sans demander de version):
+
+> Le bouton devrait dire « Prolonger de 7 jours ».
+
+| # | Point | ✓ |
+|---|---|---|
+| 2.10 | Pas de `pnpm proto iterate`: la retouche est faite en place dans `v002`, il n'y a pas de `v003` | |
+| 2.11 | `v001` n'a toujours pas changé | |
+| 2.12 | `pnpm proto check 90001` passe, un coup d'œil dans le navigateur, et l'URL donnée est celle de `v002` dans le shell | |
 
 **Faire soi-même:**
 
@@ -156,7 +166,7 @@ pnpm proto proposals
 
 Arrêter le chronomètre, puis remplir une ligne du journal ci-dessous.
 
-- **Points**: le nombre de ✓ sur 32.
+- **Points**: le nombre de ✓ sur 35.
 - **Interventions**: chaque fois qu'il a fallu répondre ou débloquer l'agent.
 - **Ressemblance**: de 1 à 5, sur l'impression d'ensemble de la v002.
 - **Problème principal**: le défaut le plus gênant de cet essai.
@@ -175,7 +185,7 @@ Puis repartir de l'étape 0.
 
 ## Journal des essais
 
-| Date | Commit | Modèle | Points /32 | Interventions | Durée | Ressemblance /5 | Problème principal | Correction apportée |
+| Date | Commit | Modèle | Points /35 | Interventions | Durée | Ressemblance /5 | Problème principal | Correction apportée |
 |---|---|---|---|---|---|---|---|---|
 | 2026-11-09 | 5fa3ca0 | (non noté) | 12/12 (étape 1 seulement) | 0 | | | ~40 lectures avant d'écrire (CLI, helpers, sources des primitives); bug d'`ez-dialog` à 390 px contourné dans la proposition sans être signalé | Recette dans `AGENTS.md`, API générée de `@mocks` et des helpers, « Signalements » dans les notes, avertissement sur `blueprint/` modifié, `ez-dialog` corrigé, `daysUntilDue()` |
 | 2026-11-09 | 7ce90ed | (non noté) | 11/12 (étape 1 seulement; 1.1 invérifiable) | 0 | | | Parti des fichiers de l'essai 1 (étape 0 sautée): l'agent a réécrit la v001 existante au lieu de s'arrêter. Son signalement d'un vrai bug (`formatRelative` et la date des mocks) n'a pas été collecté. ~30 lectures, mais plus aucune dans `tool/` | « Aujourd'hui » unique (`PROTO_TODAY`); tous les signalements collectés; tâche existante: s'arrêter (règle + message de `proto new`); `proto check` avertit si une version commitée est modifiée; étape 0 exige un `git status` vide |

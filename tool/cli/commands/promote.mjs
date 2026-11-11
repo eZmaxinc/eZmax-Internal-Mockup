@@ -3,7 +3,7 @@
  * Moves a proposal into the blueprint, on a human decision only:
  *   domain    → blueprint/ez/domain/<object>/<Name>.vue
  *   primitive → blueprint/ez/primitives/<Name>.vue
- * The version keeps its own copy (versions are immutable); the next versions use the global one.
+ * The version keeps its own copy (a version stays self-contained); the next versions use the global one.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'

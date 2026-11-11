@@ -33,7 +33,7 @@ export async function run(argv) {
       const latest = existing.versions.at(-1) ?? 'aucune version'
       fail(
          `La tâche #${number} a déjà un prototype: prototypes/${existing.id} (dernière version: ${latest}).`,
-         `Ne pas réutiliser ni réécrire ses versions. Demander quoi faire; en général: pnpm proto iterate ${number} -m "…"`,
+         `Ne pas le recommencer. Demander quoi faire: retoucher ${latest} en place, ou une nouvelle version (pnpm proto iterate ${number} -m "…").`,
       )
    }
 

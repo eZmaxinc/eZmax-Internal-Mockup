@@ -10,7 +10,7 @@ Mettre à jour ce fichier dans le même commit que le travail qui coche une case
 
 - [x] Projet distinct du mono: `blueprint/`, `prototypes/`, `tool/`, fichiers seulement (JSON, Markdown, git)
 - [x] Un prototype = une tâche GoodDay, dossier nommé comme la branche (`49198-la-tache`)
-- [x] Versions immuables (`v001`, `v002`, variantes `v002b`), scénarios de données, notes
+- [x] Versions en dossiers (`v001`, `v002`, variantes `v002b`), figées dès qu'une suivante existe, scénarios de données, notes
 - [x] CLI `pnpm proto`: `new`, `iterate`, `status`, `list`, `diff`, `open`, `check`, `export`, `catalog`, `proposals`, `promote`, `tokens`
 - [x] Shell: versions côte à côte, scénarios, largeurs, clair / sombre, export HTML, panneau de gauche masquable (bouton ou touche `[`)
 - [x] Tokens partagés `ez-tokens` 1.1.0 (source ici, copie manuelle vers le mono), contrat de noms de SUM, mode sombre
@@ -57,7 +57,8 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [x] `proto new` et `proto iterate` préviennent le shell; port fixe strict; `PROTO_POLL=1`; un seul shell à l'étape 0
   - [x] Vérification proportionnée (règle 8): un coup d'œil pour une itération ou une variante, la tournée complète pour une `v001`, un changement de structure, sur demande ou avant la revue (l'itération de l'essai 7 a pris ~18 min, surtout en navigateur)
   - [ ] Mesurer `pnpm proto check 90001` sur le poste en RDP (3,6 s en local): au-delà de 15 s, cloner le dépôt sur un disque local plutôt que `G:\`
-  - [ ] Décider si une version reste modifiable tant qu'elle n'est pas commitée (brouillon), au lieu d'une nouvelle version à chaque retouche
+  - [x] C'est l'humain qui marque les versions (règle 4): un retour se fait en place dans la dernière version; une nouvelle version seulement sur demande. Figée: une version plus ancienne, la version retenue, ou une tâche sortie du brouillon (`proto check` le signale)
+  - [ ] Faire valider ce principe par le team lead, et le jouer dans un essai (points 2.10 à 2.12 du scénario)
   - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
   - [ ] `AGENTS.md`: ne pas lire les autres prototypes; ouvrir chaque scénario par son URL; la `v001` est la plus petite réponse au brief
   - [ ] `ez-card`: l'en-tête passe à la ligne quand `#actions` a plusieurs boutons (signalé à l'essai 7, avec le correctif)
@@ -66,7 +67,7 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
 - [x] Une seule source de règles: `.cursor/rules`, `.cursor/commands` et `.agents/skills` renvoient à `AGENTS.md` au lieu de le répéter (les flux `new`, `iterate`, `variant`, `export` y sont décrits)
 - [ ] Essayer le « click and comment » du navigateur de Cursor sur un prototype: l'agent retrouve-t-il la bonne ligne de `index.vue`? Sinon, ajouter en dev un attribut qui donne le fichier et la ligne de chaque élément
 
-**Critère de sortie**: deux essais de suite à **30/32 ou plus**, avec **au plus une intervention**, sans changement non demandé dans `blueprint/`.
+**Critère de sortie**: deux essais de suite à **33/35 ou plus**, avec **au plus une intervention**, sans changement non demandé dans `blueprint/`.
 
 ---
 

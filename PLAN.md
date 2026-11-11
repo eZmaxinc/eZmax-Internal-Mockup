@@ -22,7 +22,7 @@ Tout ce qui sort de ces couches est refusé par `pnpm proto check`, pas seulemen
 | Tokens | **La source vit dans ez-proto** (`blueprint/tokens/`). Le mono en recopie le fichier **à la main** pour le moment. Trois couches à sens unique (primitives → sémantiques → composants). Couleurs `{rôle}-{modifieur}` du contrat de SUM, un seul sens par modifieur; tailles et espaces sur des échelles; un réglage de composant se lit avec une marche en repli et ne se définit jamais. |
 | Stockage | **Fichiers seulement, aucune base de données.** JSON pour ce qu'on interroge (`meta.json`), Markdown pour ce qu'on lit, Vue/TS pour ce qu'on exécute. Pas de DuckDB pour l'instant: il pourra lire les `meta.json` tels quels si le besoin vient. |
 | Tâches | **Un prototype = une tâche GoodDay.** Le dossier porte le nom de la branche: `feature/49198-la-tache` → `prototypes/49198-la-tache/`. `meta.json` garde `goodday: { number, url }`. |
-| Historique | Dossiers de version immuables `v001`, `v002`, variantes `v002b` (comparables côte à côte dans le shell) + git (qui a changé quoi). |
+| Historique | Dossiers de version `v001`, `v002`, variantes `v002b` (comparables côte à côte dans le shell). C'est le dev qui marque une version: l'agent retouche la dernière en place, et n'en crée une nouvelle que sur demande. Une version est figée dès qu'une suivante existe, qu'elle est retenue ou que la tâche est en revue + git (qui a changé quoi). |
 | Outil | Un seul CLI, `pnpm proto`, pour les devs et pour l'agent: il pose des questions dans un terminal, échoue clairement sinon. |
 | Export | HTML autonome et interactif (un seul fichier, CSS/JS inlinés) via `vite-plugin-singlefile`. |
 | Public | L'équipe, en local. Déployer le shell en statique pourra venir plus tard. |
