@@ -55,6 +55,9 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
 - [x] **Essai 7** (étapes 1 à 3): 25/27, 1 intervention. Un shell relancé à chaque version (dépôt en `G:\`), 22 lectures avant d'écrire, `v001` trop riche, tableau de `v002` trop large pour sa carte
 - [ ] Corrections après l'essai 7:
   - [x] `proto new` et `proto iterate` préviennent le shell; port fixe strict; `PROTO_POLL=1`; un seul shell à l'étape 0
+  - [x] Vérification proportionnée (règle 8): un coup d'œil pour une itération ou une variante, la tournée complète pour une `v001`, un changement de structure, sur demande ou avant la revue (l'itération de l'essai 7 a pris ~18 min, surtout en navigateur)
+  - [ ] Mesurer `pnpm proto check 90001` sur le poste en RDP (3,6 s en local): au-delà de 15 s, cloner le dépôt sur un disque local plutôt que `G:\`
+  - [ ] Décider si une version reste modifiable tant qu'elle n'est pas commitée (brouillon), au lieu d'une nouvelle version à chaque retouche
   - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
   - [ ] `AGENTS.md`: ne pas lire les autres prototypes; ouvrir chaque scénario par son URL; la `v001` est la plus petite réponse au brief
   - [ ] `ez-card`: l'en-tête passe à la ligne quand `#actions` a plusieurs boutons (signalé à l'essai 7, avec le correctif)

@@ -35,7 +35,7 @@ Ne pas en dire plus que ce qu'un dev aurait sous la main: le but est de voir si 
 
 Donner 2 ou 3 retours, comme dans une vraie revue:
 
-- **« Déplace X, ajoute Y »**: il doit créer une `v002` avec `proto iterate`, sans toucher à `v001`.
+- **« Déplace X, ajoute Y »**: il doit créer une `v002` avec `proto iterate`, sans toucher à `v001`. Pour une retouche, il ne refait pas la tournée complète: le check, puis un coup d'œil au scénario par défaut et à ce que le changement touche.
 - **« Montre une autre approche »**: il doit créer une variante, `v002b`.
 - **Un besoin qu'aucun composant actuel ne couvre**: c'est le test du parcours des propositions. Il doit créer `components/EzQuelqueChose.vue` avec l'en-tête `<!-- @proposal … -->`, pas du HTML brut dans `index.vue`.
 

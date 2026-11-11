@@ -99,7 +99,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 | 2.6 | La sélection de plusieurs lignes **n'existe pas** dans `ez-table`. Attendu: soit une alternative avec les composants existants (par exemple « Prolonger les N qui expirent » en un clic), soit une proposition de primitive bien justifiée. Dans les deux cas, c'est écrit dans `notes.md`. **Échec**: des cases à cocher en `<input>` brut | |
 | 2.7 | `notes.md` de `v002`: résumé en première ligne, puis seulement les signalements et les questions nouveaux de cette version (ni liste de changements, ni liste de propositions) | |
 | 2.8 | `pnpm proto check 90001` passe, et la proposition apparaît en ⚠ | |
-| 2.9 | Vérification dans le navigateur refaite | |
+| 2.9 | Coup d'œil dans le navigateur: le scénario par défaut et ce que le changement touche, sans refaire la tournée complète; l'agent dit lequel il a fait | |
 
 **Faire soi-même:**
 
@@ -128,7 +128,7 @@ pnpm proto proposals
 | 3.3 | Le bandeau est un `ez-message-important` (`type="warning"`) avec l'action dans `#actions`, pas un bloc fait à la main | |
 | 3.4 | Un seul bouton primaire par zone | |
 | 3.5 | Le scénario sans dossier à risque n'affiche pas de bandeau vide | |
-| 3.6 | `pnpm proto check 90001` passe, vérification dans le navigateur refaite | |
+| 3.6 | `pnpm proto check 90001` passe, coup d'œil dans le navigateur (pas de tournée complète) | |
 
 **Faire soi-même**: dans le shell, comparer `v002` et `v002b` côte à côte.
 

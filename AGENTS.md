@@ -11,7 +11,11 @@ You build **prototypes** of eZsign/eZmax screens: minimal, but indistinguishable
 5. **One version = one folder, self-contained.** It imports only from `vue`, `@ez`, `@mocks` and its own files. Never `../` into another version.
 6. **Data lives in `mocks.ts` as named scenarios** (first = default). Cover at least the main state plus one edge state (empty, error, closed…). Use the business objects from `@mocks` and their methods (`stateLabel()`, `stateTone()`, `isStateClosed()`…).
 7. **Keep `notes.md` short.** First line = one-sentence summary: it labels the version in the shell, for the teammates who open it. Then only what must outlive the conversation, and only what is new in this version: « Signalements » and « Questions ouvertes ». No list of changes (`pnpm proto diff` shows them), no list of proposals (the `@proposal` header says why). Nothing to report: the summary alone is a complete `notes.md`.
-8. **Run `pnpm proto check <task>` and look at the result before saying you're done.** Fix every ✗. Look at it in the browser: `pnpm proto open <task> <version>` prints the URLs, and says so if the shell is not running; only then start `pnpm dev` in a background terminal. There is one shell, on one port: never start a second one, a new version shows up in the running shell without a restart (`proto new` and `proto iterate` tell it). Open the **Prototype** URL in your browser (Cursor's browser), check every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (390 px), compare with the closest pattern, fix what looks off.
+8. **Run `pnpm proto check <task>` and look at the result before saying you're done.** Fix every ✗. Look at it in the browser: `pnpm proto open <task> <version>` prints the URLs, and says so if the shell is not running; only then start `pnpm dev` in a background terminal. There is one shell, on one port: never start a second one, a new version shows up in the running shell without a restart (`proto new` and `proto iterate` tell it). Open the **Prototype** URL in your browser (Cursor's browser) and size the look to the change:
+   - **Quick look** (the default when iterating or making a variant): the default scenario, plus the scenario or the width your change touches. One or two page loads, read the page rather than screenshot it when text is enough, fix what looks off.
+   - **Full tour** (a first version `v001`, a change of layout or of structure, when the user asks, or before `pnpm proto status <task> review`): every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (390 px), compared with the closest pattern.
+
+   Say in your final message which one you did.
 9. **Tokens change only on purpose.** Never add a token in a prototype. A new or changed token is an explicit edit of `blueprint/tokens/ez-tokens.css` followed by `pnpm proto tokens bump`, and only when the user asks.
 10. **Flat files only.** No database: structured data in JSON (`meta.json`), prose in Markdown, history in git and in the version folders. Change a task's status with `pnpm proto status`, not by hand.
 
@@ -105,7 +109,7 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 
 ## Workflows
 
-This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` and `.agents/skills` point here. Every workflow ends the same way: golden rule 8 (check, then the browser), then the final message described above.
+This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` and `.agents/skills` point here. Every workflow ends the same way: golden rule 8 (check, then the browser: a quick look or the full tour), then the final message described above.
 
 **New** (`/new-proto`)
 1. Get the GoodDay number and link (ask if either is missing). Use the French title of the GoodDay task. Pick the closest pattern if one fits.
