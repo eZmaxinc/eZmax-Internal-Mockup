@@ -1,6 +1,7 @@
 /**
  * pnpm proto status <tâche> <draft|review|chosen|archived> [version]
  * `chosen` needs the retained version: pnpm proto status 49198 chosen v002
+ * `draft` and `review` take the decision back: the task has no retained version any more.
  */
 import { STATUSES, STATUS_LABELS, fail, findTask, listVersions, parseArgs, readMeta, writeMeta } from '../lib.mjs'
 
@@ -21,6 +22,8 @@ export async function run(argv) {
 
    meta.status = status
    if (version) meta.chosen = version
+   // Back to draft or to review, the decision is taken back: no version is retained any more
+   else if (status === 'draft' || status === 'review') meta.chosen = null
    writeMeta(taskId, meta)
 
    console.log(`✓ ${taskId}: ${STATUS_LABELS[status]}${meta.chosen ? `, version retenue ${meta.chosen}` : ''}`)

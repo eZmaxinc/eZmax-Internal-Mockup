@@ -139,7 +139,7 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 2. `pnpm proto check <task>`, fix every ✗, then `pnpm proto export <task> [version]`.
 3. Report the path, `exports/<task>-<version>.html`: one file, offline, with the scenario switcher.
 
-**Team decision**: `pnpm proto status <task> review|chosen|archived [vNNN]`. Set `chosen` only when the user says which version is retained.
+**Team decision**: the human retains a version themselves, in the shell: the star (☆) on the line of the version, in the left panel. The status of the task is changed there too, by a click on it. Don't do it for them, and don't spend a turn on it. `pnpm proto status <task> review|chosen|archived [vNNN]` is for the other statuses, or when the user asks you to; set `chosen` only when the user says which version is retained.
 
 ## Commands
 

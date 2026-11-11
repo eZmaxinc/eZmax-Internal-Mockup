@@ -40,7 +40,7 @@ Le tableau de bord liste les prototypes, les patrons de référence et la galeri
 | `pnpm proto check [tâche]` | Couleurs, composants et props connus, structure, imports, types |
 | `pnpm proto open [tâche] [version]` | Donne l'adresse du shell |
 | `pnpm proto diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |
-| `pnpm proto status <tâche> <statut> [version]` | `draft`, `review`, `chosen` (avec la version retenue) ou `archived` |
+| `pnpm proto status <tâche> <statut> [version]` | `draft`, `review`, `chosen` (avec la version retenue) ou `archived`. Aussi d'un clic dans le shell: le statut de la tâche ouvre la liste des statuts, et l'étoile (☆) sur la ligne d'une version la retient |
 | `pnpm proto list` | Les tâches et leur état (`--status review`, `--mine`, `--all`) |
 | `pnpm proto export <tâche> [version]` | `exports/<tâche>-<version>.html`, un seul fichier, interactif |
 | `pnpm proto proposals` | Ce que les prototypes ont créé, rehaussé ou proposé, et leurs signalements |

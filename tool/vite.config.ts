@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, type Plugin, type ViteDevServer } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { spawnSync } from 'node:child_process'
@@ -59,6 +59,71 @@ function watchContentFolders(): Plugin {
       configureServer(server) {
          server.watcher.add([PROTOTYPES, BLUEPRINT])
       },
+      /**
+       * Tailwind does not scan a folder created after the server started: a utility used for the first
+       * time in a new prototype (mt-6) generated nothing until a restart. Rebuilding the stylesheet with
+       * every saved .vue of prototypes/ makes it look again.
+       */
+      handleHotUpdate({ file, modules, server }) {
+         if (!file.endsWith('.vue') || !file.includes('/prototypes/')) return
+         const styles = [...server.moduleGraph.idToModuleMap.values()].filter((module) => module.file?.endsWith('/tool/app.css'))
+         return styles.length ? [...modules, ...styles] : undefined
+      },
+   }
+}
+
+/** Drops the registry module, whose import.meta.glob lists are then rebuilt from the disk, and reloads the pages. */
+function reloadRegistry(server: ViteDevServer): number {
+   // Matched by the end of the path: the drive letter in a module id is not always the one of ROOT
+   let dropped = 0
+   for (const environment of Object.values(server.environments)) {
+      for (const module of environment.moduleGraph.idToModuleMap.values()) {
+         if (!module.file?.endsWith('/tool/registry.ts')) continue
+         environment.moduleGraph.invalidateModule(module)
+         dropped++
+      }
+   }
+   server.ws.send({ type: 'full-reload' })
+   return dropped
+}
+
+/**
+ * POST /__proto/status?task=<task>&status=<status>[&version=<version>] — the shell's « Retenir cette version »
+ * button. The team decision is a click of the human, not a request to the agent: it runs `proto status`, which
+ * writes meta.json, then reloads the shell.
+ */
+function protoStatusEndpoint(): Plugin {
+   return {
+      name: 'ez-proto-status-endpoint',
+      apply: 'serve',
+      configureServer(server) {
+         server.middlewares.use('/__proto/status', (req, res) => {
+            const url = new URL(req.url ?? '', 'http://localhost')
+            const task = url.searchParams.get('task') ?? ''
+            const status = url.searchParams.get('status') ?? ''
+            const version = url.searchParams.get('version') ?? ''
+            const valid = req.method === 'POST' && /^[\w-]+$/.test(task) && /^(draft|review|chosen|archived)$/.test(status) && /^(v\d{3}[a-z]?)?$/.test(version)
+
+            if (!valid) {
+               res.statusCode = 400
+               res.end('Invalid task, status or version')
+               return
+            }
+
+            const result = spawnSync(process.execPath, [join(TOOL, 'cli', 'proto.mjs'), 'status', task, status, ...(version ? [version] : [])], {
+               cwd: ROOT,
+               encoding: 'utf8',
+            })
+            if (result.status !== 0) {
+               res.statusCode = 500
+               res.end(result.stderr || result.stdout || 'Status failed')
+               return
+            }
+
+            reloadRegistry(server)
+            res.end(result.stdout)
+         })
+      },
    }
 }
 
@@ -84,17 +149,7 @@ function protoRefreshEndpoint(): Plugin {
                return
             }
 
-            // Matched by the end of the path: the drive letter in a module id is not always the one of ROOT
-            let dropped = 0
-            for (const environment of Object.values(server.environments)) {
-               for (const module of environment.moduleGraph.idToModuleMap.values()) {
-                  if (!module.file?.endsWith('/tool/registry.ts')) continue
-                  environment.moduleGraph.invalidateModule(module)
-                  dropped++
-               }
-            }
-            server.ws.send({ type: 'full-reload' })
-            res.end(JSON.stringify({ ok: true, registry: dropped }))
+            res.end(JSON.stringify({ ok: true, registry: reloadRegistry(server) }))
          })
       },
    }
@@ -102,7 +157,7 @@ function protoRefreshEndpoint(): Plugin {
 
 export default defineConfig({
    root: TOOL,
-   plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), watchContentFolders()],
+   plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), protoStatusEndpoint(), watchContentFolders()],
    resolve: { alias: aliases },
    server: {
       port: DEV_PORT,
