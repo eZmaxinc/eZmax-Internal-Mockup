@@ -18,18 +18,18 @@
       </div>
 
       <footer class="proto-viewer__devbar">
-         <!-- Always here: hides or shows the shell's left panel (chevron left = hide) -->
+         <!-- Always here: hides or shows the shell's left panel -->
          <ez-btn
-            class="proto-viewer__sidebar-toggle"
-            :class="{ 'is-open': theSidebarOpen }"
+            class="proto-viewer__drawer-toggle"
             variant="flat"
             size="sm"
-            icon="chevronRight"
             :aria-label="theSidebarOpen ? 'Masquer le panneau' : 'Afficher le panneau'"
             :aria-expanded="theSidebarOpen"
             :title="`${theSidebarOpen ? 'Masquer' : 'Afficher'} le panneau ( [ )`"
             @click="toggleSidebar"
-         />
+         >
+            <panel-icon side="left" :open="theSidebarOpen" />
+         </ez-btn>
 
          <div class="proto-viewer__segmented" role="group" aria-label="Largeur">
             <button
@@ -70,19 +70,19 @@
          <div class="proto-viewer__devbar-end">
             <slot name="devbar-end" :scenario="theScenario" />
 
-            <!-- Mirror of the left toggle, at the right end: chevron right = hide the notes, left = show them -->
+            <!-- Mirror of the left toggle, at the right end -->
             <ez-btn
                v-if="$slots.panel"
-               class="proto-viewer__notes-toggle"
-               :class="{ 'is-closed': !theNotesOpen }"
+               class="proto-viewer__drawer-toggle"
                variant="flat"
                size="sm"
-               icon="chevronRight"
                :aria-label="theNotesOpen ? 'Masquer les notes' : 'Afficher les notes'"
                :aria-expanded="theNotesOpen"
                :title="`${theNotesOpen ? 'Masquer' : 'Afficher'} les notes ( ] )`"
                @click="toggleNotes"
-            />
+            >
+               <panel-icon side="right" :open="theNotesOpen" />
+            </ez-btn>
          </div>
       </footer>
    </div>
@@ -90,6 +90,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import PanelIcon from './PanelIcon.vue'
 import { useNotes, useSidebar } from './sidebar'
 
 const { theSidebarOpen, toggleSidebar } = useSidebar()
@@ -188,8 +189,9 @@ function frameUrl(path: string) {
    font-size: var(--text-sm);
 }
 
-.proto-viewer__sidebar-toggle.is-open {
-   transform: rotate(180deg);
+.proto-viewer__drawer-toggle {
+   width: var(--size-control-sm);
+   padding: 0;
 }
 
 .proto-viewer__devbar-end {
@@ -197,10 +199,6 @@ function frameUrl(path: string) {
    align-items: center;
    gap: 12px;
    margin-left: auto;
-}
-
-.proto-viewer__notes-toggle.is-closed {
-   transform: rotate(180deg);
 }
 
 .proto-viewer__control {
