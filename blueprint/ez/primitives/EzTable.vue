@@ -3,6 +3,9 @@
       <table>
          <thead>
             <tr>
+               <th v-if="selectable" class="ez-table__check">
+                  <input type="checkbox" :checked="allSelected" :indeterminate="selected.length > 0 && !allSelected" aria-label="Tout sélectionner" @change="toggleAll">
+               </th>
                <th
                   v-for="theColumn in columns"
                   :key="theColumn.key"
@@ -14,6 +17,7 @@
          </thead>
          <tbody v-if="loading">
             <tr v-for="n in 4" :key="n">
+               <td v-if="selectable" />
                <td v-for="theColumn in columns" :key="theColumn.key">
                   <span class="ez-table__skeleton" />
                </td>
@@ -28,6 +32,9 @@
                @click="clickable && emit('row-click', theRow)"
                @keydown.enter="clickable && emit('row-click', theRow)"
             >
+               <td v-if="selectable" class="ez-table__check" @click.stop>
+                  <input type="checkbox" :checked="selected.includes(theRow[rowKey])" aria-label="Sélectionner la ligne" @change="toggle(theRow[rowKey])">
+               </td>
                <td
                   v-for="theColumn in columns"
                   :key="theColumn.key"
@@ -54,6 +61,7 @@
 </template>
 
 <script setup lang="ts" generic="TRow extends Record<string, any>">
+import { computed } from 'vue'
 import EzEmptyState from './EzEmptyState.vue'
 
 export interface EzTableColumn {
@@ -63,10 +71,12 @@ export interface EzTableColumn {
    width?: string
 }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
    columns: EzTableColumn[]
    rows: TRow[]
    rowKey?: string
+   /** A checkbox per row and one for all; the chosen row keys are in v-model:selected */
+   selectable?: boolean
    clickable?: boolean
    loading?: boolean
    emptyTitle?: string
@@ -78,6 +88,19 @@ withDefaults(defineProps<{
 const emit = defineEmits<{
    'row-click': [row: TRow]
 }>()
+
+/** Keys (row-key) of the selected rows */
+const selected = defineModel<(string | number)[]>('selected', { default: () => [] })
+
+const allSelected = computed(() => props.rows.length > 0 && props.rows.every((row) => selected.value.includes(row[props.rowKey])))
+
+function toggle(key: string | number) {
+   selected.value = selected.value.includes(key) ? selected.value.filter((item) => item !== key) : [...selected.value, key]
+}
+
+function toggleAll() {
+   selected.value = allSelected.value ? [] : props.rows.map((row) => row[props.rowKey])
+}
 </script>
 
 <style scoped>
@@ -92,17 +115,27 @@ table {
 }
 
 th {
-   height: 36px;
+   height: var(--table-row-height);
    padding: 0 16px;
    background: var(--color-surface-muted);
    border-top: 1px solid var(--color-border-muted);
    border-bottom: 1px solid var(--color-border);
-   color: var(--color-foreground-muted);
-   font-size: var(--text-xs);
+   color: var(--color-foreground);
    font-weight: 600;
-   text-transform: uppercase;
-   letter-spacing: 0.03em;
    white-space: nowrap;
+}
+
+.ez-table__check {
+   width: 1%;
+   padding-right: 0;
+
+   input {
+      display: block;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--color-accent);
+      cursor: pointer;
+   }
 }
 
 td {

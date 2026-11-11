@@ -1,6 +1,6 @@
 <template>
    <ez-page>
-      <ez-page-header :title="theFolder.name" cancelable refresh>
+      <ez-page-header :title="theFolder.name" :breadcrumbs="[$gettext('Accueil'), $gettext('Dossiers eZsign'), $gettext('Informations du dossier')]" refresh>
          <template #meta>
             <ez-badge-folder-state :folder="theFolder" />
          </template>
@@ -20,14 +20,7 @@
 
             <ez-page-section id="summary" :title="$gettext('Résumé')">
                <ez-card :title="$gettext('Informations')" toc-id="summary-info">
-                  <ez-layout>
-                     <ez-layout-col :cols="{ base: 12, md: 6 }">
-                        <ez-info-list :items="theInfoLeft" />
-                     </ez-layout-col>
-                     <ez-layout-col :cols="{ base: 12, md: 6 }">
-                        <ez-info-list :items="theInfoRight" />
-                     </ez-layout-col>
-                  </ez-layout>
+                  <ez-info-list :items="[...theInfoLeft, ...theInfoRight]" tiles />
                </ez-card>
             </ez-page-section>
 

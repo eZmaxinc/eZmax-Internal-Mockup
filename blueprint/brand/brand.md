@@ -12,12 +12,12 @@ Un outil de travail sérieux et dense, pour des gens qui traitent des dossiers �
 1. **La tâche d'abord**: chaque écran répond à « qu'est-ce que je dois faire ici? ». L'action principale est unique et évidente (un seul bouton primaire par zone).
 2. **Dense mais respirable**: texte de base à 14px, beaucoup d'info par écran, mais des groupes clairement séparés (cartes, sections).
 3. **Le statut se lit d'un coup d'œil**: badges de statut cohérents partout (même couleur = même sens).
-4. **Sobre**: surfaces blanches sur fond gris pâle, une seule couleur d'accent (l'ardoise bleutée des boutons), pas de dégradés, pas d'illustrations décoratives.
+4. **Sobre**: cartes blanches à coins peu arrondis sur fond gris, pas de dégradés, pas d'illustrations décoratives. Deux couleurs d'action: le vert pour l'action principale d'une page (créer, sauvegarder), l'ardoise bleutée pour les autres boutons pleins (rechercher, modifier).
 5. **Prévisible**: mêmes structures de page partout (en-tête de page, contenu, colonne de droite). L'utilisateur ne réapprend rien d'un écran à l'autre.
 
 ## Structure type d'une page
 
-- `ez-page` > `ez-page-header` (titre, retour, actualiser, actions) + `ez-page-content`.
+- `ez-page` > `ez-page-header` (titre, fil d'Ariane, actualiser, action principale en pilule) + `ez-page-content`. L'en-tête est posé sur le fond gris, et le contenu prend toute la largeur.
 - Contenu en grille: colonne principale 8/12 + colonne de droite 4/12 (résumé, métadonnées). Sous `md`, la colonne de droite passe **en premier**.
 - Les fiches longues utilisent `ez-page-sections` avec une **TOC sticky à droite** qui liste aussi les sous-sections (les cartes).
 
@@ -32,7 +32,8 @@ Un outil de travail sérieux et dense, pour des gens qui traitent des dossiers �
 
 | Sens | Token | Usage |
 |---|---|---|
-| Action | `accent` | boutons primaires, liens, sélection |
+| Action | `accent` | boutons pleins d'une zone, liens, sélection |
+| Action principale | `positive` | le bouton en pilule de l'en-tête de page |
 | Succès | `positive` | complété, signé |
 | Avertissement | `warning` | en attente, expire bientôt |
 | Danger | `negative` | refusé, expiré, suppression |
@@ -44,11 +45,12 @@ Les valeurs vivent dans `blueprint/tokens/ez-tokens.css`, la source partagée av
 
 - ✅ Un bouton primaire par zone; les autres en `secondary` ou `flat`.
 - ✅ Les états vides ont un titre, une phrase et, si possible, l'action pour en sortir.
-- ✅ Les tableaux: colonnes alignées à gauche, nombres et dates à droite, statut en badge.
+- ✅ Les tableaux: colonnes alignées à gauche, nombres et dates à droite, statut en badge plein (`solid`).
+- ✅ Une fiche: les informations en tuiles (`ez-info-list tiles`), la navigation à droite.
 - ❌ Pas de couleur inventée, pas d'ombre forte, pas de coins très arrondis.
 - ❌ Pas d'icône seule sans libellé ou infobulle pour une action importante.
 - ❌ Pas de modale pour ce qui peut être fait sur la page.
 
 ## Écrans de référence
 
-Voir `blueprint/brand/screens/`. TODO: ajouter 5 à 10 captures de prod (liste, fiche détail, formulaire, dialog, état vide, erreur) avec une ligne d'annotation chacune.
+Voir `blueprint/brand/screens/README.md`: quatre captures de prod annotées (liste, fiche longue, fiche de dossier, éditeur plein écran). Ce sont elles la référence. À ajouter: formulaire, dialogue, état vide, erreur.

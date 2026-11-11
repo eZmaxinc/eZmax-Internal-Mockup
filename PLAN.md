@@ -74,7 +74,7 @@ Le modèle est la copie de fichiers, pas la dépendance.
 | `open [tâche] [version]` | Ouvre le shell, le démarre au besoin |
 | `check [tâche]` | Structure, lien GoodDay, couleurs brutes, primitives, palette Tailwind, hiérarchie et noms des tokens, composants et props connus, règles par niveau, imports, types |
 | `catalog` | Régénère catalog.json, l'enregistrement des composants et l'API de CATALOG.md |
-| `proposals` / `promote` | Composants proposés dans les prototypes; promotion dans blueprint/ez |
+| `proposals` / `promote` | Ce que les prototypes ont créé, rehaussé ou proposé, avec l'écart d'un composant rehaussé; promotion dans blueprint/ez (un rehaussé remplace l'original) |
 | `export [tâche] [version]` | HTML autonome dans `exports/` |
 | `tokens [bump <niveau> -m …] [migrate]` | Version des tokens partagés, nouvelle version + CHANGELOG, réécriture des anciens noms |
 

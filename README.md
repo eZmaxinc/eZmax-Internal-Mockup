@@ -38,7 +38,7 @@ Sans arguments, `pnpm proto new` pose les questions. Une tâche se désigne par 
 | `pnpm proto check [tâche]` | Règles de brand, structure, lien GoodDay, imports, types |
 | `pnpm proto export <tâche> [version]` | `exports/<tâche>-<version>.html`, autonome et interactif |
 | `pnpm proto proposals` | Composants proposés dans les prototypes, les plus demandés d'abord |
-| `pnpm proto promote <tâche> <version> <Nom>` | Fait entrer une proposition dans `blueprint/ez` (décision humaine) |
+| `pnpm proto promote <tâche> <version> <Nom>` | Fait entrer dans `blueprint/ez` un composant créé, rehaussé ou proposé dans une version (décision humaine). Un composant rehaussé remplace l'original |
 | `pnpm proto catalog` | Régénère le catalogue après un changement dans `blueprint/ez` |
 | `pnpm proto tokens` | Version des tokens partagés (`bump patch\|minor\|major -m …`, `migrate`) |
 

@@ -1,7 +1,7 @@
 <template>
    <button
       class="ez-btn"
-      :class="[`ez-btn--${variant}`, `ez-btn--${size}`, { 'ez-btn--block': block, 'ez-btn--icon-only': isIconOnly }]"
+      :class="[`ez-btn--${variant}`, `ez-btn--${size}`, { 'ez-btn--block': block, 'ez-btn--icon-only': isIconOnly, 'ez-btn--pill': pill }]"
       :type="type"
       :disabled="disabled || loading"
       :aria-busy="loading || undefined"
@@ -26,8 +26,10 @@ const props = withDefaults(defineProps<{
    label?: string
    icon?: IconName
    iconRight?: IconName
-   /** primary: one per zone · secondary: default · flat: low emphasis · danger: destructive */
-   variant?: 'primary' | 'secondary' | 'flat' | 'danger'
+   /** positive: the main action of a page (create, save) · primary: the main action of a zone · secondary: default · flat: low emphasis · danger: destructive */
+   variant?: 'positive' | 'primary' | 'secondary' | 'flat' | 'danger'
+   /** Rounded ends and uppercase label: the actions of a page header */
+   pill?: boolean
    size?: 'md' | 'sm'
    loading?: boolean
    disabled?: boolean
@@ -96,6 +98,25 @@ const isIconOnly = computed(() => !props.label && !theSlots.default && !!props.i
    width: 100%;
 }
 
+.ez-btn--pill {
+   padding: 0 var(--space-inset-lg);
+   border-radius: var(--radius-full);
+   text-transform: uppercase;
+
+   &.ez-btn--icon-only {
+      padding: 0;
+   }
+}
+
+.ez-btn--positive {
+   background: var(--color-positive);
+   color: var(--color-foreground-inverse);
+
+   &:hover:not(:disabled) {
+      background: var(--color-foreground-positive);
+   }
+}
+
 .ez-btn--primary {
    background: var(--color-accent);
    color: var(--color-accent-foreground);
@@ -124,12 +145,14 @@ const isIconOnly = computed(() => !props.label && !theSlots.default && !!props.i
    }
 }
 
+/* Outlined, as in production: a destructive action never looks like the main one */
 .ez-btn--danger {
-   background: var(--color-negative);
-   color: var(--color-foreground-inverse);
+   background: var(--color-surface);
+   border-color: var(--color-negative);
+   color: var(--color-negative);
 
    &:hover:not(:disabled) {
-      background: var(--color-foreground-negative);
+      background: var(--color-surface-negative);
    }
 }
 

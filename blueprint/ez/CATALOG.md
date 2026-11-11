@@ -25,14 +25,15 @@ Toute page commence ainsi.
 
 `ez-page-header`
 - `title` (requis), `subtitle`
-- `button`: libellé de l'action principale de la page (bouton primaire) → émet `button`
-- `button-icon`
+- `breadcrumbs`: le fil d'Ariane sous le titre, `['Accueil', 'Administration', 'Types de dossiers']`
+- `button`: libellé de l'action principale de la page (pilule verte, en majuscules) → émet `button`
+- `button-icon`, `button-variant`: `positive` (défaut: créer, sauvegarder) · `primary` (ardoise: modifier)
 - `refresh` → affiche « Actualiser », émet `refresh`
 - `cancelable` → affiche « Retour », émet `cancel`
 - slots `#meta` (badges à côté du titre), `#actions` (actions secondaires)
 - ⚠ à valider: noms exacts des émissions en prod
 
-`ez-page-content`: conteneur avec la marge `--inset-page` et la largeur max. Pas de props.
+`ez-page-content`: conteneur avec la marge `--inset-page`, sur toute la largeur. Pas de props.
 
 ### `ez-layout` + `ez-layout-col`
 Grille de 12 colonnes (breakpoints de la prod: sm ≥ 600px, md ≥ 1024px, lg ≥ 1440px).
@@ -56,12 +57,13 @@ Fiche longue avec TOC sticky à droite (≥ 1024px) et scroll-spy.
 
 ### `ez-btn`
 - `label` ou slot, `icon`, `icon-right`
-- `variant`: `primary` (un seul par zone) · `secondary` (défaut) · `flat` (faible emphase, actions de carte) · `danger` (destructif)
+- `variant`: `positive` (vert: l'action principale d'une page) · `primary` (ardoise: l'action d'une zone, un seul par zone) · `secondary` (défaut) · `flat` (faible emphase, actions de carte) · `danger` (destructif, en contour rouge)
+- `pill`: bouts arrondis et libellé en majuscules, pour les actions d'un en-tête de page
 - `size`: `md` · `sm`; `loading`, `disabled`, `block`, `type`
 - Bouton icône seule: `aria-label` obligatoire
 
 ### `ez-badge`
-- `label` ou slot, `tone`: `neutral info success warning danger action`, `dot`
+- `label` ou slot, `tone`: `neutral info success warning danger action`, `dot`, `solid` (plein, pour un tableau)
 - Pour le statut d'un objet métier, utiliser son composant métier (`ez-badge-folder-state`, `ez-badge-signer-state`): même statut = même badge partout.
 
 ### `ez-message-important`
@@ -72,7 +74,7 @@ Fiche longue avec TOC sticky à droite (≥ 1024px) et scroll-spy.
 
 ### `ez-info-list`
 Paires libellé / valeur (colonne de droite, résumés). **Propre à ez-proto** (pas d'équivalent connu en prod).
-- `items`: `{ label, value?, key? }[]`, `inline`; slot `#value-<key>`
+- `items`: `{ label, value?, key? }[]`, `inline`, `tiles` (chaque paire dans une tuile bordée: les informations d'une fiche); slot `#value-<key>`
 
 ### `ez-icon`
 - `name`, `size` (défaut 18)
@@ -87,9 +89,9 @@ Paires libellé / valeur (colonne de droite, résumés). **Propre à ez-proto** 
 ## Données
 
 ### `ez-table`
-- `columns`: `{ key, label, align?, width? }[]`, `rows`, `row-key` (défaut `id`), `clickable` → `row-click`, `loading`, `empty-title`
+- `columns`: `{ key, label, align?, width? }[]`, `rows`, `row-key` (défaut `id`), `clickable` → `row-click`, `selectable` + `v-model:selected` (cases à cocher, clés des lignes choisies), `loading`, `empty-title`
 - slot `#cell-<key>="{ row, value }"` pour formater une cellule; `#empty`
-- Dans une carte: `<ez-card flush>`. Dates et nombres alignés à droite.
+- Dans une carte: `<ez-card flush>`, ou sous les filtres d'une carte titrée (patron `list-page`). Dates et nombres alignés à droite.
 
 ## Overlays
 
@@ -128,7 +130,7 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 ```
 
 - `@proposal domain <objet>` ou `@proposal primitive`, puis pourquoi il existe. Une proposition suit les règles de son niveau (`proto check` les vérifie): une proposition métier n'a ni couleur, ni bordure, ni ombre, ni arrondi à elle.
-- Rien de tout ça ne bloque le prototype. `pnpm proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide d'en promouvoir une: `pnpm proto promote <tâche> <version> <Nom>`. Seulement sur demande.
+- Rien de tout ça ne bloque le prototype. `pnpm proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `pnpm proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande.
 
 <!-- api:start — généré par pnpm proto catalog, ne pas modifier à la main -->
 
@@ -153,6 +155,7 @@ Slots: `défaut`
 | `label` | `string` |  |  |
 | `tone` | `neutral` `info` `success` `warning` `danger` `action` | `'neutral'` | Same tone = same meaning everywhere (see brand.md) |
 | `dot` | `boolean` |  |  |
+| `solid` | `boolean` |  | Filled with the solid color, squarer: the badges of a table in production |
 
 Slots: `défaut`
 
@@ -163,7 +166,8 @@ Slots: `défaut`
 | `label` | `string` |  |  |
 | `icon` | `IconName` |  |  |
 | `icon-right` | `IconName` |  |  |
-| `variant` | `primary` `secondary` `flat` `danger` | `'secondary'` | primary: one per zone · secondary: default · flat: low emphasis · danger: destructive |
+| `variant` | `positive` `primary` `secondary` `flat` `danger` | `'secondary'` | positive: the main action of a page (create, save) · primary: the main action of a zone · secondary: default · flat: low emphasis · danger: destructive |
+| `pill` | `boolean` |  | Rounded ends and uppercase label: the actions of a page header |
 | `size` | `md` `sm` | `'md'` |  |
 | `loading` | `boolean` |  |  |
 | `disabled` | `boolean` |  |  |
@@ -240,6 +244,7 @@ Slots: `#actions`
 |---|---|---|---|
 | `items` * | `EzInfoItem[]` |  |  |
 | `inline` | `boolean` |  | Label and value side by side |
+| `tiles` | `boolean` |  | Each pair in a bordered tile, side by side when there is room: the information of a detail page in production |
 
 Slots: `#value-<…>`
 
@@ -287,8 +292,10 @@ Slots: `défaut`
 |---|---|---|---|
 | `title` * | `string` |  |  |
 | `subtitle` | `string` |  |  |
+| `breadcrumbs` | `string[]` |  | Where the page is, from the home down to this page: ['Accueil', 'Administration', 'Types de dossiers'] |
 | `button` | `string` |  | Label of the page's primary action (emits `button`) |
 | `button-icon` | `IconName` |  |  |
+| `button-variant` | `positive` `primary` | `'positive'` | positive (green): create, save · primary (slate): edit |
 | `refresh` | `boolean` |  | Shows the refresh action (emits `refresh`) |
 | `cancelable` | `boolean` |  | Shows the back action (emits `cancel`) |
 
@@ -328,9 +335,11 @@ Slots: `défaut`
 | `columns` * | `EzTableColumn[]` |  |  |
 | `rows` * | `TRow[]` |  |  |
 | `row-key` | `string` | `'id'` |  |
+| `selectable` | `boolean` |  | A checkbox per row and one for all; the chosen row keys are in v-model:selected |
 | `clickable` | `boolean` |  |  |
 | `loading` | `boolean` |  |  |
 | `empty-title` | `string` | `'Aucun élément'` |  |
+| `selected` | `(string \| number)[]` |  | v-model:selected |
 
 Slots: `#cell-<…>`, `#empty`
 
@@ -348,6 +357,7 @@ Construit avec: `ez-badge`
 |---|---|---|---|
 | `folder` * | `EzsignFolder` |  |  |
 | `dot` | `boolean` |  | Small dot before the label, for dense lists |
+| `solid` | `boolean` |  | Filled badge, for tables |
 
 #### `ez-badge-signer-state` · signer
 
@@ -359,6 +369,7 @@ Construit avec: `ez-badge`
 |---|---|---|---|
 | `signer` * | `EzsignSigner` |  |  |
 | `dot` | `boolean` |  | Small dot before the label, for dense lists |
+| `solid` | `boolean` |  | Filled badge, for tables |
 
 ### Helpers (`import { … } from '@ez'`)
 

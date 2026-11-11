@@ -52,10 +52,17 @@ export function extractComponent(file, { tier, object } = {}) {
    let propsType = null
    let emitsType = null
    let defaults = {}
+   const models = []
 
    const visit = (node) => {
       if (ts.isCallExpression(node)) {
          const callee = node.expression.getText(sourceFile)
+         // defineModel<T>('selected'): a prop (v-model:selected) and its update event
+         if (callee === 'defineModel') {
+            const first = node.arguments[0]
+            const name = first && ts.isStringLiteralLike(first) ? first.text : 'modelValue'
+            models.push({ name, attr: toKebab(name), type: node.typeArguments?.[0]?.getText(sourceFile).replace(/\s+/g, ' ') ?? 'unknown', required: false, values: null, default: null, doc: `v-model${name === 'modelValue' ? '' : `:${name}`}` })
+         }
          if (callee === 'defineProps' && node.typeArguments?.[0]) propsType = node.typeArguments[0]
          if (callee === 'defineEmits' && node.typeArguments?.[0]) emitsType = node.typeArguments[0]
          if (callee === 'withDefaults' && node.arguments[1] && ts.isObjectLiteralExpression(node.arguments[1])) {
@@ -82,6 +89,7 @@ export function extractComponent(file, { tier, object } = {}) {
             doc: jsDocOf(member),
          }
       })
+      .concat(models)
 
    const emits = membersOf(emitsType, sourceFile).flatMap((member) => {
       if (ts.isPropertySignature(member) && member.name) {

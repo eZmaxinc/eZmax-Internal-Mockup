@@ -1,5 +1,5 @@
 /*
- * ez-tokens 2.0.1 — 2026-11-10
+ * ez-tokens 2.1.0 — 2026-11-11
  * Source: ez-proto, blueprint/tokens/ez-tokens.css. Copied by hand into the mono: never edit the copy.
  * Changes: blueprint/tokens/CHANGELOG.md · Copy procedure: blueprint/tokens/COPY.md
  *
@@ -79,8 +79,8 @@
    --prim-cyan-700: #2b6873;
    --prim-cyan-950: #122c30;
 
-   /* Type — TODO: the production font */
-   --prim-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+   /* Type — Poppins, read on production screenshots (blueprint/brand/screens); to confirm in the mono's CSS */
+   --prim-font-sans: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
    --prim-font-mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
 }
 

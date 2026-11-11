@@ -1,5 +1,5 @@
 <template>
-   <ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" :dot="dot" />
+   <ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" :dot="dot" :solid="solid" />
 </template>
 
 <script setup lang="ts">
@@ -13,5 +13,7 @@ defineProps<{
    folder: EzsignFolder
    /** Small dot before the label, for dense lists */
    dot?: boolean
+   /** Filled badge, for tables */
+   solid?: boolean
 }>()
 </script>

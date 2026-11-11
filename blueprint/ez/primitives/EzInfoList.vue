@@ -1,5 +1,5 @@
 <template>
-   <dl class="ez-info-list" :class="{ 'ez-info-list--inline': inline }">
+   <dl class="ez-info-list" :class="{ 'ez-info-list--inline': inline, 'ez-info-list--tiles': tiles }">
       <div v-for="theItem in items" :key="theItem.label" class="ez-info-list__item">
          <dt>{{ theItem.label }}</dt>
          <dd>
@@ -21,6 +21,8 @@ defineProps<{
    items: EzInfoItem[]
    /** Label and value side by side */
    inline?: boolean
+   /** Each pair in a bordered tile, side by side when there is room: the information of a detail page in production */
+   tiles?: boolean
 }>()
 </script>
 
@@ -59,6 +61,23 @@ dd {
    dd {
       margin: 0;
       text-align: right;
+   }
+}
+
+.ez-info-list--tiles {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+   gap: var(--space-inset-sm);
+
+   .ez-info-list__item {
+      padding: var(--space-inset-sm);
+      border: 1px solid var(--color-border-muted);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface-muted);
+   }
+
+   dd {
+      font-size: var(--text-base);
    }
 }
 </style>

@@ -53,7 +53,7 @@ defineProps<{
    --_padding: var(--card-padding, var(--space-inset-lg));
 
    background: var(--color-surface);
-   border-radius: var(--radius-lg);
+   border-radius: var(--radius-sm);
    box-shadow: var(--shadow-card);
    scroll-margin-top: calc(var(--sizing-toolbar-height, 50px) + 16px);
 }
@@ -87,7 +87,8 @@ defineProps<{
    margin: 0;
    font-size: var(--text-lg);
    line-height: var(--text-lg--line-height);
-   font-weight: 600;
+   font-weight: 400;
+   color: var(--color-foreground-muted);
 }
 
 .ez-card__icon {

@@ -1,5 +1,5 @@
 <template>
-   <span class="ez-badge" :class="`ez-badge--${tone}`">
+   <span class="ez-badge" :class="[`ez-badge--${tone}`, { 'ez-badge--solid': solid }]">
       <span v-if="dot" class="ez-badge__dot" />
       <slot>{{ label }}</slot>
    </span>
@@ -11,6 +11,8 @@ withDefaults(defineProps<{
    /** Same tone = same meaning everywhere (see brand.md) */
    tone?: 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'action'
    dot?: boolean
+   /** Filled with the solid color, squarer: the badges of a table in production */
+   solid?: boolean
 }>(), {
    tone: 'neutral',
 })
@@ -60,5 +62,31 @@ withDefaults(defineProps<{
 .ez-badge--danger {
    background: var(--color-surface-negative);
    color: var(--color-foreground-negative);
+}
+
+.ez-badge--solid {
+   border-radius: var(--radius-sm);
+   color: var(--color-foreground-inverse);
+
+   &.ez-badge--neutral {
+      background: var(--color-foreground-muted);
+   }
+
+   &.ez-badge--info,
+   &.ez-badge--action {
+      background: var(--color-info);
+   }
+
+   &.ez-badge--success {
+      background: var(--color-positive);
+   }
+
+   &.ez-badge--warning {
+      background: var(--color-warning);
+   }
+
+   &.ez-badge--danger {
+      background: var(--color-negative);
+   }
 }
 </style>

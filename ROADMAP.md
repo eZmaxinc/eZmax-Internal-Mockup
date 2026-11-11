@@ -67,11 +67,12 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [x] Règles 1 et 2: réutiliser ce qui existe, inventer le reste avec les tokens. Un morceau local (`components/Nom.vue`) n'a plus besoin d'en-tête; une proposition seulement s'il est réutilisable. `proto check` refuse un `<button>`, `<input>`, `<table>` brut; `proto proposals` liste le visuel local
   - [x] Règle 8: le check à chaque fois; aucun navigateur pour une retouche, un seul chargement pour une nouvelle version, la tournée complète sur demande ou avant la revue
   - [x] Essai à blanc d'une interface nouvelle (ligne du temps, couloirs par signataire): `v001`, une retouche et `v002` passent le check; trouvé et corrigé: un composant local ne pouvait pas importer le `mocks.ts` de sa version
+  - [x] `proto promote` accepte un composant sans en-tête et remplace l'original quand il est rehaussé; `proto proposals` montre l'écart avec l'original et la commande de promotion
   - [ ] Rejouer cet essai dans Cursor, en mesurant le temps entre la demande et le changement à l'écran (cible: moins de 2 minutes pour une retouche)
   - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
   - [ ] `AGENTS.md`: ne pas lire les autres prototypes; ouvrir chaque scénario par son URL; la `v001` est la plus petite réponse au brief
   - [ ] `ez-card`: l'en-tête passe à la ligne quand `#actions` a plusieurs boutons (signalé à l'essai 7, avec le correctif)
-  - [ ] `ez-table`: sélection de lignes (demandée par l'essai 7)
+  - [x] `ez-table`: sélection de lignes (`selectable`, `v-model:selected`)
   - [ ] Sortir le commit de l'essai 7 de `main` (branche `essai/7`), sinon l'étape 0 ne donne plus un `git status` vide
 - [x] Une seule source de règles: `.cursor/rules`, `.cursor/commands` et `.agents/skills` renvoient à `AGENTS.md` au lieu de le répéter (les flux `new`, `iterate`, `variant`, `export` y sont décrits)
 - [ ] Essayer le « click and comment » du navigateur de Cursor sur un prototype: l'agent retrouve-t-il la bonne ligne de `index.vue`? Sinon, ajouter en dev un attribut qui donne le fichier et la ligne de chaque élément
@@ -88,7 +89,11 @@ Un relevé unique de la prod, pas un lien: ez-proto devient la source de vérit�
 - [ ] Valider les valeurs à l'œil contre la prod: `warning` et `info` (trop pâles pour du texte sur blanc, d'où `foreground-warning` et `foreground-info`), la police
 - [ ] Place des couleurs de marque non utilisées par l'app (rouge `#d02c2f`, mauve, turquoise): des primitives à ajouter seulement quand un rôle les demande
 - [ ] Décider si l'app a un mode sombre. Si oui, reprendre ses valeurs; sinon, garder le sombre comme outil d'exploration et l'écrire dans `brand.md`
-- [ ] Ajouter 5 à 10 captures annotées dans `blueprint/brand/screens/` (liste, fiche, formulaire, dialogue, état vide, erreur)
+- [x] Quatre captures de prod annotées dans `blueprint/brand/screens/` (liste, fiche longue, fiche de dossier, éditeur)
+- [x] Premier recalage sur ces captures: police, en-tête de page sur le fond gris avec fil d'Ariane, pleine largeur, action principale en pilule verte, badges pleins, tuiles d'information, navigation de fiche en carte, en-tête de tableau
+- [ ] Confirmer la police (Poppins, lue sur les captures) dans le CSS du mono, et l'embarquer plutôt que de la charger de Google Fonts
+- [ ] Reste à recaler: rangée de filtres et pagination d'`ez-table`, menu ⋮ par ligne, groupes repliables avec icône dans la navigation de fiche, bandeau d'état, bouton à menu
+- [ ] Captures manquantes: formulaire, dialogue, état vide, erreur
 - [ ] Finir les TODO de `brand.md` (tutoiement ou vouvoiement, ton)
 - [ ] Valider les seuils sur la prod: tiroir de l'app masqué sous md (1024), TOC à droite dès md, en-tête de page qui passe à la ligne sous sm (600)
 - [ ] Recaler les primitives les plus visibles, écran par écran, contre les captures: `ez-page-header`, `ez-table`, `ez-card`, `ez-btn`, `ez-field`, `ez-badge`

@@ -26,7 +26,7 @@ You build **prototypes** of eZsign/eZmax screens, fast: existing screens look li
 |---|---|
 | Always | `blueprint/brand/brand.md`, `blueprint/ez/CATALOG.md` (when to use what + generated API of components and `@ez` helpers) |
 | Using business data | `blueprint/mocks/API.md` (generated: `EzsignFolder`, `EzsignSigner`… their properties and methods, the factories) |
-| Building a page | the closest `blueprint/patterns/*/index.vue`: a list → `list-page` (filters above, table in `<ez-card flush>`); a long detail → `detail-page` (`ez-page-sections`, TOC on the right, cards with `toc-id`); edit or create → `edit-form` (`ez-layout` 8/4, right column `first-below-md`, buttons in the summary card `#footer`) |
+| Building a page | the closest `blueprint/patterns/*/index.vue`: a list → `list-page` (one titled card: filters, then the table); a long detail → `detail-page` (`ez-page-sections`, TOC on the right, cards with `toc-id`); edit or create → `edit-form` (`ez-layout` 8/4, right column `first-below-md`, buttons in the summary card `#footer`) |
 | Building something no component covers | the semantic layer of `blueprint/tokens/ez-tokens.css` (the names of the colors, spaces, sizes and radii your scoped style may use) |
 | Starting a task | `prototypes/<task>/README.md`, when there is one (the constraints given with the request) |
 | Iterating | the source version's `index.vue`, `mocks.ts`, `notes.md` |

@@ -1,5 +1,5 @@
 <template>
-   <ez-badge :tone="signer.stateTone()" :label="signer.stateLabel()" :dot="dot" />
+   <ez-badge :tone="signer.stateTone()" :label="signer.stateLabel()" :dot="dot" :solid="solid" />
 </template>
 
 <script setup lang="ts">
@@ -13,5 +13,7 @@ defineProps<{
    signer: EzsignSigner
    /** Small dot before the label, for dense lists */
    dot?: boolean
+   /** Filled badge, for tables */
+   solid?: boolean
 }>()
 </script>

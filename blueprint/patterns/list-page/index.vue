@@ -2,14 +2,14 @@
    <ez-page>
       <ez-page-header
          :title="$gettext('Dossiers')"
-         :subtitle="$gettext('%{count} dossiers', { count: theFiltered.length })"
+         :breadcrumbs="[$gettext('Accueil'), $gettext('Dossiers eZsign')]"
          :button="$gettext('Créer un dossier')"
          :button-icon="ez.icons.add"
          refresh
       />
       <ez-page-content>
-         <div class="flex flex-col gap-4">
-            <div class="list-page__filters || flex flex-wrap items-end gap-3">
+         <ez-card :title="$gettext('Liste des dossiers')" :subtitle="$gettext('%{count} dossiers', { count: theFiltered.length })">
+            <div class="list-page__filters || flex flex-wrap items-end gap-3 mb-4">
                <ez-field
                   v-model="theFilters.search"
                   class="grow"
@@ -20,18 +20,20 @@
                <ez-field v-model="theFilters.state" type="select" :options="stateOptions" />
             </div>
 
-            <ez-card flush>
+            <div class="list-page__table || border border-border-muted">
                <ez-table
+                  v-model:selected="theUI.selected"
                   :columns="columns"
                   :rows="theFiltered"
                   :loading="theData.loading"
+                  selectable
                   clickable
                >
                   <template #cell-name="{ row }">
                      <span class="font-semibold">{{ row.name }}</span>
                   </template>
                   <template #cell-state="{ row }">
-                     <ez-badge-folder-state :folder="row" />
+                     <ez-badge-folder-state :folder="row" solid />
                   </template>
                   <template #cell-signers="{ row }">
                      {{ row.signedCount() }} / {{ row.signers.length }}
@@ -46,13 +48,13 @@
                         :icon="ez.icons.folder"
                      >
                         <template #actions>
-                           <ez-btn variant="primary" :icon="ez.icons.add" :label="$gettext('Créer un dossier')" />
+                           <ez-btn variant="positive" pill :icon="ez.icons.add" :label="$gettext('Créer un dossier')" />
                         </template>
                      </ez-empty-state>
                   </template>
                </ez-table>
-            </ez-card>
-         </div>
+            </div>
+         </ez-card>
       </ez-page-content>
    </ez-page>
 </template>
@@ -64,6 +66,7 @@ import { scenarios } from './mocks'
 
 const theData = useScenario(scenarios)
 const theFilters = reactive({ search: '', state: 'all' })
+const theUI = reactive({ selected: [] as (string | number)[] })
 
 const stateOptions = [
    { label: 'Tous les statuts', value: 'all' },

@@ -49,6 +49,10 @@ function isActive(id: string) {
 .ez-page-toc {
    position: sticky;
    top: calc(var(--sizing-toolbar-height) + 24px);
+   padding: var(--space-inset-sm);
+   border-radius: var(--radius-sm);
+   background: var(--color-surface);
+   box-shadow: var(--shadow-card);
    font-size: var(--text-sm);
 }
 
@@ -68,15 +72,10 @@ function isActive(id: string) {
    list-style: none;
 }
 
-.ez-page-toc__list {
-   border-left: 1px solid var(--color-border);
-}
-
 .ez-page-toc__link {
    display: block;
-   margin-left: -1px;
-   padding: 4px 12px;
-   border-left: 2px solid transparent;
+   padding: 8px 12px;
+   border-radius: var(--radius-sm);
    color: var(--color-foreground-muted);
    text-decoration: none;
 
@@ -86,13 +85,12 @@ function isActive(id: string) {
 }
 
 .ez-page-toc__link--child {
-   padding-left: 24px;
-   font-size: var(--text-xs);
+   padding: 6px 12px 6px 28px;
 }
 
 .ez-page-toc__link--active {
-   border-left-color: var(--color-accent);
-   color: var(--color-accent);
-   font-weight: 600;
+   background: var(--color-surface-muted);
+   color: var(--color-foreground);
+   font-weight: 500;
 }
 </style>

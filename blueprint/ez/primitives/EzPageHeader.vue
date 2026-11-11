@@ -7,12 +7,18 @@
                <h1 class="ez-page-header__title">{{ title }}</h1>
                <slot name="meta" />
             </div>
+            <nav v-if="breadcrumbs?.length" class="ez-page-header__breadcrumbs" aria-label="Fil d'Ariane">
+               <template v-for="(theCrumb, index) in breadcrumbs" :key="theCrumb">
+                  <ez-icon v-if="index" name="chevronRight" :size="14" />
+                  <span :class="{ 'ez-page-header__crumb--current': index === breadcrumbs.length - 1 }">{{ theCrumb }}</span>
+               </template>
+            </nav>
             <p v-if="subtitle" class="ez-page-header__subtitle">{{ subtitle }}</p>
          </div>
          <div class="ez-page-header__actions">
             <ez-btn v-if="refresh" variant="flat" icon="refresh" aria-label="Actualiser" @click="emit('refresh')" />
             <slot name="actions" />
-            <ez-btn v-if="button" variant="primary" :icon="buttonIcon" :label="button" @click="emit('button')" />
+            <ez-btn v-if="button" :variant="buttonVariant" pill :icon="buttonIcon" :label="button" @click="emit('button')" />
          </div>
       </div>
    </header>
@@ -20,19 +26,26 @@
 
 <script setup lang="ts">
 import EzBtn from './EzBtn.vue'
+import EzIcon from './EzIcon.vue'
 import type { IconName } from '../icons'
 
-defineProps<{
+withDefaults(defineProps<{
    title: string
    subtitle?: string
+   /** Where the page is, from the home down to this page: ['Accueil', 'Administration', 'Types de dossiers'] */
+   breadcrumbs?: string[]
    /** Label of the page's primary action (emits `button`) */
    button?: string
    buttonIcon?: IconName
+   /** positive (green): create, save · primary (slate): edit */
+   buttonVariant?: 'positive' | 'primary'
    /** Shows the refresh action (emits `refresh`) */
    refresh?: boolean
    /** Shows the back action (emits `cancel`) */
    cancelable?: boolean
-}>()
+}>(), {
+   buttonVariant: 'positive',
+})
 
 const emit = defineEmits<{
    button: []
@@ -42,9 +55,9 @@ const emit = defineEmits<{
 </script>
 
 <style scoped>
+/* Sits on the app background, as in production: no band of its own */
 .ez-page-header {
-   background: var(--color-surface);
-   border-bottom: 1px solid var(--color-border);
+   background: transparent;
 }
 
 .ez-page-header__inner {
@@ -53,7 +66,7 @@ const emit = defineEmits<{
    gap: 12px;
    max-width: var(--page-max-width);
    margin: 0 auto;
-   padding: 16px var(--inset-page);
+   padding: 16px var(--inset-page) 0;
 }
 
 .ez-page-header__titles {
@@ -72,7 +85,21 @@ const emit = defineEmits<{
    margin: 0;
    font-size: var(--text-xl);
    line-height: var(--text-xl--line-height);
-   font-weight: 700;
+   font-weight: 500;
+}
+
+.ez-page-header__breadcrumbs {
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 4px;
+   margin-top: 2px;
+   color: var(--color-foreground-accent);
+   font-size: var(--text-xs);
+}
+
+.ez-page-header__crumb--current {
+   color: var(--color-foreground);
 }
 
 .ez-page-header__subtitle {

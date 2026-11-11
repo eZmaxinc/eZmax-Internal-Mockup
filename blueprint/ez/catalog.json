@@ -54,6 +54,15 @@
                "values": null,
                "default": null,
                "doc": null
+            },
+            {
+               "name": "solid",
+               "attr": "solid",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Filled with the solid color, squarer: the badges of a table in production"
             }
          ],
          "emits": [],
@@ -99,16 +108,26 @@
             {
                "name": "variant",
                "attr": "variant",
-               "type": "'primary' | 'secondary' | 'flat' | 'danger'",
+               "type": "'positive' | 'primary' | 'secondary' | 'flat' | 'danger'",
                "required": false,
                "values": [
+                  "positive",
                   "primary",
                   "secondary",
                   "flat",
                   "danger"
                ],
                "default": "'secondary'",
-               "doc": "primary: one per zone · secondary: default · flat: low emphasis · danger: destructive"
+               "doc": "positive: the main action of a page (create, save) · primary: the main action of a zone · secondary: default · flat: low emphasis · danger: destructive"
+            },
+            {
+               "name": "pill",
+               "attr": "pill",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Rounded ends and uppercase label: the actions of a page header"
             },
             {
                "name": "size",
@@ -538,6 +557,15 @@
                "values": null,
                "default": null,
                "doc": "Label and value side by side"
+            },
+            {
+               "name": "tiles",
+               "attr": "tiles",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Each pair in a bordered tile, side by side when there is room: the information of a detail page in production"
             }
          ],
          "emits": [],
@@ -693,6 +721,15 @@
                "doc": null
             },
             {
+               "name": "breadcrumbs",
+               "attr": "breadcrumbs",
+               "type": "string[]",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Where the page is, from the home down to this page: ['Accueil', 'Administration', 'Types de dossiers']"
+            },
+            {
                "name": "button",
                "attr": "button",
                "type": "string",
@@ -709,6 +746,18 @@
                "values": null,
                "default": null,
                "doc": null
+            },
+            {
+               "name": "buttonVariant",
+               "attr": "button-variant",
+               "type": "'positive' | 'primary'",
+               "required": false,
+               "values": [
+                  "positive",
+                  "primary"
+               ],
+               "default": "'positive'",
+               "doc": "positive (green): create, save · primary (slate): edit"
             },
             {
                "name": "refresh",
@@ -751,7 +800,8 @@
             "actions"
          ],
          "uses": [
-            "ez-btn"
+            "ez-btn",
+            "ez-icon"
          ]
       },
       {
@@ -885,6 +935,15 @@
                "doc": null
             },
             {
+               "name": "selectable",
+               "attr": "selectable",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "A checkbox per row and one for all; the chosen row keys are in v-model:selected"
+            },
+            {
                "name": "clickable",
                "attr": "clickable",
                "type": "boolean",
@@ -910,6 +969,15 @@
                "values": null,
                "default": "'Aucun élément'",
                "doc": null
+            },
+            {
+               "name": "selected",
+               "attr": "selected",
+               "type": "(string | number)[]",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "v-model:selected"
             }
          ],
          "emits": [
@@ -952,6 +1020,15 @@
                "values": null,
                "default": null,
                "doc": "Small dot before the label, for dense lists"
+            },
+            {
+               "name": "solid",
+               "attr": "solid",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Filled badge, for tables"
             }
          ],
          "emits": [],
@@ -985,6 +1062,15 @@
                "values": null,
                "default": null,
                "doc": "Small dot before the label, for dense lists"
+            },
+            {
+               "name": "solid",
+               "attr": "solid",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Filled badge, for tables"
             }
          ],
          "emits": [],

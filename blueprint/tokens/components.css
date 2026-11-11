@@ -12,11 +12,11 @@
    --inset-page: var(--space-inset-xl);
 
    --nav-width: 250px;
-   --page-max-width: 1280px;
+   --page-max-width: none; /* production pages use the full width */
 
    --field-height: var(--size-control-md);
 
-   --table-row-height: 44px;
+   --table-row-height: 50px;
 
    --dialog-width: 520px;
 }

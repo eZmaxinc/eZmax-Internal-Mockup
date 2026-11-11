@@ -2,6 +2,10 @@
 
 Le plus récent en haut. `pnpm proto tokens bump` ajoute les entrées. Copie vers le mono: `COPY.md`.
 
+## 2.1.0 — 2026-11-11
+
+- Police Poppins, lue sur les captures de prod (à confirmer dans le mono).
+
 ## 2.0.1 — 2026-11-10
 
 - Fond de l'app: le gris de la prod (`#e2e5e8`, `$background-main`) au lieu du gris de marque (`#f1f3f4`).

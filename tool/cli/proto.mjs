@@ -14,7 +14,7 @@ const COMMANDS = {
    export: 'Exporte une version en HTML autonome',
    catalog: "Régénère le catalogue des composants (API, enregistrement, CATALOG.md)",
    proposals: "Composants proposés dans les prototypes",
-   promote: "Promeut une proposition dans blueprint/ez (sur décision humaine)",
+   promote: "Fait entrer dans blueprint/ez un composant créé, rehaussé ou proposé dans une version (décision humaine)",
    tokens: 'Version des tokens partagés, nouvelle version, migration des noms',
 }
 

@@ -9,7 +9,8 @@
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { basename, join } from 'node:path'
-import { PROTOTYPES, listDirs, listVersions, parseArgs } from '../lib.mjs'
+import { spawnSync } from 'node:child_process'
+import { PROTOTYPES, ROOT, listDirs, listVersions, parseArgs, rel } from '../lib.mjs'
 import { buildCatalog, catalogMap, readProposal, toKebab } from '../catalog-lib.mjs'
 import { groupProposals } from '../proposals-lib.mjs'
 
@@ -70,13 +71,15 @@ function showLocalVisuals() {
          if (!styleLines && !isLocalComponent) continue
          // Same name as a blueprint component: an enhanced copy, to compare with the original
          const original = isLocalComponent ? known.get(toKebab(basename(file, '.vue'))) : null
-         const kind = original ? ` (rehausse ${original.file})` : isLocalComponent ? ' (créé)' : ''
+         const kind = original ? ` (rehausse ${original.file}${diffStat(join(ROOT, original.file), file)})` : isLocalComponent ? ' (créé)' : ''
          items.push(`${basename(file)}${kind}${styleLines ? `: ${styleLines} ligne(s) de style` : ''}`)
+         if (original) items.push(`  Voir l'écart: git diff --no-index ${original.file} ${rel(file)}`)
+         if (isLocalComponent) items.push(`  Promouvoir: pnpm proto promote ${taskId} ${version} ${basename(file, '.vue')}`)
       }
       if (!items.length) continue
       found = true
       console.log(`${taskId}/${version}`)
-      for (const item of items) console.log(`   - ${item}`)
+      for (const item of items) console.log(item.startsWith('  ') ? `   ${item}` : `   - ${item}`)
       console.log('')
    }
    if (!found) console.log('  Aucun.\n')
@@ -86,7 +89,8 @@ function showComponents(all) {
    const known = catalogMap(buildCatalog())
    const groups = groupProposals()
       .map((group) => ({ ...group, promoted: known.has(group.tag) }))
-      .filter((group) => all || !group.promoted)
+      // Without a header it is a local piece: listed below, with what was created or enhanced
+      .filter((group) => group.header && (all || !group.promoted))
       .sort((a, b) => b.tasks.length - a.tasks.length || a.tag.localeCompare(b.tag))
 
    console.log('Composants proposés\n')
@@ -105,6 +109,13 @@ function showComponents(all) {
       if (!group.promoted) console.log(`   Promouvoir: pnpm proto promote ${latest.taskId} ${latest.version} ${group.name}`)
       console.log('')
    }
+}
+
+/** « , +3 −1 »: how far an enhanced copy is from the original; '' when git cannot tell. */
+function diffStat(original, copy) {
+   const result = spawnSync('git', ['diff', '--no-index', '--numstat', original, copy], { encoding: 'utf8' })
+   const match = result.stdout?.match(/^(\d+)\s+(\d+)/)
+   return match ? `, +${match[1]} −${match[2]}` : ''
 }
 
 /** « Signalements » of every version's notes.md, grouped by kind. */
