@@ -2,10 +2,9 @@
  * pnpm proto open [tâche] [version] [--scenario <nom>] [--print]
  *
  * In a terminal: opens the shell in the system browser, starting the dev server first if needed.
- * For an agent (no terminal, or --print): never starts anything, prints the URLs to open in the
- * agent's own browser (Cursor's browser, Claude's browser pane…):
- *   - shell: the task with its versions, notes and dev bar
- *   - frame: the prototype alone, at full size, for screenshots and visual checks
+ * For an agent (no terminal, or --print): never starts anything, prints the URL to open in the agent's
+ * own browser (Cursor's browser, Claude's browser pane…). It is the shell, the page the user looks at
+ * too: the scenario, the theme and the width are parameters of its address.
  */
 import { spawn } from 'node:child_process'
 import { join } from 'node:path'
@@ -23,16 +22,12 @@ export async function run(argv) {
 
    const origin = `http://localhost:${DEV_PORT}`
    const query = scenario ? `?scenario=${encodeURIComponent(scenario)}` : ''
-   const shellPath = taskId ? `/#/p/${taskId}/${version}` : '/'
-   const framePath = taskId ? `/frame.html#/p/${taskId}/${version}${query}` : null
+   const shellPath = taskId ? `/#/p/${taskId}/${version}${query}` : '/'
    const serverUp = await isServerUp(origin)
 
    if (!isInteractive || flags.print) {
-      console.log(`Shell:     ${origin}${shellPath}`)
-      if (framePath) {
-         console.log(`Prototype: ${origin}${framePath}`)
-         console.log('           (seul, pleine taille; ?scenario=<nom> pour un autre scénario de mocks.ts)')
-      }
+      console.log(`Shell: ${origin}${shellPath}`)
+      if (taskId) console.log('       Paramètres de l\'adresse: ?scenario=<nom de mocks.ts>&theme=dark&width=mobile (ou tablet, desktop)')
       if (!serverUp) fail(`Le shell ne tourne pas sur ${origin}.`, 'Le lancer en arrière-plan: pnpm dev')
       return
    }

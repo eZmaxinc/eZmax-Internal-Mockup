@@ -26,7 +26,7 @@ Ne pas en dire plus que ce qu'un dev aurait sous la main: le but est de voir si 
 **Ce qui devrait se passer**, et donc ce qu'il faut vérifier:
 
 1. Il lance `pnpm proto new 49198 <lien> "Titre" --from <patron>`.
-2. Il construit `v001` avec au moins deux scénarios. Le brief, c'est la tâche GoodDay: `README.md` ne garde que son lien et les contraintes que tu as données.
+2. Il construit `v001` avec au moins deux scénarios. Le brief, c'est la tâche GoodDay: le titre et le lien sont dans `meta.json`. Un `README.md` n'existe que si tu as donné des contraintes, et ne contient qu'elles.
 3. Il lance `pnpm proto check` et corrige les ✗.
 4. Il ouvre le prototype dans son navigateur et vérifie chaque scénario, le mode sombre et la largeur mobile.
 5. Il répond avec la tâche, la version, un résumé et ses questions ouvertes.

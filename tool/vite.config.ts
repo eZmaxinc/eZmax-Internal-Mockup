@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { BLUEPRINT, DEV_PORT, PROTOTYPES, ROOT, TOOL, aliases } from './paths.mjs'
 
@@ -64,8 +64,10 @@ function watchContentFolders(): Plugin {
 
 /**
  * GET /__proto/refresh?dir=<task>[/<version>] — called by `proto new` and `proto iterate` right after they
- * write files. On some drives (network or mapped ones) the watcher never hears about a new folder; this
- * tells Vite itself, so the new version shows up without restarting the server.
+ * write files. On some drives (network, mapped or aliased ones) the watcher never hears about a new folder,
+ * or hears it under another drive letter than the one Vite knows the files by. So this does not go through
+ * the watcher: it drops the registry module, whose import.meta.glob lists are then rebuilt from the disk,
+ * and reloads the pages. The new version shows up without restarting the server.
  */
 function protoRefreshEndpoint(): Plugin {
    return {
@@ -74,29 +76,28 @@ function protoRefreshEndpoint(): Plugin {
       configureServer(server) {
          server.middlewares.use('/__proto/refresh', (req, res) => {
             const dir = new URL(req.url ?? '', 'http://localhost').searchParams.get('dir') ?? ''
-            const target = join(PROTOTYPES, dir)
 
             res.setHeader('Content-Type', 'application/json')
-            if (!/^[\w-]+(\/v\d{3}[a-z]?)?$/.test(dir) || !existsSync(target)) {
+            if (!/^[\w-]+(\/v\d{3}[a-z]?)?$/.test(dir) || !existsSync(join(PROTOTYPES, dir))) {
                res.statusCode = 400
                res.end('{"ok":false}')
                return
             }
 
-            const files = walk(target)
-            files.forEach((file) => server.watcher.emit('add', file))
+            // Matched by the end of the path: the drive letter in a module id is not always the one of ROOT
+            let dropped = 0
+            for (const environment of Object.values(server.environments)) {
+               for (const module of environment.moduleGraph.idToModuleMap.values()) {
+                  if (!module.file?.endsWith('/tool/registry.ts')) continue
+                  environment.moduleGraph.invalidateModule(module)
+                  dropped++
+               }
+            }
             server.ws.send({ type: 'full-reload' })
-            res.end(JSON.stringify({ ok: true, files: files.length }))
+            res.end(JSON.stringify({ ok: true, registry: dropped }))
          })
       },
    }
-}
-
-function walk(dir: string): string[] {
-   return readdirSync(dir).flatMap((name) => {
-      const path = join(dir, name)
-      return statSync(path).isDirectory() ? walk(path) : [path]
-   })
 }
 
 export default defineConfig({

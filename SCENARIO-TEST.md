@@ -66,14 +66,14 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 |---|---|---|
 | 1.1 | Lance `pnpm proto new 90001 https://www.goodday.work/t/TEST01 "…"`, avec `--from list-page` | |
 | 1.2 | Le dossier se nomme `prototypes/90001-<slug>/` | |
-| 1.3 | `README.md` garde le lien GoodDay et les deux contraintes données, sans paraphraser la demande | |
+| 1.3 | `README.md` ne contient que les deux contraintes données, dans tes mots: ni titre, ni lien GoodDay (ils sont dans `meta.json`), ni reformulation de la demande | |
 | 1.4 | `mocks.ts` a au moins 2 scénarios, dont un sans dossier qui expire (état vide) et des dossiers complétés ou refusés | |
 | 1.5 | Le statut des dossiers passe par `<ez-badge-folder-state>`, pas par `<ez-badge :tone="…stateTone()">` | |
 | 1.6 | La prolongation passe par `ez-dialog` + `ez-field type="select"` (7, 14, 30 jours) | |
 | 1.7 | Le bouton de prolongation est absent ou désactivé pour un dossier complété ou refusé | |
 | 1.8 | Pas de HTML brut (`<button>`, `<input>`, `<table>`), pas de couleur inventée | |
 | 1.9 | `pnpm proto check 90001` passe, et l'agent l'a lancé lui-même | |
-| 1.10 | Il a ouvert le prototype dans son navigateur: chaque scénario, le sombre, 390 px | |
+| 1.10 | Il a ouvert le **shell** dans son navigateur (jamais `frame.html`), et l'a piloté par l'adresse: chaque scénario, le sombre, 390 px | |
 | 1.11 | Il répond avec la tâche, la version, un résumé et ses questions ouvertes | |
 | 1.12 | Textes en français, vouvoiement, pas d'espace avant le deux-points | |
 

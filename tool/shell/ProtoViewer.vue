@@ -90,7 +90,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import PanelIcon from './PanelIcon.vue'
 import { useNotes, useSidebar } from './sidebar'
 
@@ -116,12 +117,62 @@ const themes = [
 ] as const
 type ThemeKey = (typeof themes)[number]['key']
 
-const theScenario = ref(props.scenarioNames[0] ?? '')
-const theViewportKey = ref<(typeof viewports)[number]['key']>(readStored('ez-proto:viewport', viewports.map((viewport) => viewport.key), 'fluid'))
-const theTheme = ref<ThemeKey>(readStored('ez-proto:theme', themes.map((theme) => theme.key), 'light'))
+type ViewportKey = (typeof viewports)[number]['key']
+const viewportKeys = viewports.map((viewport) => viewport.key)
+const themeKeys = themes.map((theme) => theme.key)
+
+/*
+ * The address drives the viewer and tells its state:
+ *   #/p/<task>/<version>?scenario=empty&theme=dark&width=mobile
+ * A link shows exactly one state, and an agent checks every state here, in the shell, where the user is
+ * looking too. A parameter left out means the default: first scenario, light, available width.
+ */
+const route = useRoute()
+const router = useRouter()
+
+function queryValue(key: string): string {
+   const value = route.query[key]
+   return typeof value === 'string' ? value : ''
+}
+
+function pick<T extends string>(value: string, allowed: readonly T[]): T | undefined {
+   return allowed.includes(value as T) ? (value as T) : undefined
+}
+
+// On arrival, what the address does not say comes from the viewer's remembered choices
+const theScenario = ref(pick(queryValue('scenario'), props.scenarioNames) ?? props.scenarioNames[0] ?? '')
+const theViewportKey = ref<ViewportKey>(pick(queryValue('width'), viewportKeys) ?? readStored('ez-proto:viewport', viewportKeys, 'fluid'))
+const theTheme = ref<ThemeKey>(pick(queryValue('theme'), themeKeys) ?? readStored('ez-proto:theme', themeKeys, 'light'))
+
+function writeAddress() {
+   if (route.path === '/') return // leaving for the dashboard: nothing to say there
+   // Until the names are loaded (mocks.ts comes on demand), keep the scenario the address asks for
+   const scenario = props.scenarioNames.length ? theScenario.value : queryValue('scenario')
+   router.replace({
+      query: {
+         ...route.query,
+         scenario: scenario && scenario !== props.scenarioNames[0] ? scenario : undefined,
+         theme: theTheme.value === 'dark' ? 'dark' : undefined,
+         width: theViewportKey.value === 'fluid' ? undefined : theViewportKey.value,
+      },
+   })
+}
+
+onMounted(writeAddress)
+watch([theScenario, theTheme, theViewportKey], writeAddress)
 
 watch(() => props.scenarioNames, (names) => {
-   if (!names.includes(theScenario.value)) theScenario.value = names[0] ?? ''
+   theScenario.value = pick(queryValue('scenario'), names) ?? (names.includes(theScenario.value) ? theScenario.value : names[0] ?? '')
+   writeAddress()
+})
+
+watch(() => ({ path: route.path, query: route.query }), (now, before) => {
+   // Another version or reference: the viewer keeps its state, and the new address says it
+   if (now.path !== before.path) return writeAddress()
+   // Same page, another address (a link, the back button, an agent): follow it
+   theScenario.value = pick(queryValue('scenario'), props.scenarioNames) ?? props.scenarioNames[0] ?? ''
+   theTheme.value = pick(queryValue('theme'), themeKeys) ?? 'light'
+   theViewportKey.value = pick(queryValue('width'), viewportKeys) ?? 'fluid'
 })
 
 watch(theViewportKey, (key) => store('ez-proto:viewport', key))

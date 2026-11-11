@@ -59,6 +59,11 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [ ] Mesurer `pnpm proto check 90001` sur le poste en RDP (3,6 s en local): au-delà de 15 s, cloner le dépôt sur un disque local plutôt que `G:\`
   - [x] C'est l'humain qui marque les versions (règle 4): un retour se fait en place dans la dernière version; une nouvelle version seulement sur demande. Figée: une version plus ancienne, la version retenue, ou une tâche sortie du brouillon (`proto check` le signale)
   - [ ] Faire valider ce principe par le team lead, et le jouer dans un essai (points 2.10 à 2.12 du scénario)
+  - [x] L'agent ouvre le shell, plus le cadre seul: l'adresse du shell porte le scénario, le thème et la largeur (`?scenario=…&theme=dark&width=mobile`), donc l'agent et le dev regardent la même page
+  - [ ] Vérifier dans Cursor que l'agent lit et clique bien dans le prototype à travers le cadre du shell (sinon, lui redonner `frame.html` pour les interactions seulement)
+  - [x] Essai 8: `v001` « Introuvable » dans le shell juste après `proto new`. Le signal du CLI passait par le surveillant de fichiers (chemins en `G:\`, alors que Vite connaît les fichiers en `C:\`): il vide maintenant le registre directement. Testé avec un lecteur alias et une surveillance sourde
+  - [ ] Le confirmer sur le poste de travail (essai 9), shell relancé après le `git pull`
+  - [x] Le `README.md` d'une tâche est facultatif: seulement les contraintes données (titre et lien GoodDay sont dans `meta.json`)
   - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
   - [ ] `AGENTS.md`: ne pas lire les autres prototypes; ouvrir chaque scénario par son URL; la `v001` est la plus petite réponse au brief
   - [ ] `ez-card`: l'en-tête passe à la ligne quand `#actions` a plusieurs boutons (signalé à l'essai 7, avec le correctif)

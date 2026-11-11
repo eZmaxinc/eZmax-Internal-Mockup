@@ -11,9 +11,9 @@ You build **prototypes** of eZsign/eZmax screens: minimal, but indistinguishable
 5. **One version = one folder, self-contained.** It imports only from `vue`, `@ez`, `@mocks` and its own files. Never `../` into another version.
 6. **Data lives in `mocks.ts` as named scenarios** (first = default). Cover at least the main state plus one edge state (empty, error, closed…). Use the business objects from `@mocks` and their methods (`stateLabel()`, `stateTone()`, `isStateClosed()`…).
 7. **Keep `notes.md` short.** First line = one-sentence summary: it labels the version in the shell, for the teammates who open it. Then only what must outlive the conversation, and only what is new in this version: « Signalements » and « Questions ouvertes ». No list of changes (`pnpm proto diff` shows them), no list of proposals (the `@proposal` header says why). Nothing to report: the summary alone is a complete `notes.md`.
-8. **Run `pnpm proto check <task>` and look at the result before saying you're done.** Fix every ✗. Look at it in the browser: `pnpm proto open <task> <version>` prints the URLs, and says so if the shell is not running; only then start `pnpm dev` in a background terminal. There is one shell, on one port: never start a second one, a new version shows up in the running shell without a restart (`proto new` and `proto iterate` tell it). Open the **Prototype** URL in your browser (Cursor's browser) and size the look to the change:
+8. **Run `pnpm proto check <task>` and look at the result before saying you're done.** Fix every ✗. Look at it in the browser: `pnpm proto open <task> <version>` prints the URL, and says so if the shell is not running; only then start `pnpm dev` in a background terminal. There is one shell, on one port: never start a second one, a new version shows up in the running shell without a restart (`proto new` and `proto iterate` tell it). Open that **Shell** URL in your browser (Cursor's browser): the user watches the same browser, so you both look at the same page, with the versions and the dev bar around the prototype. Never open `frame.html` yourself. Drive the shell by its address, no clicking in the dev bar: `?scenario=<name>&theme=dark&width=mobile` (or `tablet`, `desktop`); a parameter left out is the default. A new version says « Introuvable »: the shell missed it, tell the user instead of touching `tool/` or starting a second server. Size the look to the change:
    - **Quick look** (the default when adjusting, iterating or making a variant): the default scenario, plus the scenario or the width your change touches. One or two page loads, read the page rather than screenshot it when text is enough, fix what looks off.
-   - **Full tour** (a first version `v001`, a change of layout or of structure, when the user asks, or before `pnpm proto status <task> review`): every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (390 px), compared with the closest pattern.
+   - **Full tour** (a first version `v001`, a change of layout or of structure, when the user asks, or before `pnpm proto status <task> review`): every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (`&width=mobile`, 390 px), compared with the closest pattern.
 
    Say in your final message which one you did.
 9. **Tokens change only on purpose.** Never add a token in a prototype. A new or changed token is an explicit edit of `blueprint/tokens/ez-tokens.css` followed by `pnpm proto tokens bump`, and only when the user asks.
@@ -26,7 +26,7 @@ You build **prototypes** of eZsign/eZmax screens: minimal, but indistinguishable
 | Always | `blueprint/brand/brand.md`, `blueprint/ez/CATALOG.md` (when to use what + generated API of components and `@ez` helpers) |
 | Using business data | `blueprint/mocks/API.md` (generated: `EzsignFolder`, `EzsignSigner`… their properties and methods, the factories) |
 | Building a page | the closest `blueprint/patterns/*/index.vue`: a list → `list-page` (filters above, table in `<ez-card flush>`); a long detail → `detail-page` (`ez-page-sections`, TOC on the right, cards with `toc-id`); edit or create → `edit-form` (`ez-layout` 8/4, right column `first-below-md`, buttons in the summary card `#footer`) |
-| Starting a task | `prototypes/<task>/README.md` (the brief) |
+| Starting a task | `prototypes/<task>/README.md`, when there is one (the constraints given with the request) |
 | Iterating | the source version's `index.vue`, `mocks.ts`, `notes.md` |
 
 That is enough to build. **Don't read `tool/`** (the CLI explains itself: `pnpm proto help`) **nor the source of `blueprint/ez` or `blueprint/mocks`**: the catalog and `API.md` are generated from it. Open a source only when they really don't answer, and then say what was missing in `notes.md`.
@@ -105,7 +105,7 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 
 **Something is wrong in `blueprint/`** (a primitive bug, a missing mock method): don't fix it there. Work around it inside the version if needed, and write it under « Signalements » as `Bug primitive: …`, `Bug helper: …`, `Mock manquant: …` or `Composant manquant: …`. `pnpm proto proposals` collects them for the team. For a `Bug primitive` or `Bug helper`, add **the fix you suggest** (which file, what to change, e.g. « `EzMessageImportant.vue`: `flex-wrap` on the container, body `flex: 1 1 14rem` »), so the reviewer only has to validate it; and work around it in the version so the prototype stays presentable.
 
-**Your final message** is the report, said once and briefly: the task, the version, what changed in a few lines, the scenarios, the components you proposed, the « Signalements » and the open questions (or « aucun »). Don't paste `notes.md` into it, and don't repeat what an earlier version already reported. Give the user the **Shell** URL of the version you worked in, never the Prototype one: the Prototype page is for your own checks and stays on the version it was opened at, so a user left on it would not see the next version.
+**Your final message** is the report, said once and briefly: the task, the version, what changed in a few lines, the scenarios, the components you proposed, the « Signalements » and the open questions (or « aucun »). Don't paste `notes.md` into it, and don't repeat what an earlier version already reported. Give the user the **Shell** URL of the version you worked in, without parameters, and leave your browser on it.
 
 ## Workflows
 
@@ -114,7 +114,7 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 **New** (`/new-proto`)
 1. Get the GoodDay number and link (ask if either is missing). Use the French title of the GoodDay task. Pick the closest pattern if one fits.
 2. `pnpm proto new <number> <link> "<Titre>" [--from <pattern>]`. The task already has a prototype: stop (golden rule 3).
-3. The brief is the GoodDay task: `README.md` already links it. Add a « Contraintes » section only for the constraints or the out-of-scope the user stated, in their words; don't paraphrase the request. Ask only if something blocking is missing.
+3. The brief is the GoodDay task: its title and link are in `meta.json`, nothing to copy. Only when the user stated constraints or an out-of-scope, write them in `prototypes/<task>/README.md`, in their words: a list, no title, no link, no paraphrase of the request. No constraints: no `README.md`. Ask only if something blocking is missing.
 4. Build `v001/index.vue`, `v001/mocks.ts` (at least two scenarios) and `v001/notes.md`.
 
 **Adjust** (the default for any feedback on a prototype): change the working version in place.
@@ -123,12 +123,12 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 3. Keep its `notes.md` true: fix the summary if it no longer describes the version, add the new « Signalements » and « Questions ouvertes », remove the ones the change settled.
 
 **Iterate** (`/iterate-proto`, or the user asks for a new version): mark a step, then go on in the new version.
-1. Identify the task (ask if ambiguous). Read the latest version's `index.vue`, `mocks.ts`, `notes.md`, and the task `README.md`, unless they are already in this conversation.
+1. Identify the task (ask if ambiguous). Read the latest version's `index.vue`, `mocks.ts`, `notes.md`, and the task `README.md` if there is one, unless they are already in this conversation.
 2. `pnpm proto iterate <task> -m "<one-line summary>"` (`--from vNNN` to start from an older version).
 3. Edit only the new folder: apply the feedback, keep everything else identical. Its `notes.md` starts empty of the previous version's reports: write only the new ones.
 
 **Variant** (`/variant-proto`, or the user asks for another approach to compare): an alternative next to a version (`v002` → `v002b`), not a replacement.
-1. Read the source version and the task `README.md`.
+1. Read the source version, and the task `README.md` if there is one.
 2. `pnpm proto iterate <task> -m "Variante: <summary>" --variant [--from vNNN]`.
 3. Change only what the alternative is about, so the two compare cleanly in the shell (« Comparer avec »). Its summary says what the variant tries; its open question is the one the comparison should answer.
 
@@ -191,7 +191,7 @@ blueprint/             the UI blueprint, what ez-proto maintains
   patterns/              reference pages to copy patterns from (list, detail, form)
   brand/                 mood board, sync procedure, prod screenshots
   mocks/                 shared business objects + factories (seeded)
-prototypes/<task>/     meta.json, README.md, v###/{index.vue, mocks.ts, notes.md}
+prototypes/<task>/     meta.json, v###/{index.vue, mocks.ts, notes.md}, README.md only for stated constraints
 tool/                  the shell, the frame and the proto CLI — not for prototype work
 ```
 

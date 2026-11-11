@@ -41,7 +41,7 @@ blueprint/                le blueprint de l'UI, ce qu'on maintient
 prototypes/
   49198-relance-signataires/
     meta.json               titre, lien GoodDay, statut, version retenue, responsable
-    README.md               le brief
+    README.md               les contraintes données, s'il y en a (facultatif)
     v001/                   index.vue, mocks.ts (scénarios), notes.md
     v002/
     v002b/                  variante parallèle

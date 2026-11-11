@@ -100,8 +100,6 @@ function checkStructure(onlyTask, errors, warnings) {
       if (meta.chosen && !listVersions(taskId).includes(meta.chosen)) errors.push(`${where}/meta.json: "chosen" pointe vers ${meta.chosen}, qui n'existe pas`)
       if (meta.status === 'chosen' && !meta.chosen) warnings.push(`${where}/meta.json: statut « chosen » sans version retenue (pnpm proto status ${taskId} chosen vXXX)`)
 
-      if (!existsSync(join(taskDir, 'README.md'))) errors.push(`${where}: README.md (le brief) est absent`)
-
       for (const entry of listDirs(taskDir)) {
          if (!VERSION_PATTERN.test(entry)) {
             errors.push(`${rel(join(taskDir, entry))}: les versions se nomment v001, v002, v002b…`)

@@ -37,9 +37,10 @@
                <div v-if="theNotesRest" class="markdown" v-html="renderMarkdown(theNotesRest)" />
                <p v-else class="task-view__none">Aucun signalement, aucune question ouverte.</p>
             </section>
-            <section class="task-view__notes">
-               <h2 class="shell-heading">Brief</h2>
-               <div class="markdown" v-html="renderMarkdown(theTask.brief || 'Pas de brief (README.md).')" />
+            <!-- Only when the task has a README.md: the constraints given with the request -->
+            <section v-if="theTask.brief" class="task-view__notes">
+               <h2 class="shell-heading">Contraintes</h2>
+               <div class="markdown" v-html="renderMarkdown(theTask.brief)" />
             </section>
          </template>
       </proto-viewer>

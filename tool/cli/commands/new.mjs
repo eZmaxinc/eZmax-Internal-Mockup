@@ -1,8 +1,8 @@
 /**
  * pnpm proto new [numéro] [lien] ["Titre"] [--from <patron>|vide] [--chrome none] [--owner "Nom"] [--slug <slug>]
- * Creates prototypes/<numéro>-<slug>/ with meta.json, README.md and v001.
+ * Creates prototypes/<numéro>-<slug>/ with meta.json and v001.
  */
-import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import {
    GOODDAY_NUMBER, GOODDAY_URL, PATTERNS, PROTOTYPES, TEMPLATES,
@@ -77,11 +77,6 @@ export async function run(argv) {
       created: today(),
    })
 
-   const brief = readFileSync(join(TEMPLATES, 'README.md'), 'utf8')
-      .replace('{{title}}', title)
-      .replace('{{goodday}}', `[#${number}](${url})`)
-   writeFileSync(join(taskDir, 'README.md'), brief)
-
    const source = from === 'vide' ? TEMPLATES : join(PATTERNS, from)
    cpSync(join(source, 'index.vue'), join(versionDir, 'index.vue'))
    cpSync(join(source, 'mocks.ts'), join(versionDir, 'mocks.ts'))
@@ -100,7 +95,7 @@ export async function run(argv) {
    console.log(`  Branche, si le travail continue dans le mono: feature/${taskId}`)
    console.log('')
    console.log('  Ensuite:')
-   console.log(`   1. Le brief est la tâche GoodDay: n'ajouter à prototypes/${taskId}/README.md que les contraintes données`)
+   console.log(`   1. Le brief est la tâche GoodDay. Des contraintes ont été données? Les écrire dans prototypes/${taskId}/README.md (sinon, pas de README)`)
    console.log('   2. Construire v001/index.vue et v001/mocks.ts')
    console.log(`   3. pnpm proto check ${number}`)
    console.log(`   4. pnpm proto open ${number}`)
