@@ -328,18 +328,19 @@ export function validateTemplate(file, catalog, { locals: allLocals = new Map(),
       const line = node.loc.start.line
 
       if (rawElements && RAW_ELEMENTS[node.tag]) {
-         warnings.push({ line, message: `<${node.tag}> brut: utiliser <${RAW_ELEMENTS[node.tag]}> (ou un composant métier qui l'enveloppe)` })
+         errors.push({ line, message: `<${node.tag}> brut: <${RAW_ELEMENTS[node.tag]}> existe déjà, l'utiliser` })
       }
 
       if (!/^(ez-|Ez[A-Z])/.test(node.tag)) return
       const tag = toKebab(node.tag)
-      const component = known.get(tag) ?? locals.get(tag)
+      // A component of the version wins over the blueprint's one of the same name: it is an enhanced copy
+      const component = locals.get(tag) ?? known.get(tag)
       if (!component) {
          errors.push({
             line,
             message: allLocals.has(tag)
                ? `<${node.tag}>: proposition non importée: import ${allLocals.get(tag).name} from './components/${allLocals.get(tag).name}.vue'`
-               : `<${node.tag}>: composant inconnu. Voir blueprint/ez/CATALOG.md; s'il manque, le proposer dans components/ de la version`,
+               : `<${node.tag}>: composant inconnu. Voir blueprint/ez/CATALOG.md; s'il manque, le construire dans components/ de la version et l'importer`,
          })
          return
       }

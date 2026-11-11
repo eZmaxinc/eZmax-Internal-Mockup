@@ -218,18 +218,21 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
          const componentsDir = join(versionDir, 'components')
          const proposalFiles = existsSync(componentsDir) ? readdirSync(componentsDir).filter((name) => name.endsWith('.vue')).map((name) => join(componentsDir, name)) : []
 
-         // Proposals of this version: header, tier rules, collisions
+         // Components of this version: local pieces (no header) and proposals (header, tier rules, collisions)
          const locals = new Map()
          for (const file of proposalFiles) {
             const proposal = readProposal(file)
             if (!proposal) {
-               errors.push(`${rel(file)}: en-tête de proposition absent. Première ligne: <!-- @proposal domain <objet>: pourquoi --> (ou @proposal primitive: …)`)
+               // No header: a local piece of this version, free in its markup and style (tokens only)
+               const component = extractComponent(file, { tier: 'local' })
+               locals.set(component.tag, component)
                continue
             }
-            if (proposal.tier === 'domain' && !proposal.object) errors.push(`${rel(file)}: une proposition métier nomme son objet: <!-- @proposal domain folder: … -->`)
+            // What a proposal lacks to enter the blueprint never blocks the prototype: it matters at promotion
+            if (proposal.tier === 'domain' && !proposal.object) warnings.push(`${rel(file)}: une proposition métier nomme son objet: <!-- @proposal domain folder: … -->`)
             const component = extractComponent(file, { tier: proposal.tier, object: proposal.object })
             locals.set(component.tag, component)
-            validateTier(file, proposal.tier).forEach(report(errors, file))
+            validateTier(file, proposal.tier).forEach(report(warnings, file))
             if (known.has(component.tag)) warnings.push(`${rel(file)}: <${component.tag}> existe déjà dans blueprint/ez (promu ou doublon): les nouvelles versions utilisent celui de @ez`)
             else warnings.push(`${rel(file)}: proposition ${proposal.tier}${proposal.object ? ` · ${proposal.object}` : ''} <${component.tag}>: ${proposal.reason}`)
          }
@@ -358,7 +361,9 @@ function checkContent(files, errors, warnings) {
 
       for (const match of code.matchAll(/\bfrom\s+['"]([^'"]+)['"]|\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)|^\s*import\s+['"]([^'"]+)['"]/gm)) {
          const specifier = match[1] ?? match[2] ?? match[3]
-         if (!ALLOWED_IMPORTS.some((allowed) => allowed.test(specifier))) {
+         // A component of the version (vNNN/components/X.vue) may read the version's own files: ../mocks
+         const ownVersionFile = /[\\/]v\d{3}[a-z]?[\\/]components[\\/][^\\/]+$/.test(file) && /^\.\.\/[\w.-]+$/.test(specifier)
+         if (!ownVersionFile && !ALLOWED_IMPORTS.some((allowed) => allowed.test(specifier))) {
             errors.push(`${rel(file)}:${lineOf(code, match.index)}: import "${specifier}": un prototype n'importe que vue, @ez, @mocks ou les fichiers de sa propre version (jamais ../ une autre version)`)
          }
       }

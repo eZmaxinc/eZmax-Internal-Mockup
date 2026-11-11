@@ -28,17 +28,17 @@ Ne pas en dire plus que ce qu'un dev aurait sous la main: le but est de voir si 
 1. Il lance `pnpm proto new 49198 <lien> "Titre" --from <patron>`.
 2. Il construit `v001` avec au moins deux scénarios. Le brief, c'est la tâche GoodDay: le titre et le lien sont dans `meta.json`. Un `README.md` n'existe que si tu as donné des contraintes, et ne contient qu'elles.
 3. Il lance `pnpm proto check` et corrige les ✗.
-4. Il ouvre le prototype dans son navigateur et vérifie chaque scénario, le mode sombre et la largeur mobile.
+4. Il charge une fois l'adresse du shell et lit la page pour confirmer que le scénario par défaut s'affiche. La tournée complète (chaque scénario, le sombre, le mobile) ne se fait que sur demande ou avant la revue.
 5. Il répond avec la tâche, la version, un résumé et ses questions ouvertes.
 
 ## 3. Itérer comme en vrai
 
 Donner 2 ou 3 retours, comme dans une vraie revue:
 
-- **« Déplace X, ajoute Y »**: il retouche la dernière version en place, sans en créer une. Il ne refait pas la tournée complète: le check, puis un coup d'œil au scénario par défaut et à ce que le changement touche.
+- **« Déplace X, ajoute Y »**: il retouche la dernière version en place, sans en créer une. Il lance le check et s'arrête là, sans navigateur: tu vois le changement dans le shell à la sauvegarde.
 - **« Fais une nouvelle version: … »**: c'est toi qui marques l'étape. Il crée `v002` avec `proto iterate`; `v001` est alors figée et ne bouge plus.
 - **« Montre une autre approche »**: il doit créer une variante, `v002b`.
-- **Un besoin qu'aucun composant actuel ne couvre**: c'est le test du parcours des propositions. Il doit créer `components/EzQuelqueChose.vue` avec l'en-tête `<!-- @proposal … -->`, pas du HTML brut dans `index.vue`.
+- **Un besoin qu'aucun composant actuel ne couvre** (une ligne du temps, un tableau de bord): il le construit dans la version, en HTML avec un style fait de tokens, souvent dans `components/Nom.vue`. Il n'en fait une proposition (`Ez…`, en-tête `<!-- @proposal … -->`) que si le morceau servirait à d'autres tâches. Il ne refait jamais à la main un bouton, un champ, un tableau, une carte ou un badge.
 
 Dans le shell, comparer `v001` et `v002` côte à côte, changer de scénario et passer en sombre. Ensuite:
 
@@ -58,7 +58,7 @@ pnpm proto proposals
 |---|---|
 | Est-ce que ça ressemble à eZsign? | Le prototype à côté de la vraie app |
 | A-t-il laissé les versions figées intactes, et créé une version seulement sur demande? | `git diff` sur les versions précédentes, les ⚠ de `pnpm proto check` |
-| A-t-il inventé du visuel ou contourné une règle? | `git diff`, et les ⚠ de `pnpm proto check` |
+| Ce qu'il a inventé reste-t-il dans le même genre, sans refaire ce qui existe? | Le prototype à l'écran, `pnpm proto check`, et « Visuel local » dans `pnpm proto proposals` |
 | Ses propositions sont-elles au bon niveau, avec un bon nom? | `pnpm proto proposals` |
 | Combien de retours avant un résultat utilisable? | Le ressenti, et le nombre de versions |
 | Où a-t-il hésité ou posé des questions? | La conversation |

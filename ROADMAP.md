@@ -64,6 +64,10 @@ Refaire le scénario de test après chaque série de corrections, et noter chaqu
   - [x] Essai 8: `v001` « Introuvable » dans le shell juste après `proto new`. Le signal du CLI passait par le surveillant de fichiers (chemins en `G:\`, alors que Vite connaît les fichiers en `C:\`): il vide maintenant le registre directement. Testé avec un lecteur alias et une surveillance sourde
   - [ ] Le confirmer sur le poste de travail (essai 9), shell relancé après le `git pull`
   - [x] Le `README.md` d'une tâche est facultatif: seulement les contraintes données (titre et lien GoodDay sont dans `meta.json`)
+  - [x] Règles 1 et 2: réutiliser ce qui existe, inventer le reste avec les tokens. Un morceau local (`components/Nom.vue`) n'a plus besoin d'en-tête; une proposition seulement s'il est réutilisable. `proto check` refuse un `<button>`, `<input>`, `<table>` brut; `proto proposals` liste le visuel local
+  - [x] Règle 8: le check à chaque fois; aucun navigateur pour une retouche, un seul chargement pour une nouvelle version, la tournée complète sur demande ou avant la revue
+  - [x] Essai à blanc d'une interface nouvelle (ligne du temps, couloirs par signataire): `v001`, une retouche et `v002` passent le check; trouvé et corrigé: un composant local ne pouvait pas importer le `mocks.ts` de sa version
+  - [ ] Rejouer cet essai dans Cursor, en mesurant le temps entre la demande et le changement à l'écran (cible: moins de 2 minutes pour une retouche)
   - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
   - [ ] `AGENTS.md`: ne pas lire les autres prototypes; ouvrir chaque scénario par son URL; la `v001` est la plus petite réponse au brief
   - [ ] `ez-card`: l'en-tête passe à la ligne quand `#actions` a plusieurs boutons (signalé à l'essai 7, avec le correctif)

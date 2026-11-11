@@ -11,7 +11,7 @@ Composants enregistrés globalement: on les utilise directement dans les templat
 | Contient | le visuel: CSS et tokens | des primitives assemblées; pas de couleur, bordure, ombre ni arrondi |
 | Nom | `ez-{chose}` | `ez-{primitive}-{intention}` (`ez-btn-submit-folder`), ou `ez-{objet}-{chose}` pour un ensemble (`ez-signer-list`) |
 
-**Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées → proposer un composant métier → en dernier recours, proposer une primitive.
+**Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
 
 Les props `icon` prennent une clé de `ez.icons` (`:icon="ez.icons.send"` ou `icon="send"`). Liste: `add back calendar check chevronDown chevronRight clock close delete download edit error eye file filter folder home inbox info mail more refresh search send settings signature success user users warning`.
 
@@ -112,9 +112,13 @@ Le statut d'un signataire (en attente, consulté, signé, refusé). `:signer` (u
 - `formatDate`, `formatDateTime`, `formatRelative`
 - `gettext` (aussi `$gettext` dans les templates), `ez.icons`
 
-## Manque quelque chose? Le proposer
+## Manque quelque chose? Le construire dans la version
 
-Ne pas bricoler en HTML dans le prototype. Créer une **proposition** dans la version, `prototypes/<tâche>/vNNN/components/EzBtnSubmitFolder.vue`, qui commence par son en-tête:
+Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>`, `<textarea>` ou `<table>` brut, ni de carte, de badge ou de dialogue refait à la main. Ce qui n'existe pas (une ligne du temps, un tableau de bord, un canevas…) se construit dans la version, en HTML avec un style `scoped` fait seulement de tokens.
+
+- **Un morceau local**: `prototypes/<tâche>/vNNN/components/FolderTimeline.vue`, importé par `index.vue`. Aucun en-tête, libre dans son balisage et son style. Il peut lire les fichiers de sa version (`../mocks`).
+- **Un composant rehaussé**: un `ez-` existant à qui il manque quelque chose (une prop, un slot, un état). Copier son fichier de `blueprint/ez/` dans `components/` sous le même nom (`EzCard.vue`), modifier la copie, l'importer dans `index.vue`: dans cette version, elle remplace l'original.
+- **Une proposition**, seulement si le morceau servirait clairement à d'autres tâches, ou sur demande: il se nomme `Ez…` et commence par son en-tête.
 
 ```vue
 <!-- @proposal domain folder: Soumettre un dossier: libellé, icône et confirmation identiques partout -->
@@ -123,10 +127,8 @@ Ne pas bricoler en HTML dans le prototype. Créer une **proposition** dans la ve
 </template>
 ```
 
-- `@proposal domain <objet>` ou `@proposal primitive`, puis pourquoi il existe.
-- L'importer dans `index.vue` (`import EzBtnSubmitFolder from './components/EzBtnSubmitFolder.vue'`).
-- Il suit les règles de son niveau (`proto check` les vérifie) et donne un ⚠ « proposition ».
-- `pnpm proto proposals` liste les propositions de toutes les tâches. Un humain décide d'en promouvoir une: `pnpm proto promote <tâche> <version> <Nom>`. Seulement sur demande.
+- `@proposal domain <objet>` ou `@proposal primitive`, puis pourquoi il existe. Une proposition suit les règles de son niveau (`proto check` les vérifie): une proposition métier n'a ni couleur, ni bordure, ni ombre, ni arrondi à elle.
+- Rien de tout ça ne bloque le prototype. `pnpm proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide d'en promouvoir une: `pnpm proto promote <tâche> <version> <Nom>`. Seulement sur demande.
 
 <!-- api:start — généré par pnpm proto catalog, ne pas modifier à la main -->
 

@@ -4,13 +4,13 @@ Outil de prototypage rapide pour eZmax/eZsign, utilisé par les devs avec leur a
 
 ## Principe directeur
 
-L'agent ne doit jamais « inventer » du design. Il compose avec trois couches fermées:
+L'agent réutilise ce qui existe et n'invente que ce qui n'existe pas, dans le même genre. Trois couches lui servent de base:
 
 1. **Tokens**: le brand (couleurs, typo, espacements, rayons).
 2. **Composants `ez-`**: le vocabulaire, même API que la prod.
 3. **Patrons de référence**: la grammaire, c'est-à-dire comment on assemble une vraie page eZsign.
 
-Tout ce qui sort de ces couches est refusé par `pnpm proto check`, pas seulement par une règle écrite.
+Une interface nouvelle (ligne du temps, tableau de bord, canevas…) se construit dans la version, en HTML avec un style fait seulement de tokens. `pnpm proto check` refuse deux choses, pas seulement par une règle écrite: une couleur hors des tokens, et un élément refait à la main alors qu'un composant `ez-` existe (`<button>`, `<input>`, `<table>`…).
 
 ## Décisions
 

@@ -1,15 +1,16 @@
 /**
  * pnpm proto proposals [--all]
  * What prototypes ask of the blueprint, for the team to decide:
- *   - components proposed in prototypes (components/ of a version), most requested first
+ *   - components proposed in prototypes (components/ of a version, with a @proposal header), most requested first
+ *   - what the latest version of each task built by hand (local components, scoped styles)
  *   - reports written in notes.md: every bullet of the « Signalements » section (Bug primitive,
  *     Bug helper, Mock manquant, Composant manquant… or any other), plus those prefixes anywhere
  * --all also shows the components already promoted into blueprint/ez.
  */
-import { existsSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { basename, join } from 'node:path'
 import { PROTOTYPES, listDirs, listVersions, parseArgs } from '../lib.mjs'
-import { buildCatalog, catalogMap } from '../catalog-lib.mjs'
+import { buildCatalog, catalogMap, readProposal, toKebab } from '../catalog-lib.mjs'
 import { groupProposals } from '../proposals-lib.mjs'
 
 /** A report written anywhere in the notes with one of the known prefixes */
@@ -43,7 +44,42 @@ function readReports(markdown) {
 export async function run(argv) {
    const { flags } = parseArgs(argv)
    showComponents(Boolean(flags.all))
+   showLocalVisuals()
    showReports()
+}
+
+/**
+ * What the latest version of each task built by hand: its local components and the files with a style of
+ * their own. Nobody declares it; it is where the blueprint is missing something.
+ */
+function showLocalVisuals() {
+   console.log('Créé ou rehaussé dans les prototypes (dernière version de chaque tâche)\n')
+   const known = catalogMap(buildCatalog())
+   let found = false
+   for (const taskId of listDirs(PROTOTYPES)) {
+      const version = listVersions(taskId).at(-1)
+      if (!version) continue
+      const versionDir = join(PROTOTYPES, taskId, version)
+      const componentsDir = join(versionDir, 'components')
+      const components = existsSync(componentsDir) ? readdirSync(componentsDir).filter((name) => name.endsWith('.vue')).map((name) => join(componentsDir, name)) : []
+      const items = []
+      for (const file of [join(versionDir, 'index.vue'), ...components]) {
+         if (!existsSync(file) || readProposal(file)) continue
+         const styleLines = [...readFileSync(file, 'utf8').matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].reduce((total, match) => total + match[1].trim().split('\n').length, 0)
+         const isLocalComponent = file !== join(versionDir, 'index.vue')
+         if (!styleLines && !isLocalComponent) continue
+         // Same name as a blueprint component: an enhanced copy, to compare with the original
+         const original = isLocalComponent ? known.get(toKebab(basename(file, '.vue'))) : null
+         const kind = original ? ` (rehausse ${original.file})` : isLocalComponent ? ' (créé)' : ''
+         items.push(`${basename(file)}${kind}${styleLines ? `: ${styleLines} ligne(s) de style` : ''}`)
+      }
+      if (!items.length) continue
+      found = true
+      console.log(`${taskId}/${version}`)
+      for (const item of items) console.log(`   - ${item}`)
+      console.log('')
+   }
+   if (!found) console.log('  Aucun.\n')
 }
 
 function showComponents(all) {

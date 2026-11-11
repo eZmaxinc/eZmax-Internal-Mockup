@@ -8,7 +8,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 - partir d'un patron;
 - écrire des scénarios de données, dont un cas vide;
 - utiliser un composant métier existant;
-- proposer un composant métier;
+- construire ce qu'aucun composant ne couvre (un morceau local, ou une proposition s'il est réutilisable);
 - buter sur un manque d'une primitive (la sélection de lignes);
 - itérer, faire une variante, retenir une version, exporter.
 
@@ -73,7 +73,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 | 1.7 | Le bouton de prolongation est absent ou désactivé pour un dossier complété ou refusé | |
 | 1.8 | Pas de HTML brut (`<button>`, `<input>`, `<table>`), pas de couleur inventée | |
 | 1.9 | `pnpm proto check 90001` passe, et l'agent l'a lancé lui-même | |
-| 1.10 | Il a ouvert le **shell** dans son navigateur (jamais `frame.html`), et l'a piloté par l'adresse: chaque scénario, le sombre, 390 px | |
+| 1.10 | Il a chargé une fois l'adresse du **shell** (jamais `frame.html`) et lu la page pour confirmer que le scénario par défaut s'affiche; pas de tournée complète | |
 | 1.11 | Il répond avec la tâche, la version, un résumé et ses questions ouvertes | |
 | 1.12 | Textes en français, vouvoiement, pas d'espace avant le deux-points | |
 
@@ -93,13 +93,13 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 |---|---|---|
 | 2.1 | Lance `pnpm proto iterate 90001 -m "…"`: la nouvelle version est `v002` | |
 | 2.2 | `v001` n'a pas changé (`git status` ne montre rien dans `v001/`) | |
-| 2.3 | L'échéance passe par une **proposition de composant métier** dans `v002/components/`, par exemple `EzBadgeFolderDue.vue`, avec l'en-tête `<!-- @proposal domain folder: … -->` | |
+| 2.3 | L'échéance passe par `ez-badge` (jamais un badge refait à la main), dans `index.vue` ou dans un composant de `v002/components/`; s'il en fait une proposition, elle a son en-tête `<!-- @proposal domain folder: … -->` | |
 | 2.4 | Elle est nommée `ez-badge-…` ou `ez-folder-…`, et importée dans `index.vue` | |
 | 2.5 | Elle n'a ni couleur, ni bordure, ni ombre à elle: l'urgence passe par le `tone` d'`ez-badge` | |
 | 2.6 | La sélection de plusieurs lignes **n'existe pas** dans `ez-table`. Attendu: soit une alternative avec les composants existants (par exemple « Prolonger les N qui expirent » en un clic), soit une proposition de primitive bien justifiée. Dans les deux cas, c'est écrit dans `notes.md`. **Échec**: des cases à cocher en `<input>` brut | |
 | 2.7 | `notes.md` de `v002`: résumé en première ligne, puis seulement les signalements et les questions nouveaux de cette version (ni liste de changements, ni liste de propositions) | |
 | 2.8 | `pnpm proto check 90001` passe, et la proposition apparaît en ⚠ | |
-| 2.9 | Coup d'œil dans le navigateur: le scénario par défaut et ce que le changement touche, sans refaire la tournée complète; l'agent dit lequel il a fait | |
+| 2.9 | Nouvelle version: un seul chargement de l'adresse du shell, page lue plutôt que capturée, sans tournée complète | |
 
 **Coller ensuite** (une retouche, sans demander de version):
 
@@ -109,7 +109,7 @@ La tâche est fictive (#90001), mais réaliste, et elle n'est couverte par aucun
 |---|---|---|
 | 2.10 | Pas de `pnpm proto iterate`: la retouche est faite en place dans `v002`, il n'y a pas de `v003` | |
 | 2.11 | `v001` n'a toujours pas changé | |
-| 2.12 | `pnpm proto check 90001` passe, un coup d'œil dans le navigateur, et l'URL donnée est celle de `v002` dans le shell | |
+| 2.12 | `pnpm proto check 90001` passe, **aucun navigateur** pour une retouche, et l'URL donnée est celle de `v002` dans le shell | |
 
 **Faire soi-même:**
 
@@ -138,7 +138,7 @@ pnpm proto proposals
 | 3.3 | Le bandeau est un `ez-message-important` (`type="warning"`) avec l'action dans `#actions`, pas un bloc fait à la main | |
 | 3.4 | Un seul bouton primaire par zone | |
 | 3.5 | Le scénario sans dossier à risque n'affiche pas de bandeau vide | |
-| 3.6 | `pnpm proto check 90001` passe, coup d'œil dans le navigateur (pas de tournée complète) | |
+| 3.6 | `pnpm proto check 90001` passe, un seul chargement de l'adresse du shell (pas de tournée complète) | |
 
 **Faire soi-même**: dans le shell, comparer `v002` et `v002b` côte à côte.
 
