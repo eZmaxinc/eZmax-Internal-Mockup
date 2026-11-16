@@ -15,6 +15,15 @@
          </template>
 
          <template #devbar-end>
+            <!-- A link to send a teammate: this version, nothing else (add ?version=all for its task's versions, share.ts) -->
+            <button
+               type="button"
+               class="shell-btn"
+               title="Copier un lien vers cette version seulement. Ajouter ?version=all au lien pour toutes les versions de la tâche."
+               @click="onCopyShare"
+            >
+               {{ isCopied ? 'Lien copié' : 'Partager' }}
+            </button>
             <a
                v-if="isDev"
                class="shell-btn shell-btn--icon"
@@ -54,6 +63,7 @@ import { computed, ref, watch } from 'vue'
 import ProtoViewer from '../ProtoViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
+import { shareUrl } from '../share'
 import { currentVersion, getTask } from '@/registry'
 
 const props = defineProps<{
@@ -86,6 +96,21 @@ const theNotesRest = computed(() => {
 })
 
 const otherVersions = computed(() => theTask.value?.versions.filter((version) => version.id !== theVersion.value?.id) ?? [])
+
+const isCopied = ref(false)
+
+async function onCopyShare() {
+   if (!theTask.value || !theVersion.value) return
+   const url = shareUrl(theTask.value.id, theVersion.value.id)
+   try {
+      await navigator.clipboard.writeText(url)
+   }
+   catch {
+      window.prompt('Copier ce lien:', url) // clipboard unavailable: the link stays selectable
+   }
+   isCopied.value = true
+   setTimeout(() => (isCopied.value = false), 1500)
+}
 
 const theFrames = computed(() => {
    const base = `p/${props.taskId}/${theVersion.value?.id}`

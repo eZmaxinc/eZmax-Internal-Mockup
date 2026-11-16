@@ -6,8 +6,8 @@
       :chrome="theTarget.chrome"
       :label="theTarget.label"
       :theme="theRoute.theme"
-      :shell-url="theTarget.shellUrl"
-      :newer="theTarget.newer"
+      :shell-url="theRoute.share ? undefined : theTarget.shellUrl"
+      :newer="theRoute.share ? null : theTarget.newer"
       @update:scenario="(name: string) => setParam('scenario', name)"
       @update:theme="(theme: FrameTheme) => setParam('theme', theme === 'dark' ? 'dark' : '')"
    />
@@ -25,7 +25,8 @@ import { getTask, loadModule, type ProtoChrome, type ProtoMeta } from '@/registr
  *   #/p/<task>/<version>?scenario=<name>&theme=dark
  *   #/e/<example>?scenario=<name>
  *   #/gallery
- * Query: scenario (mocks.ts key), theme (light by default, or dark), chrome (app or none).
+ * Query: scenario (mocks.ts key), theme (light by default, or dark), chrome (app or none),
+ * share (inside a shared link: no link to the shell nor to the latest version).
  */
 function readHash() {
    const [path, query = ''] = window.location.hash.replace(/^#/, '').split('?')
@@ -35,6 +36,7 @@ function readHash() {
       scenario: params.get('scenario') ?? '',
       chrome: params.get('chrome') as ProtoChrome | null,
       theme: parseTheme(params.get('theme')),
+      share: params.has('share'),
    }
 }
 

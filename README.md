@@ -35,6 +35,8 @@ Les règles de l'agent sont dans [`AGENTS.md`](AGENTS.md), et seulement là: `.c
 
 Le tableau de bord liste les prototypes, les patrons de référence et la galerie des composants. Dans un prototype: les versions à gauche (touche `[`), les notes à droite (touche `]`), et en bas le scénario de données, la largeur, clair ou sombre, la comparaison côte à côte et l'export. L'adresse porte ces choix: `?scenario=<nom>&theme=dark&width=mobile`.
 
+**Partager une maquette**: dans la barre du bas, « Partager » copie un lien vers la version à l'écran, `#/s/<code>`. Il n'affiche qu'elle: ni panneau de gauche, ni autres tâches, ni comparaison, ni export. Ajouter `?version=all` au lien (`#/s/<code>?version=all`) donne toutes les versions de cette tâche, avec un menu pour passer de l'une à l'autre, et toujours rien des autres tâches. Le code ne dit pas la version: changer une lettre ne mène nulle part. Ça cadre ce qu'on montre, ce n'est pas un contrôle d'accès: le site publié contient tous les prototypes pour qui va les chercher.
+
 ## Commandes
 
 | Commande | Effet |

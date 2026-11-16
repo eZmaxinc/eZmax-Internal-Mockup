@@ -18,8 +18,9 @@
       </div>
 
       <footer class="proto-viewer__devbar">
-         <!-- Always here: hides or shows the shell's left panel -->
+         <!-- Hides or shows the shell's left panel; a shared link (?share) has none -->
          <button
+            v-if="!isShare"
             type="button"
             class="shell-btn shell-btn--icon"
             :aria-label="theSidebarOpen ? 'Masquer le panneau' : 'Afficher le panneau'"
@@ -30,7 +31,7 @@
             <panel-icon side="left" :open="theSidebarOpen" />
          </button>
 
-         <span class="proto-viewer__divider" />
+         <span v-if="!isShare" class="proto-viewer__divider" />
 
          <div class="shell-segmented" role="group" aria-label="Largeur">
             <button
@@ -94,8 +95,10 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PanelIcon from './PanelIcon.vue'
 import { useNotes, useSidebar } from './sidebar'
+import { useShareMode } from './share'
 
 const { theSidebarOpen, toggleSidebar } = useSidebar()
+const isShare = useShareMode()
 const { theNotesOpen, toggleNotes } = useNotes()
 
 const props = defineProps<{
@@ -208,6 +211,8 @@ function frameUrl(path: string) {
    const params = new URLSearchParams()
    if (theScenario.value) params.set('scenario', theScenario.value)
    if (theTheme.value === 'dark') params.set('theme', 'dark')
+   // A shared link: the frame drops its links to the shell and to the latest version
+   if (isShare.value) params.set('share', '1')
    const query = params.toString()
    return `${import.meta.env.BASE_URL}frame.html#/${path}${query ? `?${query}` : ''}`
 }

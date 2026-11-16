@@ -5,7 +5,7 @@
          A prototype: the way back, the task, its versions. A reference or the gallery: the way back and the others.
          Slides away when closed: the prototype gets all the width. Toggled from the dev bar or with [
       -->
-      <aside v-if="!isHome" class="shell__sidebar" :class="{ 'is-closed': !theSidebarOpen }" :inert="!theSidebarOpen" aria-label="Navigation">
+      <aside v-if="!isHome && !isShare" class="shell__sidebar" :class="{ 'is-closed': !theSidebarOpen }" :inert="!theSidebarOpen" aria-label="Navigation">
          <router-link to="/" class="shell-btn shell__back">
             <ez-icon name="back" :size="14" />
             <span>Prototypes</span>
@@ -125,11 +125,14 @@ import { useRoute } from 'vue-router'
 import { STATUS_LABEL, currentVersion, getTask, listPatterns, type ProtoStatus } from '@/registry'
 import CopyButton from './CopyButton.vue'
 import { listenSidebarShortcut, useSidebar } from './sidebar'
+import { useShareMode } from './share'
 
 const route = useRoute()
 const theExamples = listPatterns()
 
 const isHome = computed(() => route.path === '/')
+/** A shared link (?share): one version, no left panel */
+const isShare = useShareMode()
 const theTask = computed(() => (typeof route.params.taskId === 'string' ? getTask(route.params.taskId) : undefined))
 const theVersion = computed(() => currentVersion(theTask.value, typeof route.params.versionId === 'string' ? route.params.versionId : undefined))
 /** Newest first. The retained version keeps its place: its star tells it apart. */
