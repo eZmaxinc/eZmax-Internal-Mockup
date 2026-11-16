@@ -2,12 +2,12 @@
    <div
       class="ez-reveal"
       :class="{
-         'ez-reveal--expanded': !theCollapsed,
+         'ez-reveal--expanded': !isCollapsed,
          'ez-reveal--fade-muted': fadeTo === 'muted',
       }"
       :style="{
-         '--reveal-collapsed-height': collapsedHeight,
-         '--reveal-full-height': theFullHeight,
+         '--ez-reveal-collapsed-height': collapsedHeight,
+         '--ez-reveal-full-height': theFullHeight,
       }"
    >
       <div ref="theContentEl" class="ez-reveal__content">
@@ -16,15 +16,15 @@
 
       <transition name="ez-reveal-scrim">
          <div
-            v-if="theMobile && theOverflows && theCollapsed"
+            v-if="isMobile && hasOverflow && isCollapsed"
             class="ez-reveal__scrim"
             role="button"
             tabindex="0"
             :aria-expanded="false"
             :aria-label="expandLabel"
-            @click="expand"
-            @keydown.enter.prevent="expand"
-            @keydown.space.prevent="expand"
+            @click="onExpand"
+            @keydown.enter.prevent="onExpand"
+            @keydown.space.prevent="onExpand"
          >
             <span class="ez-reveal__scrim-label">
                {{ expandLabel }}
@@ -34,7 +34,7 @@
       </transition>
 
       <transition name="ez-reveal-footer">
-         <div v-if="theMobile && theOverflows && !theCollapsed" class="ez-reveal__footer">
+         <div v-if="isMobile && hasOverflow && !isCollapsed" class="ez-reveal__footer">
             <ez-btn
                variant="flat"
                size="sm"
@@ -42,7 +42,7 @@
                class="ez-reveal__collapse-btn"
                :label="collapseLabel"
                :aria-expanded="true"
-               @click="collapse"
+               @click="onCollapse"
             />
          </div>
       </transition>
@@ -86,14 +86,14 @@ const props = withDefaults(
 const theSlots = useSlots();
 const theContentEl = ref<HTMLElement | null>(null);
 /** Always start collapsed; entering mobile resets to collapsed */
-const theCollapsed = ref(true);
+const isCollapsed = ref(true);
 /** Assume overflow until measured, so the fade can show on first paint */
-const theOverflows = ref(true);
-const theMobile = ref(false);
+const hasOverflow = ref(true);
+const isMobile = ref(false);
 /** Full content height, so max-height can ease between collapsed and open */
 const theFullHeight = ref("none");
 /** Skip measuring while max-height is easing; a measure would snap the motion */
-const theMotion = ref(false);
+const isMoving = ref(false);
 
 const expandLabel = computed(() => props.expandLabel ?? gettext("Voir plus"));
 const collapseLabel = computed(() => props.collapseLabel ?? gettext("Réduire"));
@@ -115,7 +115,7 @@ function collapsedBudgetPx(el: HTMLElement): number {
 
 function measure() {
    const el = theContentEl.value;
-   if (!el || theMotion.value) return;
+   if (!el || isMoving.value) return;
    // Temporarily reveal full height so scrollHeight is trustworthy while collapsed via CSS.
    // Kill the transition for this read, or the restore would play the open animation.
    const prevMax = el.style.maxHeight;
@@ -123,7 +123,7 @@ function measure() {
    el.style.transition = "none";
    el.style.maxHeight = "none";
    const full = el.scrollHeight;
-   theOverflows.value = full > collapsedBudgetPx(el) + 8;
+   hasOverflow.value = full > collapsedBudgetPx(el) + 8;
    theFullHeight.value = `${full}px`;
    el.style.maxHeight = prevMax;
    void el.offsetHeight;
@@ -131,29 +131,29 @@ function measure() {
 }
 
 function playMotion() {
-   theMotion.value = true;
+   isMoving.value = true;
    if (theMotionTimer) clearTimeout(theMotionTimer);
    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
    theMotionTimer = setTimeout(() => {
-      theMotion.value = false;
+      isMoving.value = false;
       theMotionTimer = null;
       measure();
    }, reduce ? 0 : MOTION_MS);
 }
 
-function expand() {
+function onExpand() {
    playMotion();
-   theCollapsed.value = false;
+   isCollapsed.value = false;
 }
 
-function collapse() {
+function onCollapse() {
    playMotion();
-   theCollapsed.value = true;
+   isCollapsed.value = true;
 }
 
 function syncMobile(matches: boolean) {
-   theMobile.value = matches;
-   if (matches) theCollapsed.value = true;
+   isMobile.value = matches;
+   if (matches) isCollapsed.value = true;
    nextTick(() => measure());
 }
 
@@ -190,14 +190,18 @@ watch(
 
 <style scoped>
 .ez-reveal {
-   --reveal-collapsed-height: 10rem;
-   --_fade-to: var(--color-surface);
+   /* Variables first: what the reveal's look depends on, read below (the two heights also come from the props) */
+   --ez-reveal-collapsed-height: 10rem;
+   --ez-reveal-full-height: none;
+   --ez-reveal-fade-to: var(--color-surface);
+   --ez-reveal-label-color: var(--color-accent);
+   --ez-reveal-label-hover: var(--color-surface-accent);
 
    position: relative;
 }
 
 .ez-reveal--fade-muted {
-   --_fade-to: var(--color-surface-muted);
+   --ez-reveal-fade-to: var(--color-surface-muted);
 }
 
 .ez-reveal__content {
@@ -208,13 +212,13 @@ watch(
    Both heights are lengths, so the open and the close can ease instead of snapping. */
 @media (max-width: 39.99rem) {
    .ez-reveal__content {
-      max-height: var(--reveal-full-height);
+      max-height: var(--ez-reveal-full-height);
       overflow: hidden;
       transition: max-height 220ms cubic-bezier(0.16, 1, 0.3, 1);
    }
 
    .ez-reveal:not(.ez-reveal--expanded) .ez-reveal__content {
-      max-height: var(--reveal-collapsed-height);
+      max-height: var(--ez-reveal-collapsed-height);
    }
 
    .ez-reveal__scrim {
@@ -233,14 +237,14 @@ watch(
       /* Long ease into the surface: the last stretch to solid is slow, then opaque under the label */
       background: linear-gradient(
          to bottom,
-         color-mix(in srgb, var(--_fade-to) 0%, transparent) 0%,
-         color-mix(in srgb, var(--_fade-to) 8%, transparent) 18%,
-         color-mix(in srgb, var(--_fade-to) 24%, transparent) 36%,
-         color-mix(in srgb, var(--_fade-to) 48%, transparent) 52%,
-         color-mix(in srgb, var(--_fade-to) 72%, transparent) 66%,
-         color-mix(in srgb, var(--_fade-to) 90%, transparent) 78%,
-         var(--_fade-to) 90%,
-         var(--_fade-to) 100%
+         color-mix(in srgb, var(--ez-reveal-fade-to) 0%, transparent) 0%,
+         color-mix(in srgb, var(--ez-reveal-fade-to) 8%, transparent) 18%,
+         color-mix(in srgb, var(--ez-reveal-fade-to) 24%, transparent) 36%,
+         color-mix(in srgb, var(--ez-reveal-fade-to) 48%, transparent) 52%,
+         color-mix(in srgb, var(--ez-reveal-fade-to) 72%, transparent) 66%,
+         color-mix(in srgb, var(--ez-reveal-fade-to) 90%, transparent) 78%,
+         var(--ez-reveal-fade-to) 90%,
+         var(--ez-reveal-fade-to) 100%
       );
       cursor: pointer;
    }
@@ -252,7 +256,7 @@ watch(
       min-height: var(--size-control-sm);
       padding: 0 var(--space-gap-sm);
       border-radius: var(--radius-md);
-      color: var(--color-accent);
+      color: var(--ez-reveal-label-color);
       font-size: var(--text-sm);
       font-weight: 600;
       transition: background-color 120ms, color 120ms;
@@ -265,7 +269,7 @@ watch(
    /* Same wash as a flat button; the chevron dips so the control feels alive */
    .ez-reveal__scrim:hover .ez-reveal__scrim-label,
    .ez-reveal__scrim:focus-visible .ez-reveal__scrim-label {
-      background: var(--color-surface-accent);
+      background: var(--ez-reveal-label-hover);
    }
 
    .ez-reveal__scrim:hover .ez-reveal__scrim-label :deep(svg),

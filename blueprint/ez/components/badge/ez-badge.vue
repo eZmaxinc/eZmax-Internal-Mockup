@@ -20,12 +20,21 @@ withDefaults(defineProps<{
 
 <style scoped>
 .ez-badge {
+   /* Variables first: what the badge's look depends on, read below; the tones only change them */
+   --ez-badge-height: 22px;
+   --ez-badge-padding-x: 8px;
+   --ez-badge-radius: var(--radius-full);
+   --ez-badge-background: var(--color-border-muted);
+   --ez-badge-color: var(--color-foreground-muted);
+
    display: inline-flex;
    align-items: center;
    gap: 6px;
-   height: 22px;
-   padding: 0 8px;
-   border-radius: var(--radius-full);
+   height: var(--ez-badge-height);
+   padding: 0 var(--ez-badge-padding-x);
+   border-radius: var(--ez-badge-radius);
+   background: var(--ez-badge-background);
+   color: var(--ez-badge-color);
    font-size: var(--text-xs);
    font-weight: 600;
    white-space: nowrap;
@@ -38,55 +47,47 @@ withDefaults(defineProps<{
    background: currentColor;
 }
 
-.ez-badge--neutral {
-   background: var(--color-border-muted);
-   color: var(--color-foreground-muted);
-}
-
 .ez-badge--info,
 .ez-badge--action {
-   background: var(--color-surface-info);
-   color: var(--color-foreground-info);
+   --ez-badge-background: var(--color-surface-info);
+   --ez-badge-color: var(--color-foreground-info);
 }
 
 .ez-badge--success {
-   background: var(--color-surface-positive);
-   color: var(--color-foreground-positive);
+   --ez-badge-background: var(--color-surface-positive);
+   --ez-badge-color: var(--color-foreground-positive);
 }
 
 .ez-badge--warning {
-   background: var(--color-surface-warning);
-   color: var(--color-foreground-warning);
+   --ez-badge-background: var(--color-surface-warning);
+   --ez-badge-color: var(--color-foreground-warning);
 }
 
 .ez-badge--danger {
-   background: var(--color-surface-negative);
-   color: var(--color-foreground-negative);
+   --ez-badge-background: var(--color-surface-negative);
+   --ez-badge-color: var(--color-foreground-negative);
 }
 
 .ez-badge--solid {
-   border-radius: var(--radius-sm);
-   color: var(--color-foreground-inverse);
-
-   &.ez-badge--neutral {
-      background: var(--color-foreground-muted);
-   }
+   --ez-badge-radius: var(--radius-sm);
+   --ez-badge-background: var(--color-foreground-muted);
+   --ez-badge-color: var(--color-foreground-inverse);
 
    &.ez-badge--info,
    &.ez-badge--action {
-      background: var(--color-info);
+      --ez-badge-background: var(--color-info);
    }
 
    &.ez-badge--success {
-      background: var(--color-positive);
+      --ez-badge-background: var(--color-positive);
    }
 
    &.ez-badge--warning {
-      background: var(--color-warning);
+      --ez-badge-background: var(--color-warning);
    }
 
    &.ez-badge--danger {
-      background: var(--color-negative);
+      --ez-badge-background: var(--color-negative);
    }
 }
 </style>

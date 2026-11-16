@@ -76,6 +76,10 @@ export async function run(argv) {
       const example = join(targetDir, `${tag}.example.vue`)
       const api = catalogMap(buildCatalog()).get(tag)
       if (api && !existsSync(example)) writeFileSync(example, exampleFor(api))
+
+      // Like the app: the folder's index.ts default-exports the component
+      const index = join(targetDir, 'index.ts')
+      if (!existsSync(index)) writeFileSync(index, `import ${name} from './${tag}.vue'\n\nexport default ${name}\n`)
    }
 
    await regenerateCatalog()
@@ -89,6 +93,8 @@ export async function run(argv) {
       console.log('   3. Les autres prototypes l\'utilisent maintenant: les regarder dans le shell')
    }
    else {
+      console.log('   0. Le relire selon « Composants du blueprint » dans AGENTS.md (conventions de l\'app: prop `as`, is/has, on…)')
+      if (!catalogMap(buildCatalog()).get(tag)?.props.some((prop) => prop.name === 'as')) console.log('      ⚠ pas de prop `as`: un composant partagé doit pouvoir se rendre comme un autre élément')
       console.log('   1. Compléter sa fiche dans blueprint/ez/CATALOG.md (quand l\'utiliser)')
       console.log(`   2. Il est dans la galerie (Autres composants); ajuster son exemple: ${rel(join(targetDir, `${tag}.example.vue`))}`)
       console.log(`   3. Les prochaines versions l'utilisent sans import; ${version} garde sa copie`)

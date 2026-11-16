@@ -78,7 +78,7 @@ import { gettext, useScenario, type EzTableColumn } from '@ez'
 import { scenarios } from './mocks'
 
 const theData = useScenario(scenarios) // rebuilt when the scenario changes in the shell
-const theUI = reactive({ $dialogs: { extend: false } })
+const theUI = reactive({ $dialogs: { isExtendOpen: false } })
 
 const columns: EzTableColumn[] = [
    { key: 'name', label: gettext('Dossier') },
@@ -169,7 +169,9 @@ yarn proto open [task] [version]                         # shell on http://local
 
 - `.vue`: `<template>` first, then `<script setup lang="ts">`, then `<style scoped>` (only if needed — prefer utilities and component props).
 - 3-space indentation. English identifiers and comments; **UI text in French** through `$gettext('…')` / `gettext('…')`, interpolation `%{name}`.
-- Refs and local state named `the*` (`theData`, `theFolder`); UI state in a `theUI` object (`$isLoading`, `$dialogs`).
+- Refs and local state named `the*` (`theData`, `theFolder`); a local boolean is `is*` or `has*`, never `the*` (`isDialogVisible`, `hasLoadedDocuments`). UI state in a `theUI` object: `$loadings: { documents: false }`, `$dialogs: { isExtendOpen: false }`, `$selectedItem`.
+- Event handlers: `on` + a `function` declaration, not an arrow (`function onRemind() {…}`). Template refs through `useTemplateRef()`, named `…Ref` (`theDialogRef`).
+- `<script setup>` in this order: imports → composables and injections → props, emits, expose → constants and models → refs, reactive, computed → functions → watch → lifecycle.
 - Business logic stays in the mock objects' methods (`folder.isStateClosed()`, `signer.canBeReminded()`), not re-implemented in templates.
 - Scenarios are named in kebab-case after the situation (`some-pending`, `all-signed`, `empty`, `error`). Loading is simulated with `setTimeout`.
 - Icons through `ez.icons.<key>` (or the key string).
@@ -181,6 +183,37 @@ yarn proto open [task] [version]                         # shell on http://local
 - Raw HTML in a version is for what no `ez-` component covers (golden rule 1); a piece worth sharing becomes a proposal (golden rule 2).
 - French copy: no space before a colon (« Statut: Complété »).
 - Readable over clever: the team lead prefers simple code.
+
+## Blueprint components (`blueprint/ez/components/`)
+
+The rules of the app's library (`ezmax-library-quasar`), so that a component goes from here to the app by copying its folder. They apply when a component is promoted, enhanced or written in the blueprint, and to a `@proposal primitive` in a version (it is a candidate).
+
+- **One folder per component**, named without `ez-` (`reveal/`), its file in kebab-case (`ez-reveal.vue`). A family that only lives together shares the folder (`layout/`: `ez-layout.vue`, `ez-layout-col.vue`), with its helpers (`page-sections.ts`). Its gallery demo sits beside it: `ez-reveal.example.vue`.
+- **An `index.ts` in every folder**, that default-exports the component (and names the family's others): `import EzReveal from './ez-reveal.vue'` then `export default EzReveal`. `proto check` refuses a folder without one; `proto promote` writes it.
+- **Polymorphism**: a new shared component takes an `as` prop, so it renders as another element or component without duplicating its logic (`<ez-card as="section">`, `<ez-btn as="router-link" :to="…">`).
+- **Compound components** for a complex piece (a flow, a multi-step form, a table with inline actions): the parent `provide`s its state, `readonly`, with methods to change it; the children `inject` it with no props. A typed `InjectionKey<T>` exported from a shared file of the folder, never a string; a child used outside its parent throws. Reference: `page-sections/` (`pageSectionsKey`).
+- **The code conventions above**: `the*` for local state, `is*`/`has*` for booleans, `function on…()` for handlers, the `<script setup>` order, `onBeforeUnmount` for listeners and subscriptions.
+- **Styling is where ez-proto differs**: the app writes `<style lang="scss" scoped>` with Quasar variables (`$primary`) and overrides its dark theme under `.body--dark &`. Here a component writes `<style scoped>` with the semantic tokens only (`var(--color-surface)`), which already change under `.body--dark`: never a theme test, never a raw color. When the component goes to the app, its tokens map to the app's variables (`blueprint/tokens/COPY.md`).
+- **Variables first, at the top of `<style>`**, like the app: the component's root rule opens with its own custom properties, named `--ez-<component>-<what>`, set from the tokens (and from a knob when it has one); every rule below reads them, and a variant (`--info`, `--solid`, `--flush`) only changes them. No `--_private` names. Model: `badge/ez-badge.vue`.
+
+```css
+.ez-badge {
+   --ez-badge-radius: var(--radius-full);
+   --ez-badge-background: var(--color-border-muted);
+   --ez-badge-color: var(--color-foreground-muted);
+
+   border-radius: var(--ez-badge-radius);
+   background: var(--ez-badge-background);
+   color: var(--ez-badge-color);
+}
+
+.ez-badge--success {
+   --ez-badge-background: var(--color-surface-positive);
+   --ez-badge-color: var(--color-foreground-positive);
+}
+```
+
+- **Business components** (they know a folder, a signer…) are not written here: they are built in the app (golden rule 2).
 
 ## Repository map
 

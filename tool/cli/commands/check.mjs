@@ -12,7 +12,7 @@ import {
 } from '../lib.mjs'
 import { ALL_RENAMES, REMOVED_HINTS, renamePattern } from '../token-renames.mjs'
 import { CHANGELOG_FILE, COMPONENT_FILE, SHARED_FILE, checkComponents, checkShared, definedColors } from '../tokens-lib.mjs'
-import { buildCatalog, catalogMap, expectedFiles, extractComponent, readProposal, validateTemplate, validateTier } from '../catalog-lib.mjs'
+import { COMPONENTS_DIR, buildCatalog, catalogMap, expectedFiles, extractComponent, readProposal, validateTemplate, validateTier } from '../catalog-lib.mjs'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -184,6 +184,13 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
       for (const component of catalog.components) {
          if (seen.has(component.tag)) errors.push(`${component.file}: <${component.tag}> existe aussi dans ${seen.get(component.tag)}`)
          seen.set(component.tag, component.file)
+      }
+
+      // Like the app (ezmax-library-quasar): every component folder ships an index.ts that default-exports its component
+      for (const folder of listDirs(COMPONENTS_DIR)) {
+         const index = join(COMPONENTS_DIR, folder, 'index.ts')
+         if (!existsSync(index)) errors.push(`${rel(join(COMPONENTS_DIR, folder))}: index.ts absent (import EzNom from './ez-nom.vue', puis export default EzNom), comme dans l'app`)
+         else if (!/export default \w+/.test(readFileSync(index, 'utf8'))) errors.push(`${rel(index)}: doit faire export default de son composant`)
       }
 
       for (const component of catalog.components) {

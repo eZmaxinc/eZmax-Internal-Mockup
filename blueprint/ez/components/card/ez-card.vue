@@ -50,17 +50,23 @@ defineProps<{
  * the app's --sizing-toolbar-height) on :root or a parent only to change it.
  */
 .ez-card {
-   --_padding: var(--card-padding, var(--space-inset-lg));
+   /* Variables first: what the card's look depends on, read below */
+   --ez-card-padding: var(--card-padding, var(--space-inset-lg));
+   --ez-card-background: var(--color-surface);
+   --ez-card-radius: var(--radius-sm);
+   --ez-card-shadow: var(--shadow-card);
+   --ez-card-muted: var(--color-foreground-muted);
+   --ez-card-divider: var(--color-border-muted);
 
-   background: var(--color-surface);
-   border-radius: var(--radius-sm);
-   box-shadow: var(--shadow-card);
+   background: var(--ez-card-background);
+   border-radius: var(--ez-card-radius);
+   box-shadow: var(--ez-card-shadow);
    scroll-margin-top: calc(var(--sizing-toolbar-height, 50px) + 16px);
 }
 
 @media (width < 37.5rem) { /* below sm */
    .ez-card {
-      --_padding: var(--card-padding, var(--space-inset-md));
+      --ez-card-padding: var(--card-padding, var(--space-inset-md));
    }
 }
 
@@ -69,7 +75,7 @@ defineProps<{
    align-items: flex-start;
    justify-content: space-between;
    gap: 12px;
-   padding: var(--_padding) var(--_padding) 0;
+   padding: var(--ez-card-padding) var(--ez-card-padding) 0;
 }
 
 .ez-card--flush .ez-card__header {
@@ -77,7 +83,7 @@ defineProps<{
 }
 
 .ez-card--header-only .ez-card__header {
-   padding-bottom: var(--_padding);
+   padding-bottom: var(--ez-card-padding);
 }
 
 .ez-card__title {
@@ -88,16 +94,16 @@ defineProps<{
    font-size: var(--text-lg);
    line-height: var(--text-lg--line-height);
    font-weight: 400;
-   color: var(--color-foreground-muted);
+   color: var(--ez-card-muted);
 }
 
 .ez-card__icon {
-   color: var(--color-foreground-muted);
+   color: var(--ez-card-muted);
 }
 
 .ez-card__subtitle {
    margin: 2px 0 0;
-   color: var(--color-foreground-muted);
+   color: var(--ez-card-muted);
    font-size: var(--text-sm);
 }
 
@@ -108,7 +114,7 @@ defineProps<{
 }
 
 .ez-card__body {
-   padding: var(--_padding);
+   padding: var(--ez-card-padding);
 }
 
 .ez-card--flush .ez-card__body {
@@ -119,7 +125,7 @@ defineProps<{
    display: flex;
    justify-content: flex-end;
    gap: 8px;
-   padding: 12px var(--_padding);
-   border-top: 1px solid var(--color-border-muted);
+   padding: 12px var(--ez-card-padding);
+   border-top: 1px solid var(--ez-card-divider);
 }
 </style>
