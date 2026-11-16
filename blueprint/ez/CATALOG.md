@@ -79,6 +79,10 @@ Paires libellé / valeur (colonne de droite, résumés). **Propre à ez-proto** 
 ### `ez-icon`
 - `name`, `size` (défaut 18)
 
+### `ez-reveal`
+Réduit un contenu long sur téléphone (moins de 640 px): il garde le haut, fond le bas et le dévoile au toucher (« Voir plus », puis « Réduire »). Au-dessus de 640 px, le contenu s'affiche en entier. Pour un visuel secondaire qui prendrait tout l'écran sur mobile (une frise, un schéma), pas pour du contenu qu'on doit lire en premier. **Propre à ez-proto** (promu depuis la tâche du cycle de vie, v009).
+- `collapsed-height` (défaut `10rem`), `fade-to`: `surface` (dans une carte) ou `muted` (sur un panneau `surface-muted`), `expand-label`, `collapse-label`; slot `default`
+
 ## Formulaires
 
 ### `ez-field`
@@ -130,7 +134,7 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 ```
 
 - `@proposal domain <objet>` ou `@proposal primitive`, puis pourquoi il existe. Une proposition suit les règles de son niveau (`proto check` les vérifie): une proposition métier n'a ni couleur, ni bordure, ni ombre, ni arrondi à elle.
-- Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande.
+- Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), avec un exemple généré dans `blueprint/ez/examples/<Nom>.vue`, à ajuster.
 
 <!-- api:start — généré par yarn proto catalog, ne pas modifier à la main -->
 
@@ -327,6 +331,19 @@ Slots: `défaut`
 | Prop | Type | Défaut | |
 |---|---|---|---|
 | `title` | `string` | `'Sur cette page'` |  |
+
+#### `ez-reveal`
+
+Masque le bas d'un contenu (fade) sous un seuil de largeur et le dévoile au tap/clic; réduit par défaut sur mobile
+
+| Prop | Type | Défaut | |
+|---|---|---|---|
+| `collapsed-height` | `string` | `"10rem"` | Max height while collapsed (CSS length) |
+| `fade-to` | `surface` `muted` | `"surface"` | Color the fade blends into: card surface, or muted inset panels |
+| `expand-label` | `string` | `undefined` |  |
+| `collapse-label` | `string` | `undefined` |  |
+
+Slots: `défaut`
 
 #### `ez-table`
 

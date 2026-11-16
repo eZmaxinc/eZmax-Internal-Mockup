@@ -17,6 +17,7 @@ import EzPageHeader from './primitives/EzPageHeader.vue'
 import EzPageSection from './primitives/EzPageSection.vue'
 import EzPageSections from './primitives/EzPageSections.vue'
 import EzPageToc from './primitives/EzPageToc.vue'
+import EzReveal from './primitives/EzReveal.vue'
 import EzTable from './primitives/EzTable.vue'
 import EzBadgeFolderState from './domain/folder/EzBadgeFolderState.vue'
 import EzBadgeSignerState from './domain/signer/EzBadgeSignerState.vue'
@@ -40,6 +41,7 @@ export const components = {
    EzPageSection,
    EzPageSections,
    EzPageToc,
+   EzReveal,
    EzTable,
    EzBadgeFolderState,
    EzBadgeSignerState,
@@ -65,6 +67,7 @@ declare module 'vue' {
       EzPageSection: typeof EzPageSection
       EzPageSections: typeof EzPageSections
       EzPageToc: typeof EzPageToc
+      EzReveal: typeof EzReveal
       EzTable: typeof EzTable
       EzBadgeFolderState: typeof EzBadgeFolderState
       EzBadgeSignerState: typeof EzBadgeSignerState

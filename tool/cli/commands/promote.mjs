@@ -10,7 +10,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { PROTOTYPES, ROOT, fail, findTask, flagString, listVersions, parseArgs, rel } from '../lib.mjs'
-import { CATALOG_MD, DOMAIN_DIR, PRIMITIVES_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
+import { CATALOG_MD, DOMAIN_DIR, EZ_DIR, PRIMITIVES_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
 import { run as regenerateCatalog } from './catalog.mjs'
 
 const USAGE = 'Usage: yarn proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]'
@@ -62,11 +62,19 @@ export async function run(argv) {
    writeFileSync(target, content)
 
    if (!original) {
-      // A hand-written entry in CATALOG.md, before the helpers: when to use it
+      // A hand-written entry in CATALOG.md (when to use it): a primitive before the domain components, a domain one before the helpers
       const catalog = readFileSync(CATALOG_MD, 'utf8')
-      const anchor = catalog.indexOf('## Helpers')
+      const anchor = catalog.indexOf(tier === 'primitive' ? '## Composants métier' : '## Helpers')
       const entry = `### \`${tag}\`${tier === 'domain' ? ` · ${object}` : ''}\n${reason ? `${reason} ` : ''}_(Promu depuis ${taskId}/${version}. Fiche à compléter: quand l'utiliser.)_\n\n`
       writeFileSync(CATALOG_MD, anchor >= 0 ? catalog.slice(0, anchor) + entry + catalog.slice(anchor) : `${catalog.trimEnd()}\n\n${entry}`)
+
+      // An example for the gallery, which shows it on its own (section « Autres composants »)
+      const example = join(EXAMPLES_DIR, `${name}.vue`)
+      const api = catalogMap(buildCatalog()).get(tag)
+      if (api && !existsSync(example)) {
+         mkdirSync(EXAMPLES_DIR, { recursive: true })
+         writeFileSync(example, exampleFor(api))
+      }
    }
 
    await regenerateCatalog()
@@ -81,8 +89,37 @@ export async function run(argv) {
    }
    else {
       console.log('   1. Compléter sa fiche dans blueprint/ez/CATALOG.md (quand l\'utiliser)')
-      console.log('   2. L\'ajouter à la galerie (tool/frame/GalleryPage.vue)')
+      console.log(`   2. Il est dans la galerie (Autres composants); ajuster son exemple: ${rel(join(EXAMPLES_DIR, `${name}.vue`))}`)
       console.log(`   3. Les prochaines versions l'utilisent sans import; ${version} garde sa copie`)
    }
    console.log('   4. yarn proto check')
+}
+
+const EXAMPLES_DIR = join(EZ_DIR, 'examples')
+
+/** A first gallery example from the component's API: required props filled in, sample text in the default slot. */
+function exampleFor(component) {
+   const attributes = component.props.filter((prop) => prop.required).map((prop) => {
+      if (prop.values?.length) return `${prop.attr}="${prop.values[0]}"`
+      if (prop.type === 'string') return `${prop.attr}="Exemple"`
+      if (prop.type === 'boolean') return prop.attr
+      if (prop.type === 'number') return `:${prop.attr}="1"`
+      return `:${prop.attr}="undefined /* TODO: ${prop.type} */"`
+   })
+   const open = [component.tag, ...attributes].join(' ')
+   const body = component.slots.includes('default')
+      ? [
+         `   <${open}>`,
+         '      <p class="m-0">Le dossier « Bail commercial » a été envoyé à trois signataires le 4 novembre. Deux ont signé; le troisième a reçu deux rappels.</p>',
+         '      <p class="m-0">La date limite est le 30 novembre. Après la fermeture, le dossier est archivé puis éliminé selon les délais du type de dossiers.</p>',
+         `   </${component.tag}>`,
+      ]
+      : [`   <${open} />`]
+   return [
+      '<!-- Exemple de la galerie, généré par proto promote: à ajuster pour montrer les cas utiles. -->',
+      '<template>',
+      ...body,
+      '</template>',
+      '',
+   ].join('\n')
 }
