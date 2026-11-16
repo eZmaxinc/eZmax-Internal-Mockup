@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { iconPaths, type IconName } from '../icons'
+import { iconPaths, type IconName } from '../../icons'
 
 withDefaults(defineProps<{
    name: IconName

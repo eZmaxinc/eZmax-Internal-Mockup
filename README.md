@@ -59,8 +59,7 @@ Une tâche se désigne par une partie du nom de son dossier, ou par son numéro 
 ```
 blueprint/             le relevé de notre UI
   tokens/                ez-tokens.css (primitives → sémantiques), CHANGELOG, COPY
-  ez/primitives/         composants génériques, qui portent le visuel
-  ez/domain/<objet>/     composants métier, qui assemblent des primitives
+  ez/components/<nom>/   un dossier par composant, comme dans l'app: ez-<nom>.vue et sa démo ez-<nom>.example.vue
   ez/CATALOG.md          quand utiliser quoi + API générée du code
   patterns/              pages de référence: liste, fiche, formulaire
   brand/                 principes, captures de prod annotées

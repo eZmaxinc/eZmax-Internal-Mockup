@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
-import EzPageToc from './EzPageToc.vue'
+import EzPageToc from './ez-page-toc.vue'
 import { pageSectionsKey, type TocEntry } from './page-sections'
 
 withDefaults(defineProps<{

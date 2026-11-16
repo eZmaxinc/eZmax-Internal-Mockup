@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import EzIcon from './EzIcon.vue'
-import type { IconName } from '../icons'
+import EzIcon from '../icon/ez-icon.vue'
+import type { IconName } from '../../icons'
 
 defineProps<{
    title?: string

@@ -5,7 +5,7 @@
          "tag": "ez-app-shell",
          "name": "EzAppShell",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzAppShell.vue",
+         "file": "blueprint/ez/components/app-shell/ez-app-shell.vue",
          "description": "Placeholder frame of the production shell (toolbar + left drawer), empty on purpose: it only gives prototypes their real position and width inside the app.",
          "props": [],
          "emits": [],
@@ -18,7 +18,7 @@
          "tag": "ez-badge",
          "name": "EzBadge",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzBadge.vue",
+         "file": "blueprint/ez/components/badge/ez-badge.vue",
          "description": null,
          "props": [
             {
@@ -75,7 +75,7 @@
          "tag": "ez-btn",
          "name": "EzBtn",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzBtn.vue",
+         "file": "blueprint/ez/components/btn/ez-btn.vue",
          "description": null,
          "props": [
             {
@@ -203,7 +203,7 @@
          "tag": "ez-card",
          "name": "EzCard",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzCard.vue",
+         "file": "blueprint/ez/components/card/ez-card.vue",
          "description": null,
          "props": [
             {
@@ -267,7 +267,7 @@
          "tag": "ez-dialog",
          "name": "EzDialog",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzDialog.vue",
+         "file": "blueprint/ez/components/dialog/ez-dialog.vue",
          "description": null,
          "props": [
             {
@@ -326,7 +326,7 @@
          "tag": "ez-empty-state",
          "name": "EzEmptyState",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzEmptyState.vue",
+         "file": "blueprint/ez/components/empty-state/ez-empty-state.vue",
          "description": null,
          "props": [
             {
@@ -369,7 +369,7 @@
          "tag": "ez-field",
          "name": "EzField",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzField.vue",
+         "file": "blueprint/ez/components/field/ez-field.vue",
          "description": null,
          "props": [
             {
@@ -507,7 +507,7 @@
          "tag": "ez-icon",
          "name": "EzIcon",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzIcon.vue",
+         "file": "blueprint/ez/components/icon/ez-icon.vue",
          "description": null,
          "props": [
             {
@@ -537,7 +537,7 @@
          "tag": "ez-info-list",
          "name": "EzInfoList",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzInfoList.vue",
+         "file": "blueprint/ez/components/info-list/ez-info-list.vue",
          "description": null,
          "props": [
             {
@@ -578,7 +578,7 @@
          "tag": "ez-layout",
          "name": "EzLayout",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzLayout.vue",
+         "file": "blueprint/ez/components/layout/ez-layout.vue",
          "description": null,
          "props": [
             {
@@ -601,7 +601,7 @@
          "tag": "ez-layout-col",
          "name": "EzLayoutCol",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzLayoutCol.vue",
+         "file": "blueprint/ez/components/layout/ez-layout-col.vue",
          "description": null,
          "props": [
             {
@@ -633,7 +633,7 @@
          "tag": "ez-message-important",
          "name": "EzMessageImportant",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzMessageImportant.vue",
+         "file": "blueprint/ez/components/message-important/ez-message-important.vue",
          "description": null,
          "props": [
             {
@@ -673,7 +673,7 @@
          "tag": "ez-page",
          "name": "EzPage",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzPage.vue",
+         "file": "blueprint/ez/components/page/ez-page.vue",
          "description": null,
          "props": [],
          "emits": [],
@@ -686,7 +686,7 @@
          "tag": "ez-page-content",
          "name": "EzPageContent",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzPageContent.vue",
+         "file": "blueprint/ez/components/page/ez-page-content.vue",
          "description": null,
          "props": [],
          "emits": [],
@@ -699,7 +699,7 @@
          "tag": "ez-page-header",
          "name": "EzPageHeader",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzPageHeader.vue",
+         "file": "blueprint/ez/components/page/ez-page-header.vue",
          "description": null,
          "props": [
             {
@@ -808,7 +808,7 @@
          "tag": "ez-page-section",
          "name": "EzPageSection",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzPageSection.vue",
+         "file": "blueprint/ez/components/page-sections/ez-page-section.vue",
          "description": null,
          "props": [
             {
@@ -849,7 +849,7 @@
          "tag": "ez-page-sections",
          "name": "EzPageSections",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzPageSections.vue",
+         "file": "blueprint/ez/components/page-sections/ez-page-sections.vue",
          "description": null,
          "props": [
             {
@@ -883,7 +883,7 @@
          "tag": "ez-page-toc",
          "name": "EzPageToc",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzPageToc.vue",
+         "file": "blueprint/ez/components/page-sections/ez-page-toc.vue",
          "description": null,
          "props": [
             {
@@ -904,7 +904,7 @@
          "tag": "ez-reveal",
          "name": "EzReveal",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzReveal.vue",
+         "file": "blueprint/ez/components/reveal/ez-reveal.vue",
          "description": "Masque le bas d'un contenu (fade) sous un seuil de largeur et le dévoile au tap/clic; réduit par défaut sur mobile",
          "props": [
             {
@@ -960,7 +960,7 @@
          "tag": "ez-table",
          "name": "EzTable",
          "tier": "primitive",
-         "file": "blueprint/ez/primitives/EzTable.vue",
+         "file": "blueprint/ez/components/table/ez-table.vue",
          "description": null,
          "props": [
             {

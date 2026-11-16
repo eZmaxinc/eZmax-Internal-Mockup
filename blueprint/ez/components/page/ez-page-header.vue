@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import EzBtn from './EzBtn.vue'
-import EzIcon from './EzIcon.vue'
-import type { IconName } from '../icons'
+import EzBtn from '../btn/ez-btn.vue'
+import EzIcon from '../icon/ez-icon.vue'
+import type { IconName } from '../../icons'
 
 withDefaults(defineProps<{
    title: string

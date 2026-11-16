@@ -62,7 +62,7 @@
 
 <script setup lang="ts" generic="TRow extends Record<string, any>">
 import { computed } from 'vue'
-import EzEmptyState from './EzEmptyState.vue'
+import EzEmptyState from '../empty-state/ez-empty-state.vue'
 
 export interface EzTableColumn {
    key: string

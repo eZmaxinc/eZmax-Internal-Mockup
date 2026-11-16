@@ -4,7 +4,7 @@ Composants enregistrés globalement: on les utilise directement dans les templat
 
 ## Deux niveaux
 
-| | Primitives (`blueprint/ez/primitives/`) | Composants métier (`blueprint/ez/domain/<objet>/`) |
+| | Primitives (`blueprint/ez/components/<nom>/ez-<nom>.vue`) | Composants métier |
 |---|---|---|
 | Ex. | `ez-btn`, `ez-card`, `ez-badge`, `ez-table` | aucun pour l'instant |
 | Connaît | rien du métier: props visuelles (`variant`, `tone`) | un objet métier (`folder`, `signer`…) |
@@ -105,7 +105,7 @@ Réduit un contenu long sur téléphone (moins de 640 px): il garde le haut, fon
 
 ## Composants métier
 
-Aucun pour l'instant. Un composant métier (qui connaît un dossier, un signataire…) se construit dans l'app, `ezmax-library-quasar`, jamais d'abord ici: `blueprint/ez/domain/<objet>/` ne fait que refléter ce que l'app a déjà. En attendant, une primitive et les méthodes du mock suffisent: `<ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" />`.
+Aucun pour l'instant. Un composant métier (qui connaît un dossier, un signataire…) se construit dans l'app, `ezmax-library-quasar`, jamais d'abord ici: le blueprint ne fait que refléter ce que l'app a déjà. En attendant, une primitive et les méthodes du mock suffisent: `<ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" />`.
 
 ## Helpers (`import { … } from '@ez'`)
 
@@ -119,7 +119,7 @@ Aucun pour l'instant. Un composant métier (qui connaît un dossier, un signatai
 Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>`, `<textarea>` ou `<table>` brut, ni de carte, de badge ou de dialogue refait à la main. Ce qui n'existe pas (une ligne du temps, un tableau de bord, un canevas…) se construit dans la version, en HTML avec un style `scoped` fait seulement de tokens.
 
 - **Un morceau local**: `prototypes/<tâche>/vNNN/components/FolderTimeline.vue`, importé par `index.vue`. Aucun en-tête, libre dans son balisage et son style. Il peut lire les fichiers de sa version (`../mocks`).
-- **Un composant rehaussé**: un `ez-` existant à qui il manque quelque chose (une prop, un slot, un état). Copier son fichier de `blueprint/ez/` dans `components/` sous le même nom (`EzCard.vue`), modifier la copie, l'importer dans `index.vue`: dans cette version, elle remplace l'original.
+- **Un composant rehaussé**: un `ez-` existant à qui il manque quelque chose (une prop, un slot, un état). Copier son fichier (`blueprint/ez/components/card/ez-card.vue`) dans `components/` sous le nom `EzCard.vue`, retirer ses imports relatifs (les `ez-` sont globaux), modifier la copie, l'importer dans `index.vue`: dans cette version, elle remplace l'original.
 - **Une proposition de primitive**, seulement si le morceau servirait clairement à d'autres tâches, ou sur demande: il se nomme `Ez…`, ne connaît aucun objet métier et commence par son en-tête.
 
 ```vue
@@ -131,7 +131,7 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 
 - `@proposal primitive`, puis pourquoi il existe. `proto check` vérifie qu'il suit les règles d'une primitive.
 - **Un composant métier manquant** (un bouton « Soumettre » qui connaît le dossier, une liste de signataires): le construire localement, sans en-tête, et l'écrire dans `notes.md`, sous « Signalements »: `Composant métier manquant: …`. Il se construit ensuite dans l'app; il n'est jamais proposé ni promu ici.
-- Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), avec un exemple généré dans `blueprint/ez/examples/<Nom>.vue`, à ajuster.
+- Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), dans son dossier `blueprint/ez/components/<nom>/` (comme dans l'app: `ez-<nom>.vue`), avec une démo générée à côté, `ez-<nom>.example.vue`, à ajuster.
 
 <!-- api:start — généré par yarn proto catalog, ne pas modifier à la main -->
 

@@ -54,8 +54,8 @@
 
 <script setup lang="ts">
 import { computed, useId } from 'vue'
-import EzIcon from './EzIcon.vue'
-import type { IconName } from '../icons'
+import EzIcon from '../icon/ez-icon.vue'
+import type { IconName } from '../../icons'
 
 export interface EzFieldOption {
    label: string

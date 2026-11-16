@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, watch } from 'vue'
-import EzBtn from './EzBtn.vue'
+import EzBtn from '../btn/ez-btn.vue'
 
 const props = withDefaults(defineProps<{
    modelValue: boolean

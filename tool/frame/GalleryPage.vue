@@ -122,10 +122,10 @@
             </ez-page-section>
 
             <!-- Automatic: every catalog component the sections above don't show, with its example when it has one -->
-            <ez-page-section v-if="theOtherComponents.length" id="others" title="Autres composants" subtitle="Automatique: les composants du catalogue absents des sections ci-dessus, avec leur exemple (blueprint/ez/examples/)">
+            <ez-page-section v-if="theOtherComponents.length" id="others" title="Autres composants" subtitle="Automatique: les composants du catalogue absents des sections ci-dessus, avec leur exemple (ez-….example.vue, à côté du composant)">
                <ez-card v-for="theComponent in theOtherComponents" :key="theComponent.tag" :title="theComponent.tag" :subtitle="theComponent.object ?? theComponent.tier" :toc-id="`others-${theComponent.tag}`">
                   <component :is="theComponent.example" v-if="theComponent.example" />
-                  <p v-else class="m-0 text-sm text-foreground-muted">Pas encore d'exemple: blueprint/ez/examples/{{ theComponent.name }}.vue</p>
+                  <p v-else class="m-0 text-sm text-foreground-muted">Pas encore d'exemple: {{ theComponent.file.replace(/\.vue$/, '.example.vue') }}</p>
                </ez-card>
             </ez-page-section>
          </ez-page-sections>
@@ -140,17 +140,17 @@ import { makeFolders } from '@mocks'
 import catalog from '@ez/catalog.json'
 import gallerySource from './GalleryPage.vue?raw'
 
-// Examples written for the gallery: blueprint/ez/examples/<Name>.vue (proto promote creates one).
+// Gallery demos live next to their component: components/reveal/ez-reveal.example.vue (proto promote creates one).
 // A relative glob, like registry.ts: an alias resolves to the real path, which may sit on another drive
 // than the checkout (C:\…\git → G:\…), and Vite cannot write a relative import across drives.
-const examples = import.meta.glob<Component>('../../blueprint/ez/examples/*.vue', { eager: true, import: 'default' })
-const exampleOf = (name: string) => Object.entries(examples).find(([path]) => path.endsWith(`/${name}.vue`))?.[1]
+const examples = import.meta.glob<Component>('../../blueprint/ez/components/**/*.example.vue', { eager: true, import: 'default' })
+const exampleOf = (tag: string) => Object.entries(examples).find(([path]) => path.endsWith(`/${tag}.example.vue`))?.[1]
 
 // Components this page already shows by hand (any <ez-… tag in its own template) are not repeated
 const shownByHand = new Set(gallerySource.match(/<ez-[a-z-]+/g)?.map((tag) => tag.slice(1)))
 const theOtherComponents = catalog.components
    .filter((component) => !shownByHand.has(component.tag))
-   .map((component) => ({ ...component, object: 'object' in component ? String(component.object) : null, example: exampleOf(component.name) }))
+   .map((component) => ({ ...component, object: 'object' in component ? String(component.object) : null, example: exampleOf(component.tag) }))
 
 const colorTokens = [
    'background', 'surface', 'surface-muted', 'surface-inverse',

@@ -2,7 +2,7 @@
  * yarn proto promote <tâche> <version> <Composant> [-m "pourquoi"]
  * Moves a primitive of a version into the blueprint, on a human decision only:
  *   enhanced (same name as a blueprint primitive) → replaces the original, where it is
- *   created or suggested                          → blueprint/ez/primitives/<Name>.vue
+ *   created or suggested                          → blueprint/ez/components/<name>/ez-<name>.vue (+ ez-<name>.example.vue)
  * Business (domain) components are never promoted: they are built in the app (ezmax-library-quasar),
  * and blueprint/ez/domain/ only mirrors what the app already has.
  * The version keeps its own copy (a version stays self-contained); the next versions use the global one.
@@ -10,7 +10,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { PROTOTYPES, ROOT, fail, findTask, flagString, listVersions, parseArgs, rel } from '../lib.mjs'
-import { CATALOG_MD, EZ_DIR, PRIMITIVES_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
+import { CATALOG_MD, COMPONENTS_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
 import { run as regenerateCatalog } from './catalog.mjs'
 
 const USAGE = 'Usage: yarn proto promote <tâche> <version> <Composant> [-m "pourquoi"]'
@@ -49,8 +49,9 @@ export async function run(argv) {
    const problems = validateTier(source, tier)
    if (problems.length) fail(`Le composant ne respecte pas les règles d'une primitive:\n  ${problems.map((problem) => problem.message).join('\n  ')}`, 'Un composant qui connaît un objet métier se construit dans l\'app: le garder local et le signaler dans notes.md.')
 
-   const targetDir = PRIMITIVES_DIR
-   const target = original ? join(ROOT, original.file) : join(targetDir, `${name}.vue`)
+   // Like the app (ezmax-library-quasar): one folder per component, kebab-case file (components/reveal/ez-reveal.vue)
+   const targetDir = join(COMPONENTS_DIR, tag.replace(/^ez-/, ''))
+   const target = original ? join(ROOT, original.file) : join(targetDir, `${tag}.vue`)
 
    // The reason becomes the component's description (opening /** */ of its script)
    let content = readFileSync(source, 'utf8').replace(PROPOSAL_HEADER, '').replace(/^\s+/, '')
@@ -72,12 +73,9 @@ export async function run(argv) {
       writeFileSync(CATALOG_MD, anchor >= 0 ? catalog.slice(0, anchor) + entry + catalog.slice(anchor) : `${catalog.trimEnd()}\n\n${entry}`)
 
       // An example for the gallery, which shows it on its own (section « Autres composants »)
-      const example = join(EXAMPLES_DIR, `${name}.vue`)
+      const example = join(targetDir, `${tag}.example.vue`)
       const api = catalogMap(buildCatalog()).get(tag)
-      if (api && !existsSync(example)) {
-         mkdirSync(EXAMPLES_DIR, { recursive: true })
-         writeFileSync(example, exampleFor(api))
-      }
+      if (api && !existsSync(example)) writeFileSync(example, exampleFor(api))
    }
 
    await regenerateCatalog()
@@ -92,13 +90,12 @@ export async function run(argv) {
    }
    else {
       console.log('   1. Compléter sa fiche dans blueprint/ez/CATALOG.md (quand l\'utiliser)')
-      console.log(`   2. Il est dans la galerie (Autres composants); ajuster son exemple: ${rel(join(EXAMPLES_DIR, `${name}.vue`))}`)
+      console.log(`   2. Il est dans la galerie (Autres composants); ajuster son exemple: ${rel(join(targetDir, `${tag}.example.vue`))}`)
       console.log(`   3. Les prochaines versions l'utilisent sans import; ${version} garde sa copie`)
    }
    console.log('   4. yarn proto check')
 }
 
-const EXAMPLES_DIR = join(EZ_DIR, 'examples')
 
 /** A first gallery example from the component's API: required props filled in, sample text in the default slot. */
 function exampleFor(component) {

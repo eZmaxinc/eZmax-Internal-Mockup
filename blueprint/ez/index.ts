@@ -5,7 +5,7 @@ import { gettext } from './i18n'
 
 /**
  * Every ez- component, registered globally. The list is generated from the files in
- * primitives/ and domain/ by `yarn proto catalog` (components.generated.ts): never by hand.
+ * components/ by `yarn proto catalog` (components.generated.ts): never by hand.
  */
 export { components }
 
@@ -26,6 +26,6 @@ export { icons, type IconName } from './icons'
 export { defineScenarios, useScenario, scenarioKey, type Scenarios } from './scenario'
 export { formatDate, formatDateTime, formatRelative } from './format'
 export { PROTO_TODAY, protoToday } from './today'
-export type { EzTableColumn } from './primitives/EzTable.vue'
-export type { EzFieldOption } from './primitives/EzField.vue'
-export type { EzInfoItem } from './primitives/EzInfoList.vue'
+export type { EzTableColumn } from './components/table/ez-table.vue'
+export type { EzFieldOption } from './components/field/ez-field.vue'
+export type { EzInfoItem } from './components/info-list/ez-info-list.vue'
