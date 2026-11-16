@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { useId } from 'vue'
 import EzIcon from '../icon/ez-icon.vue'
 import type { IconName } from '../../icons'
 
@@ -62,8 +62,7 @@ export interface EzFieldOption {
    value: string | number
 }
 
-const props = withDefaults(defineProps<{
-   modelValue?: string | number | null
+withDefaults(defineProps<{
    label?: string
    type?: 'text' | 'email' | 'tel' | 'number' | 'date' | 'password' | 'search' | 'textarea' | 'select'
    options?: EzFieldOption[]
@@ -81,24 +80,37 @@ const props = withDefaults(defineProps<{
    rows: 4,
 })
 
-const emit = defineEmits<{
-   'update:modelValue': [value: string | number | null]
-}>()
+/** The field's value: v-model */
+const theValue = defineModel<string | number | null>({ default: '' })
 
 const theId = useId()
-
-const theValue = computed({
-   get: () => props.modelValue ?? '',
-   set: (value) => emit('update:modelValue', value),
-})
 </script>
 
 <style scoped>
 .ez-field {
+   /* Variables first: what the field's look depends on, read below */
+   --ez-field-gap: 6px;
+   --ez-field-padding-x: 10px;
+   --ez-field-height: var(--field-height);
+   --ez-field-radius: var(--radius-md);
+   --ez-field-surface: var(--color-surface);
+   --ez-field-color: var(--color-foreground);
+   --ez-field-border: var(--color-border-strong);
+   --ez-field-focus: var(--color-accent);
+   --ez-field-muted-surface: var(--color-surface-muted);
+   --ez-field-muted: var(--color-foreground-muted);
+   --ez-field-subtle: var(--color-foreground-subtle);
+   --ez-field-error: var(--color-negative);
+
    display: flex;
    flex-direction: column;
-   gap: 6px;
+   gap: var(--ez-field-gap);
    min-width: 0;
+}
+
+.ez-field--error {
+   --ez-field-border: var(--ez-field-error);
+   --ez-field-focus: var(--ez-field-error);
 }
 
 .ez-field__label {
@@ -108,7 +120,7 @@ const theValue = computed({
 
 .ez-field__required {
    margin-left: 2px;
-   color: var(--color-negative);
+   color: var(--ez-field-error);
 }
 
 .ez-field__input,
@@ -119,35 +131,35 @@ const theValue = computed({
 .ez-field__control {
    box-sizing: border-box;
    width: 100%;
-   height: var(--field-height);
-   padding: 0 10px;
-   border: 1px solid var(--color-border-strong);
-   border-radius: var(--radius-md);
-   background: var(--color-surface);
-   color: var(--color-foreground);
+   height: var(--ez-field-height);
+   padding: 0 var(--ez-field-padding-x);
+   border: 1px solid var(--ez-field-border);
+   border-radius: var(--ez-field-radius);
+   background: var(--ez-field-surface);
+   color: var(--ez-field-color);
    font: inherit;
    appearance: none;
 
    &:focus {
       outline: none;
-      border-color: var(--color-accent);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+      border-color: var(--ez-field-focus);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ez-field-focus) 20%, transparent);
    }
 
    &:disabled,
    &:read-only {
-      background: var(--color-surface-muted);
-      color: var(--color-foreground-muted);
+      background: var(--ez-field-muted-surface);
+      color: var(--ez-field-muted);
    }
 
    &::placeholder {
-      color: var(--color-foreground-subtle);
+      color: var(--ez-field-subtle);
    }
 }
 
 .ez-field__control--textarea {
    height: auto;
-   padding: 8px 10px;
+   padding: var(--space-gap-sm) var(--ez-field-padding-x);
    resize: vertical;
 }
 
@@ -160,16 +172,16 @@ const theValue = computed({
    position: absolute;
    top: 50%;
    transform: translateY(-50%);
-   color: var(--color-foreground-subtle);
+   color: var(--ez-field-subtle);
    pointer-events: none;
 }
 
 .ez-field__icon {
-   left: 10px;
+   left: var(--ez-field-padding-x);
 }
 
 .ez-field__chevron {
-   right: 10px;
+   right: var(--ez-field-padding-x);
 }
 
 .ez-field__select .ez-field__control {
@@ -178,17 +190,11 @@ const theValue = computed({
 
 .ez-field__message {
    margin: 0;
-   color: var(--color-foreground-muted);
+   color: var(--ez-field-muted);
    font-size: var(--text-xs);
 }
 
-.ez-field--error {
-   .ez-field__control {
-      border-color: var(--color-negative);
-   }
-
-   .ez-field__message--error {
-      color: var(--color-negative);
-   }
+.ez-field__message--error {
+   color: var(--ez-field-error);
 }
 </style>

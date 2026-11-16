@@ -13,7 +13,7 @@ withDefaults(defineProps<{
 </script>
 
 <style scoped>
-/* Self-contained: copies into the mono as is, with EzLayoutCol.vue. The default gap is the `gap` prop. */
+/* Self-contained: copies into the mono as is, with ez-layout-col.vue. The default gap is the `gap` prop. */
 .ez-layout {
    display: grid;
    grid-template-columns: repeat(12, minmax(0, 1fr));

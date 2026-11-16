@@ -10,21 +10,22 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
+import { onBeforeUnmount, onMounted, provide, readonly, ref } from 'vue'
 import EzPageToc from './ez-page-toc.vue'
 import { pageSectionsKey, type TocEntry } from './page-sections'
 
 withDefaults(defineProps<{
    /** Sticky TOC on the right (≥ 1024px) */
    toc?: boolean
+   /** Title of the TOC (default: « Sur cette page ») */
    tocTitle?: string
 }>(), {
    toc: true,
-   tocTitle: 'Sur cette page',
 })
 
 const theEntries = ref<TocEntry[]>([])
 const theActiveId = ref<string | null>(null)
+let theFrame = 0
 
 function scrollOffset(): number {
    const toolbar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sizing-toolbar-height')) || 0
@@ -65,41 +66,46 @@ function updateActive() {
       if (element && element.getBoundingClientRect().top <= line) current = id
    }
 
-   const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
-   if (atBottom && ids.length) current = ids[ids.length - 1]
+   const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
+   if (isAtBottom && ids.length) current = ids[ids.length - 1]
 
    theActiveId.value = current
 }
 
-let theFrame = 0
 function onScroll() {
    cancelAnimationFrame(theFrame)
    theFrame = requestAnimationFrame(updateActive)
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
-
+// The children read the state, and change it only through the methods
 provide(pageSectionsKey, {
-   entries: theEntries,
-   activeId: theActiveId,
+   entries: readonly(theEntries),
+   activeId: readonly(theActiveId),
    register,
    unregister,
    scrollTo,
 })
+
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <style scoped>
 .ez-page-sections {
+   /* Variables first: what the layout depends on, read below */
+   --ez-page-sections-gap: var(--space-gap-lg);
+   --ez-page-sections-section-gap: 32px;
+   --ez-page-sections-toc-width: 220px;
+
    display: grid;
    grid-template-columns: minmax(0, 1fr);
-   gap: 24px;
+   gap: var(--ez-page-sections-gap);
 }
 
 .ez-page-sections__content {
    display: flex;
    flex-direction: column;
-   gap: 32px;
+   gap: var(--ez-page-sections-section-gap);
    min-width: 0;
 }
 
@@ -109,7 +115,7 @@ provide(pageSectionsKey, {
 
 @media (width >= 64rem) { /* md: TOC on the right */
    .ez-page-sections--with-toc {
-      grid-template-columns: minmax(0, 1fr) 220px;
+      grid-template-columns: minmax(0, 1fr) var(--ez-page-sections-toc-width);
    }
 
    .ez-page-sections__toc {

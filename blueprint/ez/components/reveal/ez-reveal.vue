@@ -10,7 +10,7 @@
          '--ez-reveal-full-height': theFullHeight,
       }"
    >
-      <div ref="theContentEl" class="ez-reveal__content">
+      <div ref="content" class="ez-reveal__content">
          <slot />
       </div>
 
@@ -51,141 +51,133 @@
 
 <script setup lang="ts">
 /**
- * Masque le bas d'un contenu (fade) sous un seuil de largeur et le dévoile au tap/clic; réduit par défaut sur mobile
+ * Hides the bottom of a long content behind a fade on narrow screens and reveals it on tap or click; collapsed by default on mobile.
  */
-import { gettext } from "@ez";
-import {
-   computed,
-   nextTick,
-   onBeforeUnmount,
-   onMounted,
-   ref,
-   useSlots,
-   watch,
-} from "vue";
+import { gettext } from '../../i18n'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, useTemplateRef, watch } from 'vue'
 
-const MOBILE_QUERY = "(max-width: 39.99rem)";
+const theSlots = useSlots()
 
 const props = withDefaults(
    defineProps<{
       /** Max height while collapsed (CSS length) */
-      collapsedHeight?: string;
+      collapsedHeight?: string
       /** Color the fade blends into: card surface, or muted inset panels */
-      fadeTo?: "surface" | "muted";
-      expandLabel?: string;
-      collapseLabel?: string;
+      fadeTo?: 'surface' | 'muted'
+      expandLabel?: string
+      collapseLabel?: string
    }>(),
    {
-      collapsedHeight: "10rem",
-      fadeTo: "surface",
+      collapsedHeight: '10rem',
+      fadeTo: 'surface',
       expandLabel: undefined,
       collapseLabel: undefined,
    },
-);
+)
 
-const theSlots = useSlots();
-const theContentEl = ref<HTMLElement | null>(null);
+const MOBILE_QUERY = '(max-width: 39.99rem)'
+const MOTION_MS = 280
+
+const theContentRef = useTemplateRef<HTMLElement>('content')
 /** Always start collapsed; entering mobile resets to collapsed */
-const isCollapsed = ref(true);
+const isCollapsed = ref(true)
 /** Assume overflow until measured, so the fade can show on first paint */
-const hasOverflow = ref(true);
-const isMobile = ref(false);
+const hasOverflow = ref(true)
+const isMobile = ref(false)
 /** Full content height, so max-height can ease between collapsed and open */
-const theFullHeight = ref("none");
+const theFullHeight = ref('none')
 /** Skip measuring while max-height is easing; a measure would snap the motion */
-const isMoving = ref(false);
+const isMoving = ref(false)
 
-const expandLabel = computed(() => props.expandLabel ?? gettext("Voir plus"));
-const collapseLabel = computed(() => props.collapseLabel ?? gettext("Réduire"));
+const expandLabel = computed(() => props.expandLabel ?? gettext('Voir plus'))
+const collapseLabel = computed(() => props.collapseLabel ?? gettext('Réduire'))
 
-const MOTION_MS = 280;
-
-let theObserver: ResizeObserver | null = null;
-let theMedia: MediaQueryList | null = null;
-let theMotionTimer: ReturnType<typeof setTimeout> | null = null;
+let theObserver: ResizeObserver | null = null
+let theMedia: MediaQueryList | null = null
+let theMotionTimer: ReturnType<typeof setTimeout> | null = null
 
 function collapsedBudgetPx(el: HTMLElement): number {
-   const probe = document.createElement("div");
-   probe.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;height:${props.collapsedHeight}`;
-   el.appendChild(probe);
-   const px = probe.offsetHeight;
-   probe.remove();
-   return px;
+   const probe = document.createElement('div')
+   probe.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;height:${props.collapsedHeight}`
+   el.appendChild(probe)
+   const px = probe.offsetHeight
+   probe.remove()
+   return px
 }
 
 function measure() {
-   const el = theContentEl.value;
-   if (!el || isMoving.value) return;
+   const el = theContentRef.value
+   if (!el || isMoving.value) return
    // Temporarily reveal full height so scrollHeight is trustworthy while collapsed via CSS.
    // Kill the transition for this read, or the restore would play the open animation.
-   const prevMax = el.style.maxHeight;
-   const prevTransition = el.style.transition;
-   el.style.transition = "none";
-   el.style.maxHeight = "none";
-   const full = el.scrollHeight;
-   hasOverflow.value = full > collapsedBudgetPx(el) + 8;
-   theFullHeight.value = `${full}px`;
-   el.style.maxHeight = prevMax;
-   void el.offsetHeight;
-   el.style.transition = prevTransition;
+   const prevMax = el.style.maxHeight
+   const prevTransition = el.style.transition
+   el.style.transition = 'none'
+   el.style.maxHeight = 'none'
+   const full = el.scrollHeight
+   hasOverflow.value = full > collapsedBudgetPx(el) + 8
+   theFullHeight.value = `${full}px`
+   el.style.maxHeight = prevMax
+   void el.offsetHeight
+   el.style.transition = prevTransition
 }
 
 function playMotion() {
-   isMoving.value = true;
-   if (theMotionTimer) clearTimeout(theMotionTimer);
-   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+   isMoving.value = true
+   if (theMotionTimer) clearTimeout(theMotionTimer)
+   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
    theMotionTimer = setTimeout(() => {
-      isMoving.value = false;
-      theMotionTimer = null;
-      measure();
-   }, reduce ? 0 : MOTION_MS);
+      isMoving.value = false
+      theMotionTimer = null
+      measure()
+   }, reduce ? 0 : MOTION_MS)
 }
 
 function onExpand() {
-   playMotion();
-   isCollapsed.value = false;
+   playMotion()
+   isCollapsed.value = false
 }
 
 function onCollapse() {
-   playMotion();
-   isCollapsed.value = true;
+   playMotion()
+   isCollapsed.value = true
 }
 
 function syncMobile(matches: boolean) {
-   isMobile.value = matches;
-   if (matches) isCollapsed.value = true;
-   nextTick(() => measure());
+   isMobile.value = matches
+   if (matches) isCollapsed.value = true
+   nextTick(() => measure())
 }
 
 function onMediaChange(event: MediaQueryListEvent) {
-   syncMobile(event.matches);
+   syncMobile(event.matches)
 }
 
 onMounted(() => {
-   theMedia = window.matchMedia(MOBILE_QUERY);
-   syncMobile(theMedia.matches);
-   theMedia.addEventListener("change", onMediaChange);
+   theMedia = window.matchMedia(MOBILE_QUERY)
+   syncMobile(theMedia.matches)
+   theMedia.addEventListener('change', onMediaChange)
 
-   requestAnimationFrame(() => measure());
+   requestAnimationFrame(() => measure())
 
-   if (!theContentEl.value || typeof ResizeObserver === "undefined") return;
-   theObserver = new ResizeObserver(() => measure());
-   theObserver.observe(theContentEl.value);
-});
+   if (!theContentRef.value || typeof ResizeObserver === 'undefined') return
+   theObserver = new ResizeObserver(() => measure())
+   theObserver.observe(theContentRef.value)
+})
 
 onBeforeUnmount(() => {
-   theObserver?.disconnect();
-   theMedia?.removeEventListener("change", onMediaChange);
-   if (theMotionTimer) clearTimeout(theMotionTimer);
-});
+   theObserver?.disconnect()
+   theMedia?.removeEventListener('change', onMediaChange)
+   if (theMotionTimer) clearTimeout(theMotionTimer)
+})
 
 watch(
    () => theSlots.default?.(),
    async () => {
-      await nextTick();
-      measure();
+      await nextTick()
+      measure()
    },
-);
+)
 </script>
 
 <style scoped>

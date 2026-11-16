@@ -26,23 +26,30 @@ withDefaults(defineProps<{
 
 <style scoped>
 .ez-empty-state {
+   /* Variables first: what the empty state's look depends on, read below */
+   --ez-empty-state-padding: 40px var(--space-inset-xl);
+   --ez-empty-state-icon-size: 48px;
+   --ez-empty-state-icon-surface: var(--color-surface-muted);
+   --ez-empty-state-icon-color: var(--color-foreground-subtle);
+   --ez-empty-state-text: var(--color-foreground-muted);
+
    display: flex;
    flex-direction: column;
    align-items: center;
    gap: 4px;
-   padding: 40px 24px;
+   padding: var(--ez-empty-state-padding);
    text-align: center;
 }
 
 .ez-empty-state__icon {
    display: grid;
    place-items: center;
-   width: 48px;
-   height: 48px;
-   margin-bottom: 8px;
+   width: var(--ez-empty-state-icon-size);
+   height: var(--ez-empty-state-icon-size);
+   margin-bottom: var(--space-gap-sm);
    border-radius: var(--radius-full);
-   background: var(--color-surface-muted);
-   color: var(--color-foreground-subtle);
+   background: var(--ez-empty-state-icon-surface);
+   color: var(--ez-empty-state-icon-color);
 }
 
 .ez-empty-state__title {
@@ -53,13 +60,13 @@ withDefaults(defineProps<{
 .ez-empty-state__text {
    max-width: 40ch;
    margin: 0;
-   color: var(--color-foreground-muted);
+   color: var(--ez-empty-state-text);
    font-size: var(--text-sm);
 }
 
 .ez-empty-state__actions {
    display: flex;
-   gap: 8px;
-   margin-top: 12px;
+   gap: var(--space-gap-sm);
+   margin-top: var(--space-inset-sm);
 }
 </style>

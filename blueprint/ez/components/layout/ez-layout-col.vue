@@ -3,9 +3,9 @@
       class="ez-layout-col"
       :class="{ 'ez-layout-col--first-below-md': firstBelowMd }"
       :style="{
-         '--span-base': spanBase,
-         '--span-md': span.md ?? spanBase,
-         '--span-lg': span.lg ?? span.md ?? spanBase,
+         '--ez-layout-col-span-base': theSpanBase,
+         '--ez-layout-col-span-md': theSpan.md ?? theSpanBase,
+         '--ez-layout-col-span-lg': theSpan.lg ?? theSpan.md ?? theSpanBase,
       }"
    >
       <slot />
@@ -26,29 +26,32 @@ const props = withDefaults(defineProps<{
    cols: 12,
 })
 
-const span = computed(() => (typeof props.cols === 'number' ? { base: props.cols } : props.cols))
-const spanBase = computed(() => span.value.base ?? 12)
+const theSpan = computed(() => (typeof props.cols === 'number' ? { base: props.cols } : props.cols))
+const theSpanBase = computed(() => theSpan.value.base ?? 12)
 </script>
 
 <style scoped>
-/* Self-contained: copies into the mono as is, with EzLayout.vue. Override the gap with --card-gap. */
+/* Self-contained: copies into the mono as is, with ez-layout.vue. Override the gap with --card-gap. */
 .ez-layout-col {
+   /* Variables first: the gap here, the spans from the cols prop (inline) */
+   --ez-layout-col-gap: var(--card-gap, var(--space-gap-md));
+
    display: flex;
    flex-direction: column;
-   gap: var(--card-gap, var(--space-gap-md));
+   gap: var(--ez-layout-col-gap);
    min-width: 0;
-   grid-column: span var(--span-base) / span var(--span-base);
+   grid-column: span var(--ez-layout-col-span-base) / span var(--ez-layout-col-span-base);
 }
 
 @media (width >= 64rem) { /* md */
    .ez-layout-col {
-      grid-column: span var(--span-md) / span var(--span-md);
+      grid-column: span var(--ez-layout-col-span-md) / span var(--ez-layout-col-span-md);
    }
 }
 
 @media (width >= 90rem) { /* lg */
    .ez-layout-col {
-      grid-column: span var(--span-lg) / span var(--span-lg);
+      grid-column: span var(--ez-layout-col-span-lg) / span var(--ez-layout-col-span-lg);
    }
 }
 

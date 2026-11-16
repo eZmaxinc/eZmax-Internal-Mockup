@@ -28,15 +28,22 @@ defineProps<{
 
 <style scoped>
 .ez-info-list {
+   /* Variables first: what the list's look depends on, read below */
+   --ez-info-list-gap: var(--space-inset-sm);
+   --ez-info-list-label: var(--color-foreground-muted);
+   --ez-info-list-tile-surface: var(--color-surface-muted);
+   --ez-info-list-tile-border: var(--color-border-muted);
+   --ez-info-list-tile-radius: var(--radius-sm);
+
    display: flex;
    flex-direction: column;
-   gap: 12px;
+   gap: var(--ez-info-list-gap);
    margin: 0;
    font-size: var(--text-sm);
 }
 
 dt {
-   color: var(--color-foreground-muted);
+   color: var(--ez-info-list-label);
    font-size: var(--text-xs);
 }
 
@@ -46,12 +53,12 @@ dd {
 }
 
 .ez-info-list--inline {
-   gap: 8px;
+   --ez-info-list-gap: var(--space-gap-sm);
 
    .ez-info-list__item {
       display: flex;
       justify-content: space-between;
-      gap: 16px;
+      gap: var(--space-gap-md);
    }
 
    dt {
@@ -67,13 +74,12 @@ dd {
 .ez-info-list--tiles {
    display: grid;
    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-   gap: var(--space-inset-sm);
 
    .ez-info-list__item {
       padding: var(--space-inset-sm);
-      border: 1px solid var(--color-border-muted);
-      border-radius: var(--radius-sm);
-      background: var(--color-surface-muted);
+      border: 1px solid var(--ez-info-list-tile-border);
+      border-radius: var(--ez-info-list-tile-radius);
+      background: var(--ez-info-list-tile-surface);
    }
 
    dd {

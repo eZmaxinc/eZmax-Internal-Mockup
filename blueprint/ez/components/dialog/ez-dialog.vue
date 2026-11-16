@@ -1,7 +1,7 @@
 <template>
    <teleport to="body">
       <transition name="ez-dialog">
-         <div v-if="modelValue" class="ez-dialog" @mousedown.self="!persistent && close()">
+         <div v-if="isOpen" class="ez-dialog" @mousedown.self="onBackdrop">
             <div
                class="ez-dialog__panel"
                role="dialog"
@@ -11,7 +11,7 @@
             >
                <header class="ez-dialog__header">
                   <h2 class="ez-dialog__title">{{ title }}</h2>
-                  <ez-btn variant="flat" size="sm" icon="close" aria-label="Fermer" @click="close" />
+                  <ez-btn variant="flat" size="sm" icon="close" :aria-label="$gettext('Fermer')" @click="onClose" />
                </header>
                <div class="ez-dialog__body">
                   <slot />
@@ -30,7 +30,6 @@ import { onBeforeUnmount, watch } from 'vue'
 import EzBtn from '../btn/ez-btn.vue'
 
 const props = withDefaults(defineProps<{
-   modelValue: boolean
    title: string
    width?: string
    /** Click outside / Escape do not close */
@@ -39,20 +38,23 @@ const props = withDefaults(defineProps<{
    width: 'var(--dialog-width)',
 })
 
-const emit = defineEmits<{
-   'update:modelValue': [value: boolean]
-}>()
+/** Visibility, like the app's dialogs: v-model */
+const isOpen = defineModel<boolean>({ required: true })
 
-function close() {
-   emit('update:modelValue', false)
+function onClose() {
+   isOpen.value = false
+}
+
+function onBackdrop() {
+   if (!props.persistent) onClose()
 }
 
 function onKeydown(event: KeyboardEvent) {
-   if (event.key === 'Escape' && !props.persistent) close()
+   if (event.key === 'Escape' && !props.persistent) onClose()
 }
 
-watch(() => props.modelValue, (isOpen) => {
-   if (isOpen) document.addEventListener('keydown', onKeydown)
+watch(isOpen, (isNowOpen) => {
+   if (isNowOpen) document.addEventListener('keydown', onKeydown)
    else document.removeEventListener('keydown', onKeydown)
 })
 
@@ -61,6 +63,14 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 
 <style scoped>
 .ez-dialog {
+   /* Variables first: what the dialog's look depends on, read below */
+   --ez-dialog-overlay: var(--color-overlay);
+   --ez-dialog-margin: var(--space-inset-md);
+   --ez-dialog-padding: var(--card-padding, var(--space-inset-lg));
+   --ez-dialog-surface: var(--color-surface);
+   --ez-dialog-radius: var(--radius-lg);
+   --ez-dialog-shadow: var(--shadow-overlay);
+
    position: fixed;
    inset: 0;
    z-index: 100;
@@ -68,34 +78,32 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    /* One column as wide as the screen: without it, the column takes the panel's width and max-width: 100% never applies */
    grid-template-columns: minmax(0, 1fr);
    place-items: center;
-   padding: 16px;
-   background: var(--color-overlay);
-}
-
-.ez-dialog__panel {
-   --_padding: var(--card-padding, var(--space-inset-lg));
-
-   display: flex;
-   flex-direction: column;
-   max-width: 100%;
-   max-height: calc(100vh - 32px);
-   border-radius: var(--radius-lg);
-   background: var(--color-surface);
-   box-shadow: var(--shadow-overlay);
+   padding: var(--ez-dialog-margin);
+   background: var(--ez-dialog-overlay);
 }
 
 @media (width < 37.5rem) { /* below sm */
-   .ez-dialog__panel {
-      --_padding: var(--card-padding, var(--space-inset-md));
+   .ez-dialog {
+      --ez-dialog-padding: var(--card-padding, var(--space-inset-md));
    }
+}
+
+.ez-dialog__panel {
+   display: flex;
+   flex-direction: column;
+   max-width: 100%;
+   max-height: calc(100vh - 2 * var(--ez-dialog-margin));
+   border-radius: var(--ez-dialog-radius);
+   background: var(--ez-dialog-surface);
+   box-shadow: var(--ez-dialog-shadow);
 }
 
 .ez-dialog__header {
    display: flex;
    align-items: center;
    justify-content: space-between;
-   gap: 12px;
-   padding: 16px 16px 0 var(--_padding);
+   gap: var(--space-inset-sm);
+   padding: var(--space-inset-md) var(--space-inset-md) 0 var(--ez-dialog-padding);
 }
 
 .ez-dialog__title {
@@ -105,15 +113,15 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 }
 
 .ez-dialog__body {
-   padding: 16px var(--_padding);
+   padding: var(--space-inset-md) var(--ez-dialog-padding);
    overflow-y: auto;
 }
 
 .ez-dialog__footer {
    display: flex;
    justify-content: flex-end;
-   gap: 8px;
-   padding: 12px var(--_padding) var(--_padding);
+   gap: var(--space-gap-sm);
+   padding: var(--space-inset-sm) var(--ez-dialog-padding) var(--ez-dialog-padding);
 }
 
 .ez-dialog-enter-active,

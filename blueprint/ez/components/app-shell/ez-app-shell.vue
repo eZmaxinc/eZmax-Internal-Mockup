@@ -19,8 +19,14 @@
 
 <style scoped>
 .ez-app-shell {
+   /* Variables first: what the shell's look depends on, read below */
+   --ez-app-shell-background: var(--color-background);
+   --ez-app-shell-toolbar: var(--color-surface-inverse);
+   --ez-app-shell-nav: var(--color-surface);
+   --ez-app-shell-nav-border: var(--color-border);
+
    min-height: 100vh;
-   background: var(--color-background);
+   background: var(--ez-app-shell-background);
 }
 
 .ez-app-shell__toolbar {
@@ -28,7 +34,7 @@
    top: 0;
    z-index: 20;
    height: var(--sizing-toolbar-height);
-   background: var(--color-surface-inverse);
+   background: var(--ez-app-shell-toolbar);
 }
 
 .ez-app-shell__body {
@@ -41,8 +47,8 @@
    flex-shrink: 0;
    width: var(--nav-width);
    height: calc(100vh - var(--sizing-toolbar-height));
-   background: var(--color-surface);
-   border-right: 1px solid var(--color-border);
+   background: var(--ez-app-shell-nav);
+   border-right: 1px solid var(--ez-app-shell-nav-border);
 }
 
 .ez-app-shell__main {

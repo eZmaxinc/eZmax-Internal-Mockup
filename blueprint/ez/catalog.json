@@ -271,15 +271,6 @@
          "description": null,
          "props": [
             {
-               "name": "modelValue",
-               "attr": "model-value",
-               "type": "boolean",
-               "required": true,
-               "values": null,
-               "default": null,
-               "doc": null
-            },
-            {
                "name": "title",
                "attr": "title",
                "type": "string",
@@ -305,15 +296,18 @@
                "values": null,
                "default": null,
                "doc": "Click outside / Escape do not close"
-            }
-         ],
-         "emits": [
+            },
             {
-               "name": "update:modelValue",
-               "args": "[value: boolean]",
-               "doc": null
+               "name": "modelValue",
+               "attr": "model-value",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "v-model"
             }
          ],
+         "emits": [],
          "slots": [
             "default",
             "actions"
@@ -372,15 +366,6 @@
          "file": "blueprint/ez/components/field/ez-field.vue",
          "description": null,
          "props": [
-            {
-               "name": "modelValue",
-               "attr": "model-value",
-               "type": "string | number | null",
-               "required": false,
-               "values": null,
-               "default": null,
-               "doc": null
-            },
             {
                "name": "label",
                "attr": "label",
@@ -489,15 +474,18 @@
                "values": null,
                "default": null,
                "doc": null
-            }
-         ],
-         "emits": [
+            },
             {
-               "name": "update:modelValue",
-               "args": "[value: string | number | null]",
-               "doc": null
+               "name": "modelValue",
+               "attr": "model-value",
+               "type": "string | number | null",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "v-model"
             }
          ],
+         "emits": [],
          "slots": [],
          "uses": [
             "ez-icon"
@@ -867,8 +855,8 @@
                "type": "string",
                "required": false,
                "values": null,
-               "default": "'Sur cette page'",
-               "doc": null
+               "default": null,
+               "doc": "Title of the TOC (default: « Sur cette page »)"
             }
          ],
          "emits": [],
@@ -892,7 +880,7 @@
                "type": "string",
                "required": false,
                "values": null,
-               "default": "'Sur cette page'",
+               "default": null,
                "doc": null
             }
          ],
@@ -905,7 +893,7 @@
          "name": "EzReveal",
          "tier": "primitive",
          "file": "blueprint/ez/components/reveal/ez-reveal.vue",
-         "description": "Masque le bas d'un contenu (fade) sous un seuil de largeur et le dévoile au tap/clic; réduit par défaut sur mobile",
+         "description": "Hides the bottom of a long content behind a fade on narrow screens and reveals it on tap or click; collapsed by default on mobile.",
          "props": [
             {
                "name": "collapsedHeight",
@@ -913,19 +901,19 @@
                "type": "string",
                "required": false,
                "values": null,
-               "default": "\"10rem\"",
+               "default": "'10rem'",
                "doc": "Max height while collapsed (CSS length)"
             },
             {
                "name": "fadeTo",
                "attr": "fade-to",
-               "type": "\"surface\" | \"muted\"",
+               "type": "'surface' | 'muted'",
                "required": false,
                "values": [
                   "surface",
                   "muted"
                ],
-               "default": "\"surface\"",
+               "default": "'surface'",
                "doc": "Color the fade blends into: card surface, or muted inset panels"
             },
             {
@@ -1023,7 +1011,7 @@
                "type": "string",
                "required": false,
                "values": null,
-               "default": "'Aucun élément'",
+               "default": null,
                "doc": null
             },
             {

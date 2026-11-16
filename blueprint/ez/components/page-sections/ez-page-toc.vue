@@ -1,13 +1,13 @@
 <template>
-   <nav v-if="theContext" class="ez-page-toc" :aria-label="title">
-      <p class="ez-page-toc__title">{{ title }}</p>
+   <nav class="ez-page-toc" :aria-label="theTitle">
+      <p class="ez-page-toc__title">{{ theTitle }}</p>
       <ul class="ez-page-toc__list">
          <li v-for="theEntry in theContext.entries.value" :key="theEntry.id">
             <a
                :href="`#${theEntry.id}`"
                class="ez-page-toc__link"
                :class="{ 'ez-page-toc__link--active': isActive(theEntry.id) }"
-               @click.prevent="theContext.scrollTo(theEntry.id)"
+               @click.prevent="onGoTo(theEntry.id)"
             >
                {{ theEntry.title }}
             </a>
@@ -17,7 +17,7 @@
                      :href="`#${theChild.id}`"
                      class="ez-page-toc__link ez-page-toc__link--child"
                      :class="{ 'ez-page-toc__link--active': isActive(theChild.id) }"
-                     @click.prevent="theContext.scrollTo(theChild.id)"
+                     @click.prevent="onGoTo(theChild.id)"
                   >
                      {{ theChild.title }}
                   </a>
@@ -29,36 +29,50 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
-import { pageSectionsKey } from './page-sections'
+import { computed } from 'vue'
+import { gettext } from '../../i18n'
+import { usePageSections } from './page-sections'
 
-withDefaults(defineProps<{
+const theContext = usePageSections('ez-page-toc')
+
+const props = defineProps<{
    title?: string
-}>(), {
-   title: 'Sur cette page',
-})
+}>()
 
-const theContext = inject(pageSectionsKey, null)
+const theTitle = computed(() => props.title ?? gettext('Sur cette page'))
 
 function isActive(id: string) {
-   return theContext?.activeId.value === id
+   return theContext.activeId.value === id
+}
+
+function onGoTo(id: string) {
+   theContext.scrollTo(id)
 }
 </script>
 
 <style scoped>
 .ez-page-toc {
+   /* Variables first: what the TOC's look depends on, read below */
+   --ez-page-toc-surface: var(--color-surface);
+   --ez-page-toc-radius: var(--radius-sm);
+   --ez-page-toc-shadow: var(--shadow-card);
+   --ez-page-toc-title: var(--color-foreground-subtle);
+   --ez-page-toc-link: var(--color-foreground-muted);
+   --ez-page-toc-link-active: var(--color-foreground);
+   --ez-page-toc-active-surface: var(--color-surface-muted);
+
    position: sticky;
-   top: calc(var(--sizing-toolbar-height) + 24px);
+   top: calc(var(--sizing-toolbar-height) + var(--space-gap-lg));
    padding: var(--space-inset-sm);
-   border-radius: var(--radius-sm);
-   background: var(--color-surface);
-   box-shadow: var(--shadow-card);
+   border-radius: var(--ez-page-toc-radius);
+   background: var(--ez-page-toc-surface);
+   box-shadow: var(--ez-page-toc-shadow);
    font-size: var(--text-sm);
 }
 
 .ez-page-toc__title {
-   margin: 0 0 8px;
-   color: var(--color-foreground-subtle);
+   margin: 0 0 var(--space-gap-sm);
+   color: var(--ez-page-toc-title);
    font-size: var(--text-xs);
    font-weight: 600;
    text-transform: uppercase;
@@ -74,23 +88,23 @@ function isActive(id: string) {
 
 .ez-page-toc__link {
    display: block;
-   padding: 8px 12px;
-   border-radius: var(--radius-sm);
-   color: var(--color-foreground-muted);
+   padding: var(--space-gap-sm) var(--space-inset-sm);
+   border-radius: var(--ez-page-toc-radius);
+   color: var(--ez-page-toc-link);
    text-decoration: none;
 
    &:hover {
-      color: var(--color-foreground);
+      color: var(--ez-page-toc-link-active);
    }
 }
 
 .ez-page-toc__link--child {
-   padding: 6px 12px 6px 28px;
+   padding: 6px var(--space-inset-sm) 6px 28px;
 }
 
 .ez-page-toc__link--active {
-   background: var(--color-surface-muted);
-   color: var(--color-foreground);
+   background: var(--ez-page-toc-active-surface);
+   color: var(--ez-page-toc-link-active);
    font-weight: 500;
 }
 </style>

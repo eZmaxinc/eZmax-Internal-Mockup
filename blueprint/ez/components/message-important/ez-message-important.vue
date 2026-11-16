@@ -36,13 +36,22 @@ const iconByType: Record<string, IconName> = {
  * the actions wrap below the text instead of crushing it: the body never goes under 14rem.
  */
 .ez-message-important {
+   /* Variables first: what the message's look depends on, read below; the types only change them */
+   --ez-message-important-padding: var(--space-inset-sm) var(--space-inset-md);
+   --ez-message-important-radius: var(--radius-md);
+   --ez-message-important-surface: var(--color-surface-info);
+   --ez-message-important-border: color-mix(in srgb, var(--color-info) 25%, transparent);
+   --ez-message-important-color: var(--color-foreground-info);
+
    display: flex;
    flex-wrap: wrap;
    align-items: flex-start;
-   gap: 8px 12px;
-   padding: 12px 16px;
-   border: 1px solid;
-   border-radius: var(--radius-md);
+   gap: var(--space-gap-sm) var(--space-inset-sm);
+   padding: var(--ez-message-important-padding);
+   border: 1px solid var(--ez-message-important-border);
+   border-radius: var(--ez-message-important-radius);
+   background: var(--ez-message-important-surface);
+   color: var(--ez-message-important-color);
    font-size: var(--text-sm);
 }
 
@@ -65,32 +74,26 @@ const iconByType: Record<string, IconName> = {
    display: flex;
    flex-wrap: wrap;
    justify-content: flex-end;
-   gap: 8px;
+   gap: var(--space-gap-sm);
    max-width: 100%;
    margin-left: auto;
 }
 
-.ez-message-important--info {
-   background: var(--color-surface-info);
-   border-color: color-mix(in srgb, var(--color-info) 25%, transparent);
-   color: var(--color-foreground-info);
-}
-
 .ez-message-important--success {
-   background: var(--color-surface-positive);
-   border-color: color-mix(in srgb, var(--color-positive) 25%, transparent);
-   color: var(--color-foreground-positive);
+   --ez-message-important-surface: var(--color-surface-positive);
+   --ez-message-important-border: color-mix(in srgb, var(--color-positive) 25%, transparent);
+   --ez-message-important-color: var(--color-foreground-positive);
 }
 
 .ez-message-important--warning {
-   background: var(--color-surface-warning);
-   border-color: color-mix(in srgb, var(--color-warning) 30%, transparent);
-   color: var(--color-foreground-warning);
+   --ez-message-important-surface: var(--color-surface-warning);
+   --ez-message-important-border: color-mix(in srgb, var(--color-warning) 30%, transparent);
+   --ez-message-important-color: var(--color-foreground-warning);
 }
 
 .ez-message-important--danger {
-   background: var(--color-surface-negative);
-   border-color: color-mix(in srgb, var(--color-negative) 25%, transparent);
-   color: var(--color-foreground-negative);
+   --ez-message-important-surface: var(--color-surface-negative);
+   --ez-message-important-border: color-mix(in srgb, var(--color-negative) 25%, transparent);
+   --ez-message-important-color: var(--color-foreground-negative);
 }
 </style>

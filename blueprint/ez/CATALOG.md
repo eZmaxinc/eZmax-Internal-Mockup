@@ -194,14 +194,12 @@ Slots: `#header`, `#actions`, `défaut`, `#footer`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `model-value` * | `boolean` |  |  |
 | `title` * | `string` |  |  |
 | `width` | `string` | `'var(--dialog-width)'` |  |
 | `persistent` | `boolean` |  | Click outside / Escape do not close |
+| `model-value` | `boolean` |  | v-model |
 
 Slots: `défaut`, `#actions`
-
-Émet: `update:modelValue`
 
 #### `ez-empty-state`
 
@@ -217,7 +215,6 @@ Slots: `#actions`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `model-value` | `string \| number \| null` |  |  |
 | `label` | `string` |  |  |
 | `type` | `text` `email` `tel` `number` `date` `password` `search` `textarea` `select` | `'text'` |  |
 | `options` | `EzFieldOption[]` | `() => []` |  |
@@ -229,8 +226,7 @@ Slots: `#actions`
 | `required` | `boolean` |  |  |
 | `disabled` | `boolean` |  |  |
 | `readonly` | `boolean` |  |  |
-
-Émet: `update:modelValue`
+| `model-value` | `string \| number \| null` |  | v-model |
 
 #### `ez-icon`
 
@@ -319,7 +315,7 @@ Slots: `défaut`
 | Prop | Type | Défaut | |
 |---|---|---|---|
 | `toc` | `boolean` | `true` | Sticky TOC on the right (≥ 1024px) |
-| `toc-title` | `string` | `'Sur cette page'` |  |
+| `toc-title` | `string` |  | Title of the TOC (default: « Sur cette page ») |
 
 Slots: `défaut`
 
@@ -327,16 +323,16 @@ Slots: `défaut`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `title` | `string` | `'Sur cette page'` |  |
+| `title` | `string` |  |  |
 
 #### `ez-reveal`
 
-Masque le bas d'un contenu (fade) sous un seuil de largeur et le dévoile au tap/clic; réduit par défaut sur mobile
+Hides the bottom of a long content behind a fade on narrow screens and reveals it on tap or click; collapsed by default on mobile.
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `collapsed-height` | `string` | `"10rem"` | Max height while collapsed (CSS length) |
-| `fade-to` | `surface` `muted` | `"surface"` | Color the fade blends into: card surface, or muted inset panels |
+| `collapsed-height` | `string` | `'10rem'` | Max height while collapsed (CSS length) |
+| `fade-to` | `surface` `muted` | `'surface'` | Color the fade blends into: card surface, or muted inset panels |
 | `expand-label` | `string` | `undefined` |  |
 | `collapse-label` | `string` | `undefined` |  |
 
@@ -352,7 +348,7 @@ Slots: `défaut`
 | `selectable` | `boolean` |  | A checkbox per row and one for all; the chosen row keys are in v-model:selected |
 | `clickable` | `boolean` |  |  |
 | `loading` | `boolean` |  |  |
-| `empty-title` | `string` | `'Aucun élément'` |  |
+| `empty-title` | `string` |  |  |
 | `selected` | `(string \| number)[]` |  | v-model:selected |
 
 Slots: `#cell-<…>`, `#empty`
