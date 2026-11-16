@@ -6,7 +6,7 @@ You build **prototypes** of eZsign/eZmax screens, fast: existing screens look li
 
 1. **Reuse what exists, invent the rest in the same family.** What exists is mandatory: an `ez-` component whenever one does the job (`blueprint/ez/CATALOG.md`), semantic tokens for every color (`blueprint/tokens/ez-tokens.css`, semantic layer), the scales for sizes and spaces, a pattern from `blueprint/patterns/` when the page is a list, a detail or a form. What doesn't exist, you build: a new interface (a timeline, a board, a canvas, a wizard…) is plain HTML, utilities and a scoped style in the version, made only of tokens. Never rebuild by hand something an `ez-` component already is (a button, a field, a table, a card, a badge, a dialog…). No raw colors, no Tailwind palette (`bg-blue-500` doesn't exist here), no `--prim-*`. `proto check` rejects a raw color, an unknown `ez-` component, prop or value, and a raw `<button>`, `<input>`, `<select>`, `<textarea>`, `<table>`.
 2. **Create or enhance in the version; the human syncs the app.** Everything you add lives in `vNNN/components/`, imported by `index.vue`, free in its markup and style (tokens only), with no header and no ceremony. *Create*: a piece that is big or used twice (`FolderTimeline.vue`). *Enhance*: an existing `ez-` component that lacks something (a prop, a slot, a state): copy its file from `blueprint/ez/` into `components/` under the same name (`EzCard.vue`), change the copy, import it; in that version it replaces the original. *Suggest*, optional, when a piece would clearly serve other tasks: name it `Ez…` and start it with `<!-- @proposal domain <object>: why -->` (or `@proposal primitive: why`). None of this blocks or slows the prototype: `yarn proto proposals` finds what was created, enhanced and suggested by itself, and a human decides what goes into `blueprint/ez/` (`yarn proto promote`) and into the app. Never edit `blueprint/ez/` yourself unless asked.
-3. **One prototype = one GoodDay task.** Every task folder is `prototypes/<GoodDay number>-<slug>/`, named like the branch (`feature/49198-la-tache` → `49198-la-tache`), with `goodday: { number, url }` in `meta.json`. No number or link? Ask the user. **The task already has a folder** (`proto new` says so, or you find one): stop and tell the user (folder, latest version). Don't start it over; go on only on their instruction (golden rule 4 says where the changes go).
+3. **One prototype = one task.** Every task folder is `prototypes/<slug>/`, a slug of its French title (`relance-signataires`), never a number. GoodDay is a nice to have: when the user gives a number or a link, pass it to `proto new` and it is kept in `meta.json` (`goodday`); otherwise don't ask for it, the task lives without it. **The task already has a folder** (`proto new` says so, or you find one): stop and tell the user (folder, latest version). Don't start it over; go on only on their instruction (golden rule 4 says where the changes go).
 4. **The human marks the versions.** Feedback is applied in place, in the **working version**: the latest version of the task. Create a new version (`yarn proto iterate`) only when the user asks for one (« nouvelle version », `/iterate-proto`, `/variant-proto`); never on your own. A version is **frozen** when a later one exists, when it is the `chosen` one, or when the task has left `draft` (teammates have looked at it): never edit a frozen version. Feedback on a frozen version: say so and ask whether to create a new one. `proto check` flags an edited frozen version.
 5. **One version = one folder, self-contained.** It imports only from `vue`, `@ez`, `@mocks` and its own files. Never `../` into another version.
 6. **Data lives in `mocks.ts` as named scenarios** (first = default). Cover at least the main state plus one edge state (empty, error, closed…). Use the business objects from `@mocks` and their methods (`stateLabel()`, `stateTone()`, `isStateClosed()`…).
@@ -114,9 +114,9 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` and `.agents/skills` point here. Every workflow ends the same way: golden rule 8 (check; the browser only as it says), then the final message described above.
 
 **New** (`/new-proto`)
-1. Get the GoodDay number and link (ask if either is missing). Use the French title of the GoodDay task. Pick the closest pattern if one fits.
-2. `yarn proto new <number> <link> "<Titre>" [--from <pattern>]`. The task already has a prototype: stop (golden rule 3).
-3. The brief is the GoodDay task: its title and link are in `meta.json`, nothing to copy. Only when the user stated constraints or an out-of-scope, write them in `prototypes/<task>/README.md`, in their words: a list, no title, no link, no paraphrase of the request. No constraints: no `README.md`. Ask only if something blocking is missing.
+1. Pick a short French title for the task (the GoodDay title when there is one) and the closest pattern if one fits.
+2. `yarn proto new "<Titre>" [<GoodDay number>] [<GoodDay link>] [--from <pattern>] [--slug <short-name>]`: the GoodDay number and link only when the user gave them. The task already has a prototype: stop (golden rule 3).
+3. The brief is the user's request (and the GoodDay task, when there is one: its title and link are in `meta.json`, nothing to copy). Only when the user stated constraints or an out-of-scope, write them in `prototypes/<task>/README.md`, in their words: a list, no title, no link, no paraphrase of the request. No constraints: no `README.md`. Ask only if something blocking is missing.
 4. Build `v001/index.vue`, `v001/mocks.ts` (at least two scenarios) and `v001/notes.md`: the smallest screen that answers the task, not every idea around it. Don't read other prototypes to get started: the catalog, the patterns and the starter below are the references.
 
 **Adjust** (the default for any feedback on a prototype): change the working version in place.
@@ -146,8 +146,9 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 One CLI, `yarn proto` (`yarn proto help` for everything). In a non-interactive shell it never prompts: pass every argument.
 
 ```bash
-yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Titre"            # new task + v001 (blank)
-yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Titre" --from detail-page
+yarn proto new "Titre"                                   # new task + v001 (blank), in prototypes/titre/
+yarn proto new "Titre" --from detail-page
+yarn proto new "Titre" 49198 https://www.goodday.work/t/M2nSjU   # GoodDay, when known: kept in meta.json
 yarn proto iterate <task> -m "Résumé"                    # next version from the latest
 yarn proto iterate <task> -m "Résumé" --from v001        # from an older version
 yarn proto iterate <task> -m "Variante: Résumé" --from v001   # a variant is the next version too
@@ -162,7 +163,7 @@ yarn proto tokens [bump patch|minor|major -m "…"]         # shared tokens: ver
 yarn proto open [task] [version]                         # shell on http://localhost:5180
 ```
 
-`<task>` accepts the GoodDay number (`49198` or `#49198`), the GoodDay link, the folder name or a unique part of it.
+`<task>` accepts the folder name or a unique part of it, and the GoodDay number (`49198` or `#49198`) or link when the task has one.
 
 ## Code conventions (same as production)
 

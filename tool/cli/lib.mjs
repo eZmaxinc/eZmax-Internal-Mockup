@@ -15,8 +15,8 @@ export const STATUSES = ['draft', 'review', 'chosen', 'archived']
 export const STATUS_LABELS = { draft: 'brouillon', review: 'en revue', chosen: 'retenu', archived: 'archivé' }
 export const GOODDAY_URL = /^https?:\/\/(?:www\.)?goodday\.work\/t\/([A-Za-z0-9]+)\/?$/
 export const GOODDAY_NUMBER = /^#?(\d+)$/
-/** Task folder: GoodDay number + slug, like the branch (feature/49198-la-tache → 49198-la-tache) */
-export const TASK_FOLDER = /^(\d+)-[a-z0-9]+(?:-[a-z0-9]+)*$/
+/** Task folder: a slug of the title (relance-signataires). GoodDay is optional and lives in meta.json only. */
+export const TASK_FOLDER = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 export const DEMO_FOLDER = /^demo-[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 /* ───────────── Output ───────────── */
@@ -156,7 +156,7 @@ export function findTask(input) {
    const shortId = value.match(GOODDAY_URL)?.[1] ?? (/^[A-Za-z0-9]{5,8}$/.test(value) ? value : null)
 
    let matches = []
-   if (number) matches = tasks.filter((task) => task.meta.goodday?.number === Number(number) || task.id.startsWith(`${number}-`))
+   if (number) matches = tasks.filter((task) => task.meta.goodday?.number === Number(number))
    if (!matches.length && shortId) matches = tasks.filter((task) => task.meta.goodday?.url?.match(GOODDAY_URL)?.[1] === shortId)
    if (!matches.length) matches = tasks.filter((task) => task.id.includes(value.toLowerCase()))
 
@@ -179,9 +179,12 @@ export async function resolveTask(input, usage) {
 }
 
 export function taskLabel(task) {
-   const ref = task.meta.goodday ? `#${task.meta.goodday.number}` : 'démo'
+   const ref = taskRef(task.meta)
    return `${ref.padEnd(7)} ${task.meta.title} (${task.versions.at(-1) ?? 'aucune version'})`
 }
+
+/** Short reference shown in lists: #49198 when the GoodDay number is known, else démo or —. */
+export const taskRef = (meta) => (meta.goodday?.number ? `#${meta.goodday.number}` : meta.demo ? 'démo' : '—')
 
 /* ───────────── Misc ───────────── */
 

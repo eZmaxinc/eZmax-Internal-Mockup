@@ -71,7 +71,7 @@ const dateFormat = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'sh
 
 const theTasks = computed(() => listTasks().map((task) => ({
    id: task.id,
-   number: task.meta.goodday ? `#${task.meta.goodday.number}` : 'démo',
+   number: task.meta.goodday?.number ? `#${task.meta.goodday.number}` : task.meta.demo ? 'démo' : '—',
    title: task.meta.title,
    status: task.meta.status,
    versions: task.versions.length,

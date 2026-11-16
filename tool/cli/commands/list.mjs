@@ -2,7 +2,7 @@
  * yarn proto list [--status review] [--mine] [--all]
  * Archived tasks are hidden unless --all or --status archived.
  */
-import { STATUSES, STATUS_LABELS, fail, flagString, gitUserName, listTasks, parseArgs } from '../lib.mjs'
+import { STATUSES, STATUS_LABELS, fail, flagString, gitUserName, listTasks, parseArgs, taskRef } from '../lib.mjs'
 
 export async function run(argv) {
    const { flags } = parseArgs(argv)
@@ -19,7 +19,7 @@ export async function run(argv) {
    }
 
    const rows = tasks.map((task) => [
-      task.meta.goodday ? `#${task.meta.goodday.number}` : 'démo',
+      taskRef(task.meta),
       STATUS_LABELS[task.meta.status] ?? task.meta.status ?? '?',
       task.versions.at(-1) ?? '—',
       task.meta.chosen ?? '—',

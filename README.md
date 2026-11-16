@@ -15,13 +15,15 @@ Yarn 1 (`packageManager` dans `package.json`). Pas de commande `yarn`: `corepack
 
 Ouvrir `ez-proto` comme dossier racine dans Cursor (pas le mono), le shell dans le navigateur de Cursor, puis demander:
 
-> Nouveau prototype pour la tâche #49198 (https://www.goodday.work/t/M2nSjU): permettre au propriétaire de relancer les signataires en retard depuis la fiche du dossier.
+> Nouveau prototype: permettre au propriétaire de relancer les signataires en retard depuis la fiche du dossier.
+
+La tâche GoodDay (numéro, lien) s'ajoute si on l'a, sans être nécessaire.
 
 Un seul shell à la fois: le port est fixe. Une version créée s'affiche sans le relancer. Sur un lecteur réseau où les modifications n'apparaissent pas: `PROTO_POLL=1 yarn dev`. Un autre port: `PROTO_PORT=5190 yarn dev`.
 
 ## Comment ça marche
 
-- **Un prototype = une tâche GoodDay.** Son dossier porte le nom de la branche: `feature/49198-relance-signataires` → `prototypes/49198-relance-signataires/`.
+- **Un prototype = une tâche.** Son dossier porte le nom de son titre, sans numéro: `prototypes/relance-signataires/`. Le numéro et le lien GoodDay, quand on les a, vont dans `meta.json`.
 - **L'agent réutilise ce qui existe et invente le reste dans le même genre.** Un composant `ez-` quand il y en a un, les tokens pour toute couleur. Ce qui n'existe pas (une ligne du temps, un canevas) se construit dans la version. Il peut aussi rehausser un composant existant, dans une copie locale.
 - **Le dev marque les versions.** Un retour s'applique en place dans la dernière version; une nouvelle version se demande. Les versions se suivent (`v001`, `v002`, `v003`…): une variante est la version suivante, son résumé commence par « Variante: » et le shell dit de quelle version elle part.
 - **Le check à chaque fois, le navigateur quand ça paie.** `yarn proto check` garde la conformité (couleurs, composants, types) en quelques secondes. L'agent ne refait pas le tour du navigateur à chaque retouche: tu regardes la même page que lui.
@@ -37,7 +39,7 @@ Le tableau de bord liste les prototypes, les patrons de référence et la galeri
 
 | Commande | Effet |
 |---|---|
-| `yarn proto new <numéro> <lien> "Titre"` | Nouvelle tâche + `v001` (`--from list-page`, `detail-page` ou `edit-form`) |
+| `yarn proto new "Titre" [numéro] [lien]` | Nouvelle tâche + `v001` (`--from list-page`, `detail-page` ou `edit-form`); le numéro et le lien GoodDay sont facultatifs |
 | `yarn proto iterate <tâche> -m "Résumé"` | Version suivante copiée de la dernière (`--from v001` pour partir d'une autre, une variante par exemple) |
 | `yarn proto check [tâche]` | Couleurs, composants et props connus, structure, imports, types |
 | `yarn proto open [tâche] [version]` | Donne l'adresse du shell |
@@ -50,7 +52,7 @@ Le tableau de bord liste les prototypes, les patrons de référence et la galeri
 | `yarn proto catalog` | Régénère le catalogue après un changement dans `blueprint/ez` |
 | `yarn proto tokens` | Version des tokens (`bump patch\|minor\|major -m …`) |
 
-Une tâche se désigne par son numéro GoodDay, son lien ou une partie du nom de son dossier. Sans arguments, dans un terminal, `yarn proto new` pose les questions.
+Une tâche se désigne par une partie du nom de son dossier, ou par son numéro ou son lien GoodDay si elle en a un. Sans arguments, dans un terminal, `yarn proto new` pose les questions.
 
 ## Structure
 

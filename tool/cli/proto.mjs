@@ -4,7 +4,7 @@
  * Asks for what is missing in an interactive terminal; fails with a clear message otherwise (agents, CI).
  */
 const COMMANDS = {
-   new: 'Nouvelle tâche à partir d\'une tâche GoodDay, avec sa v001',
+   new: 'Nouvelle tâche (un titre, GoodDay facultatif), avec sa v001',
    iterate: 'Version suivante d\'une tâche (copie de la dernière)',
    list: 'Liste des tâches',
    status: 'Change le statut ou la version retenue',
@@ -26,18 +26,19 @@ Usage: yarn proto <commande> [arguments]
 ${Object.entries(COMMANDS).map(([name, text]) => `  ${name.padEnd(10)} ${text}`).join('\n')}
 
 Exemples:
-  yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Relance des signataires" --from detail-page
-  yarn proto iterate 49198 -m "Relance groupée avec message"
-  yarn proto iterate 49198 --from v001 -m "Variante: relance depuis la liste"
-  yarn proto status 49198 chosen v002
-  yarn proto open 49198
-  yarn proto diff 49198 v001 v002
-  yarn proto check 49198
-  yarn proto export 49198 v002
+  yarn proto new "Relance des signataires" --from detail-page
+  yarn proto new "Relance des signataires" 49198 https://www.goodday.work/t/M2nSjU   # GoodDay facultatif
+  yarn proto iterate relance -m "Relance groupée avec message"
+  yarn proto iterate relance --from v001 -m "Variante: relance depuis la liste"
+  yarn proto status relance chosen v002
+  yarn proto open relance
+  yarn proto diff relance v001 v002
+  yarn proto check relance
+  yarn proto export relance v002
   yarn proto tokens bump patch -m "Couleurs de la prod"
 
-Une tâche se désigne par son numéro GoodDay (49198 ou #49198), son lien GoodDay, une partie
-du nom de son dossier, ou rien du tout si la commande est lancée depuis son dossier.
+Une tâche se désigne par le nom de son dossier ou une partie (relance), son numéro ou son lien
+GoodDay s'il est connu, ou rien du tout si la commande est lancée depuis son dossier.
 `
 
 const [command, ...rest] = process.argv.slice(2)

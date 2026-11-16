@@ -48,7 +48,8 @@
                      </div>
                   </div>
                   <span v-else class="shell-status" :class="`shell-status--${theTask.meta.status}`">{{ STATUS_LABEL[theTask.meta.status] }}</span>
-                  <a v-if="theTask.meta.goodday" class="shell__goodday shell-mono" :href="theTask.meta.goodday.url" target="_blank" rel="noopener" title="Ouvrir la tâche dans GoodDay">#{{ theTask.meta.goodday.number }} ↗</a>
+                  <a v-if="theTask.meta.goodday?.url" class="shell__goodday shell-mono" :href="theTask.meta.goodday.url" target="_blank" rel="noopener" title="Ouvrir la tâche dans GoodDay">{{ theTask.meta.goodday.number ? `#${theTask.meta.goodday.number}` : 'GoodDay' }} ↗</a>
+                  <span v-else-if="theTask.meta.goodday?.number" class="shell__goodday shell-mono">#{{ theTask.meta.goodday.number }}</span>
                   <span v-else-if="theTask.meta.demo" class="shell__goodday">démo</span>
                </div>
             </header>

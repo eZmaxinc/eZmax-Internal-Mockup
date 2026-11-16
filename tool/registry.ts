@@ -13,11 +13,12 @@ import type { Scenarios } from '@ez'
 export type ProtoStatus = 'draft' | 'review' | 'chosen' | 'archived'
 export type ProtoChrome = 'app' | 'none'
 
+/** Optional: a task lives without GoodDay; either field may be missing. */
 export interface GoodDayLink {
-   /** Task number shown as #49198 in GoodDay; also used in branch names (feature/49198-…) */
-   number: number
+   /** Task number shown as #49198 in GoodDay */
+   number?: number | null
    /** Short link, e.g. https://www.goodday.work/t/M2nSjU */
-   url: string
+   url?: string | null
 }
 
 export interface ProtoMeta {

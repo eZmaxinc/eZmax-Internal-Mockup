@@ -83,16 +83,12 @@ function checkStructure(onlyTask, errors, warnings) {
       if (meta.demo) {
          if (!DEMO_FOLDER.test(taskId)) errors.push(`${where}: une tâche de démo se nomme demo-<slug>`)
       }
-      else {
-         const folderNumber = taskId.match(TASK_FOLDER)?.[1]
-         if (!folderNumber) errors.push(`${where}: le dossier se nomme <numéro GoodDay>-<slug>, comme la branche (ex. 49198-relance-signataires)`)
+      else if (!TASK_FOLDER.test(taskId)) errors.push(`${where}: le dossier se nomme d'après le titre, en minuscules et tirets (ex. relance-signataires), sans numéro GoodDay`)
 
-         if (!meta.goodday) errors.push(`${where}/meta.json: "goodday" est requis: { "number": 49198, "url": "https://www.goodday.work/t/…" }`)
-         else {
-            if (!Number.isInteger(meta.goodday.number)) errors.push(`${where}/meta.json: "goodday.number" doit être un nombre (49198, sans #)`)
-            else if (folderNumber && Number(folderNumber) !== meta.goodday.number) errors.push(`${where}: le dossier commence par ${folderNumber} mais goodday.number vaut ${meta.goodday.number}`)
-            if (!GOODDAY_URL.test(meta.goodday.url ?? '')) errors.push(`${where}/meta.json: "goodday.url" doit être un lien https://www.goodday.work/t/<id>`)
-         }
+      // GoodDay is optional: checked only when given
+      if (meta.goodday) {
+         if (meta.goodday.number != null && !Number.isInteger(meta.goodday.number)) errors.push(`${where}/meta.json: "goodday.number" doit être un nombre (49198, sans #)`)
+         if (meta.goodday.url != null && !GOODDAY_URL.test(meta.goodday.url)) errors.push(`${where}/meta.json: "goodday.url" doit être un lien https://www.goodday.work/t/<id>`)
       }
 
       if (!meta.title) errors.push(`${where}/meta.json: "title" est requis`)
