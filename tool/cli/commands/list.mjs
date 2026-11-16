@@ -1,5 +1,5 @@
 /**
- * yarn proto list [--status review] [--mine] [--all]
+ * yarn mockup list [--status review] [--mine] [--all]
  * Archived tasks are hidden unless --all or --status archived.
  */
 import { STATUSES, STATUS_LABELS, fail, flagString, gitUserName, listTasks, parseArgs, taskRef } from '../lib.mjs'

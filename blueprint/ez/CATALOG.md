@@ -1,6 +1,6 @@
 # Catalogue `ez-`
 
-Composants enregistrés globalement: on les utilise directement dans les templates (`<ez-btn>`), sans import. Ce fichier dit **quand utiliser quoi**; l'API exacte (props, valeurs permises, slots, émissions) est dans la section générée à la fin, tirée du code par `yarn proto catalog`. `proto check` refuse un composant, une prop ou une valeur qui n'y est pas.
+Composants enregistrés globalement: on les utilise directement dans les templates (`<ez-btn>`), sans import. Ce fichier dit **quand utiliser quoi**; l'API exacte (props, valeurs permises, slots, émissions) est dans la section générée à la fin, tirée du code par `yarn mockup catalog`. `mockup check` refuse un composant, une prop ou une valeur qui n'y est pas.
 
 ## Deux niveaux
 
@@ -8,7 +8,7 @@ Composants enregistrés globalement: on les utilise directement dans les templat
 |---|---|---|
 | Ex. | `ez-btn`, `ez-card`, `ez-badge`, `ez-table` | aucun pour l'instant |
 | Connaît | rien du métier: props visuelles (`variant`, `tone`) | un objet métier (`folder`, `signer`…) |
-| Naît | dans un prototype, puis promu ici (`yarn proto promote`), puis reporté dans l'app | dans l'app (`ezmax-library-quasar`), puis reflété ici; jamais proposé ni promu par un prototype |
+| Naît | dans un prototype, puis promu ici (`yarn mockup promote`), puis reporté dans l'app | dans l'app (`ezmax-library-quasar`), puis reflété ici; jamais proposé ni promu par un prototype |
 | Contient | le visuel: CSS et tokens | des primitives assemblées; pas de couleur, bordure, ombre ni arrondi |
 
 **Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées (avec les méthodes du mock: `folder.stateTone()`, `folder.stateLabel()`) → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
@@ -129,15 +129,15 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 </template>
 ```
 
-- `@proposal primitive`, puis pourquoi il existe. `proto check` vérifie qu'il suit les règles d'une primitive.
+- `@proposal primitive`, puis pourquoi il existe. `mockup check` vérifie qu'il suit les règles d'une primitive.
 - **Un composant métier manquant** (un bouton « Soumettre » qui connaît le dossier, une liste de signataires): le construire localement, sans en-tête, et l'écrire dans `notes.md`, sous « Signalements »: `Composant métier manquant: …`. Il se construit ensuite dans l'app; il n'est jamais proposé ni promu ici.
-- Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), dans son dossier `blueprint/ez/components/<nom>/` (comme dans l'app: `ez-<nom>.vue`), avec une démo générée à côté, `ez-<nom>.example.vue`, à ajuster.
+- Rien de tout ça ne bloque le prototype. `yarn mockup proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn mockup promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), dans son dossier `blueprint/ez/components/<nom>/` (comme dans l'app: `ez-<nom>.vue`), avec une démo générée à côté, `ez-<nom>.example.vue`, à ajuster.
 
-<!-- api:start — généré par yarn proto catalog, ne pas modifier à la main -->
+<!-- api:start — généré par yarn mockup catalog, ne pas modifier à la main -->
 
 ## API (généré)
 
-Tiré du code des composants par `yarn proto catalog`. `*` = prop obligatoire. Le texte au-dessus de cette section est écrit à la main: quand utiliser quoi.
+Tiré du code des composants par `yarn mockup catalog`. `*` = prop obligatoire. Le texte au-dessus de cette section est écrit à la main: quand utiliser quoi.
 
 ### Primitives
 

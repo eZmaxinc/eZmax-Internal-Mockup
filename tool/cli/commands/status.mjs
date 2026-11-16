@@ -1,11 +1,11 @@
 /**
- * yarn proto status <tâche> <draft|review|chosen|archived> [version]
- * `chosen` needs the retained version: yarn proto status 49198 chosen v002
+ * yarn mockup status <tâche> <draft|review|chosen|archived> [version]
+ * `chosen` needs the retained version: yarn mockup status 49198 chosen v002
  * `draft` and `review` take the decision back: the task has no retained version any more.
  */
 import { STATUSES, STATUS_LABELS, fail, findTask, listVersions, parseArgs, readMeta, writeMeta } from '../lib.mjs'
 
-const USAGE = `Usage: yarn proto status <tâche> <${STATUSES.join('|')}> [version]`
+const USAGE = `Usage: yarn mockup status <tâche> <${STATUSES.join('|')}> [version]`
 
 export async function run(argv) {
    const { positional } = parseArgs(argv)
@@ -17,7 +17,7 @@ export async function run(argv) {
    const meta = readMeta(taskId)
    const versions = listVersions(taskId)
 
-   if (status === 'chosen' && !version) fail('Indiquer la version retenue.', `Ex.: yarn proto status ${taskInput} chosen ${versions.at(-1) ?? 'v001'}`)
+   if (status === 'chosen' && !version) fail('Indiquer la version retenue.', `Ex.: yarn mockup status ${taskInput} chosen ${versions.at(-1) ?? 'v001'}`)
    if (version && !versions.includes(version)) fail(`Version inconnue « ${version} ».`, `Versions: ${versions.join(', ')}`)
 
    meta.status = status

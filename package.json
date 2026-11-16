@@ -8,7 +8,7 @@
       "dev": "vite --config tool/vite.config.ts",
       "build": "vue-tsc --noEmit && vite build --config tool/vite.config.ts",
       "typecheck": "vue-tsc --noEmit",
-      "proto": "node tool/cli/proto.mjs"
+      "mockup": "node tool/cli/mockup.mjs"
    },
    "dependencies": {
       "vue": "^3.5.45",

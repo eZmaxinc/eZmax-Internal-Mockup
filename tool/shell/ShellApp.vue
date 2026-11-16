@@ -70,7 +70,7 @@
                   </router-link>
                   <!--
                      The team decision is a click on the star, not a request to the agent: it runs
-                     `proto status <task> chosen <version>`; a click on the full star takes the decision back
+                     `mockup status <task> chosen <version>`; a click on the full star takes the decision back
                      (the task returns to draft). Only while the dev server runs: a built shell has
                      nobody to write meta.json. Next to the link, not inside it: a button in a link is not valid.
                   -->
@@ -145,7 +145,7 @@ const theChooseError = ref('')
 /** The version « Retenu » applies to when it is picked in the list: the one already retained, else the one on screen. */
 const theChosenTarget = computed(() => theTask.value?.meta.chosen ?? theVersion.value?.id)
 
-/** Runs `proto status` through the dev server. A click on a star passes its version. */
+/** Runs `mockup status` through the dev server. A click on a star passes its version. */
 async function setStatus(status: ProtoStatus, versionId?: string) {
    if (!theTask.value) return
    const version = versionId ?? (status === 'chosen' ? theChosenTarget.value : undefined)

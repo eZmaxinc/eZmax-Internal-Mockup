@@ -1,5 +1,5 @@
 /**
- * yarn proto open [tâche] [version] [--scenario <nom>] [--print]
+ * yarn mockup open [tâche] [version] [--scenario <nom>] [--print]
  *
  * In a terminal: opens the shell in the system browser, starting the dev server first if needed.
  * For an agent (no terminal, or --print): never starts anything, prints the URL to open in the agent's

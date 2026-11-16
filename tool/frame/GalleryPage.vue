@@ -140,7 +140,7 @@ import { makeFolders } from '@mocks'
 import catalog from '@ez/catalog.json'
 import gallerySource from './GalleryPage.vue?raw'
 
-// Gallery demos live next to their component: components/reveal/ez-reveal.example.vue (proto promote creates one).
+// Gallery demos live next to their component: components/reveal/ez-reveal.example.vue (mockup promote creates one).
 // A relative glob, like registry.ts: an alias resolves to the real path, which may sit on another drive
 // than the checkout (C:\…\git → G:\…), and Vite cannot write a relative import across drives.
 const examples = import.meta.glob<Component>('../../blueprint/ez/components/**/*.example.vue', { eager: true, import: 'default' })

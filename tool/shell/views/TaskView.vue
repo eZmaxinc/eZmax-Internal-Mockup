@@ -45,7 +45,7 @@
          </template>
       </proto-viewer>
 
-      <ez-empty-state v-else title="Aucune version" text="Lancer yarn proto iterate pour créer une version." icon="file" />
+      <ez-empty-state v-else title="Aucune version" text="Lancer yarn mockup iterate pour créer une version." icon="file" />
    </div>
 </template>
 

@@ -5,7 +5,7 @@ import { gettext } from './i18n'
 
 /**
  * Every ez- component, registered globally. The list is generated from the files in
- * components/ by `yarn proto catalog` (components.generated.ts): never by hand.
+ * components/ by `yarn mockup catalog` (components.generated.ts): never by hand.
  */
 export { components }
 

@@ -12,7 +12,7 @@ ez-proto est **la source** des tokens. Le mono en garde une copie, faite à la m
 
 ## Procédure
 
-1. Vérifier la version et ce qui a changé: `yarn proto tokens` (version, dernière entrée du CHANGELOG).
+1. Vérifier la version et ce qui a changé: `yarn mockup tokens` (version, dernière entrée du CHANGELOG).
 2. Copier `blueprint/tokens/ez-tokens.css` dans le mono, à côté de `tailwind.css` de `ezmax-library-quasar` (ex. `librairies/ezmax-library-quasar/src/css/ez-tokens.css`).
 3. Dans `tailwind.css` du mono, l'importer juste après Tailwind, et retirer ce qu'il remplace (breakpoints et rayons du `@theme`):
    ```css
@@ -33,9 +33,9 @@ ez-proto est **la source** des tokens. Le mono en garde une copie, faite à la m
 ## Changer un token
 
 1. Modifier `ez-tokens.css` (jamais dans un prototype, jamais dans la copie du mono).
-2. `yarn proto tokens bump <patch|minor|major> -m "Ce qui change"`: met à jour l'en-tête et le CHANGELOG.
+2. `yarn mockup tokens bump <patch|minor|major> -m "Ce qui change"`: met à jour l'en-tête et le CHANGELOG.
    - **patch**: une valeur change (une couleur, un rayon).
    - **minor**: un token s'ajoute.
-   - **major**: un token est renommé ou retiré. Ajouter aussi l'ancien nom dans `tool/cli/token-renames.mjs`, puis `yarn proto tokens migrate` pour réécrire les composants, les patrons et les prototypes.
-3. `yarn proto check` doit passer.
+   - **major**: un token est renommé ou retiré. Ajouter aussi l'ancien nom dans `tool/cli/token-renames.mjs`, puis `yarn mockup tokens migrate` pour réécrire les composants, les patrons et les prototypes.
+3. `yarn mockup check` doit passer.
 4. Copier dans le mono (ci-dessus).

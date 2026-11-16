@@ -1,6 +1,6 @@
 ---
-name: "source-command-new-proto"
-description: "Create a new prototype task from the user's brief. Use when the user asks for `new-proto`."
+name: "source-command-new-mockup"
+description: "Create a new prototype task from the user's brief. Use when the user asks for `new-mockup`."
 ---
 
 # New prototype

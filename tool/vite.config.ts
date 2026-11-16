@@ -27,7 +27,7 @@ function protoExportEndpoint(): Plugin {
                return
             }
 
-            const result = spawnSync(process.execPath, [join(TOOL, 'cli', 'proto.mjs'), 'export', task, version, '--quiet'], {
+            const result = spawnSync(process.execPath, [join(TOOL, 'cli', 'mockup.mjs'), 'export', task, version, '--quiet'], {
                cwd: ROOT,
                encoding: 'utf8',
             })
@@ -49,7 +49,7 @@ function protoExportEndpoint(): Plugin {
 
 /**
  * Vite's root is tool/, so by default it only watches tool/. Without this, a prototype created while
- * the dev server runs (yarn proto new / iterate) stays « Introuvable » until a restart: the registry's
+ * the dev server runs (yarn mockup new / iterate) stays « Introuvable » until a restart: the registry's
  * import.meta.glob never hears about the new files.
  */
 function watchContentFolders(): Plugin {
@@ -89,7 +89,7 @@ function reloadRegistry(server: ViteDevServer): number {
 
 /**
  * POST /__proto/status?task=<task>&status=<status>[&version=<version>] — the shell's « Retenir cette version »
- * button. The team decision is a click of the human, not a request to the agent: it runs `proto status`, which
+ * button. The team decision is a click of the human, not a request to the agent: it runs `mockup status`, which
  * writes meta.json, then reloads the shell.
  */
 function protoStatusEndpoint(): Plugin {
@@ -110,7 +110,7 @@ function protoStatusEndpoint(): Plugin {
                return
             }
 
-            const result = spawnSync(process.execPath, [join(TOOL, 'cli', 'proto.mjs'), 'status', task, status, ...(version ? [version] : [])], {
+            const result = spawnSync(process.execPath, [join(TOOL, 'cli', 'mockup.mjs'), 'status', task, status, ...(version ? [version] : [])], {
                cwd: ROOT,
                encoding: 'utf8',
             })
@@ -128,7 +128,7 @@ function protoStatusEndpoint(): Plugin {
 }
 
 /**
- * GET /__proto/refresh?dir=<task>[/<version>] — called by `proto new` and `proto iterate` right after they
+ * GET /__proto/refresh?dir=<task>[/<version>] — called by `mockup new` and `mockup iterate` right after they
  * write files. On some drives (network, mapped or aliased ones) the watcher never hears about a new folder,
  * or hears it under another drive letter than the one Vite knows the files by. So this does not go through
  * the watcher: it drops the registry module, whose import.meta.glob lists are then rebuilt from the disk,

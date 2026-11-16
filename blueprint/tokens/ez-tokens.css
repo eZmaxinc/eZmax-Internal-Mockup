@@ -196,7 +196,7 @@
 }
 
 /* ───────────────────────── Dark theme ────────────────────────────
- * Same color names, other primitives. Every color of the @theme is redefined here (proto check).
+ * Same color names, other primitives. Every color of the @theme is redefined here (mockup check).
  * Turned on by the class Quasar's Dark plugin puts on <body>. Provisional: no production reference.
  */
 .body--dark {

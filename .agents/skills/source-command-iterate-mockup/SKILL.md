@@ -1,6 +1,6 @@
 ---
-name: "source-command-iterate-proto"
-description: "Create the next version of an existing prototype from the user's feedback. Use when the user asks for `iterate-proto`."
+name: "source-command-iterate-mockup"
+description: "Create the next version of an existing prototype from the user's feedback. Use when the user asks for `iterate-mockup`."
 ---
 
 # Iterate prototype

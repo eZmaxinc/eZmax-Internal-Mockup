@@ -1,5 +1,5 @@
 /**
- * Shared helpers for the `proto` CLI: paths, arguments, prompts, task lookup.
+ * Shared helpers for the `mockup` CLI: paths, arguments, prompts, task lookup.
  * Code in English; everything the user reads is in French.
  */
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
@@ -162,7 +162,7 @@ export function findTask(input) {
 
    if (matches.length === 1) return matches[0].id
    if (matches.length > 1) fail(`« ${value} » correspond à plusieurs tâches: ${matches.map((task) => task.id).join(', ')}`)
-   fail(`Aucune tâche ne correspond à « ${value} ».`, 'Voir les tâches: yarn proto list')
+   fail(`Aucune tâche ne correspond à « ${value} ».`, 'Voir les tâches: yarn mockup list')
 }
 
 /** Task from the argument, else from the current folder, else asked (interactive), else an error. */
@@ -172,7 +172,7 @@ export async function resolveTask(input, usage) {
    if (fromCwd) return fromCwd
 
    const tasks = listTasks().filter((task) => task.meta.status !== 'archived')
-   if (!tasks.length) fail('Aucune tâche.', 'Créer: yarn proto new')
+   if (!tasks.length) fail('Aucune tâche.', 'Créer: yarn mockup new')
    if (!isInteractive) fail('Tâche manquante.', usage)
 
    return choose('Quelle tâche?', tasks.slice(0, 15).map((task) => ({ value: task.id, label: taskLabel(task) })))

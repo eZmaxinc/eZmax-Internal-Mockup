@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * proto — create and maintain prototypes. Run through yarn: `yarn proto <command> …`
+ * mockup — create and maintain mockups. Run through yarn: `yarn mockup <command> …`
  * Asks for what is missing in an interactive terminal; fails with a clear message otherwise (agents, CI).
  */
 const COMMANDS = {
@@ -19,23 +19,23 @@ const COMMANDS = {
 }
 
 const HELP = `
-proto — prototypes ez-proto
+mockup — maquettes ez-proto
 
-Usage: yarn proto <commande> [arguments]
+Usage: yarn mockup <commande> [arguments]
 
 ${Object.entries(COMMANDS).map(([name, text]) => `  ${name.padEnd(10)} ${text}`).join('\n')}
 
 Exemples:
-  yarn proto new "Relance des signataires" --from detail-page
-  yarn proto new "Relance des signataires" 49198 https://www.goodday.work/t/M2nSjU   # GoodDay facultatif
-  yarn proto iterate relance -m "Relance groupée avec message"
-  yarn proto iterate relance --from v001 -m "Variante: relance depuis la liste"
-  yarn proto status relance chosen v002
-  yarn proto open relance
-  yarn proto diff relance v001 v002
-  yarn proto check relance
-  yarn proto export relance v002
-  yarn proto tokens bump patch -m "Couleurs de la prod"
+  yarn mockup new "Relance des signataires" --from detail-page
+  yarn mockup new "Relance des signataires" 49198 https://www.goodday.work/t/M2nSjU   # GoodDay facultatif
+  yarn mockup iterate relance -m "Relance groupée avec message"
+  yarn mockup iterate relance --from v001 -m "Variante: relance depuis la liste"
+  yarn mockup status relance chosen v002
+  yarn mockup open relance
+  yarn mockup diff relance v001 v002
+  yarn mockup check relance
+  yarn mockup export relance v002
+  yarn mockup tokens bump patch -m "Couleurs de la prod"
 
 Une tâche se désigne par le nom de son dossier ou une partie (relance), son numéro ou son lien
 GoodDay s'il est connu, ou rien du tout si la commande est lancée depuis son dossier.

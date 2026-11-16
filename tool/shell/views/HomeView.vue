@@ -3,7 +3,7 @@
       <header class="home__top">
          <h1>Prototypes</h1>
          <span class="shell-count">{{ theTasks.length }}</span>
-         <copy-button class="home__hint" text="yarn proto new" outlined />
+         <copy-button class="home__hint" text="yarn mockup new" outlined />
       </header>
 
       <div class="home__filters">
@@ -40,7 +40,7 @@
          </router-link>
 
          <p v-if="!theVisibleTasks.length" class="home__empty">
-            {{ theTasks.length ? 'Aucun prototype ne correspond.' : 'Aucun prototype. Créer le premier: yarn proto new' }}
+            {{ theTasks.length ? 'Aucun prototype ne correspond.' : 'Aucun prototype. Créer le premier: yarn mockup new' }}
          </p>
       </nav>
 

@@ -1,5 +1,5 @@
 /**
- * yarn proto new "Titre" [numéro GoodDay] [lien GoodDay] [--from <patron>|vide] [--chrome none] [--owner "Nom"] [--slug <slug>]
+ * yarn mockup new "Titre" [numéro GoodDay] [lien GoodDay] [--from <patron>|vide] [--chrome none] [--owner "Nom"] [--slug <slug>]
  * Creates prototypes/<slug>/ with meta.json and v001. GoodDay is optional: kept in meta.json when given.
  */
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
@@ -9,7 +9,7 @@ import {
    ask, choose, fail, flagString, gitUserName, isInteractive, listPatterns, listTasks, normalizeGoodDayUrl, notifyDevServer, parseArgs, slugify, today, writeMeta,
 } from '../lib.mjs'
 
-const USAGE = 'Usage: yarn proto new "Titre" [numéro GoodDay] [lien GoodDay] [--from <patron>] [--slug <nom-court>]'
+const USAGE = 'Usage: yarn mockup new "Titre" [numéro GoodDay] [lien GoodDay] [--from <patron>] [--slug <nom-court>]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -39,7 +39,7 @@ export async function run(argv) {
       const latest = existing.versions.at(-1) ?? 'aucune version'
       fail(
          `Cette tâche a déjà un prototype: prototypes/${existing.id} (dernière version: ${latest}).`,
-         `Ne pas le recommencer. Demander quoi faire: retoucher ${latest} en place, ou une nouvelle version (yarn proto iterate ${existing.id} -m "…"). Un autre sujet: --slug <autre-nom>.`,
+         `Ne pas le recommencer. Demander quoi faire: retoucher ${latest} en place, ou une nouvelle version (yarn mockup iterate ${existing.id} -m "…"). Un autre sujet: --slug <autre-nom>.`,
       )
    }
 
@@ -92,7 +92,7 @@ export async function run(argv) {
    console.log('  Ensuite:')
    console.log(`   1. Des contraintes ont été données? Les écrire dans prototypes/${taskId}/README.md (sinon, pas de README)`)
    console.log('   2. Construire v001/index.vue et v001/mocks.ts')
-   console.log(`   3. yarn proto check ${taskId}`)
-   console.log(`   4. yarn proto open ${taskId}`)
+   console.log(`   3. yarn mockup check ${taskId}`)
+   console.log(`   4. yarn mockup open ${taskId}`)
    await notifyDevServer(taskId)
 }

@@ -1,6 +1,6 @@
 /**
  * Guardrails for prototypes. Run before declaring a version done.
- *   yarn proto check [tâche] [--no-types]
+ *   yarn mockup check [tâche] [--no-types]
  * Errors (✗) fail the run; warnings (⚠) are printed only.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
@@ -41,7 +41,7 @@ export async function run(argv) {
    for (const error of errors) console.error(`✗ ${error}`)
 
    if (errors.length) {
-      console.error(`\n✗ proto check: ${errors.length} erreur(s), ${warnings.length} avertissement(s)`)
+      console.error(`\n✗ mockup check: ${errors.length} erreur(s), ${warnings.length} avertissement(s)`)
       process.exit(1)
    }
 
@@ -94,7 +94,7 @@ function checkStructure(onlyTask, errors, warnings) {
       if (!meta.title) errors.push(`${where}/meta.json: "title" est requis`)
       if (!STATUSES.includes(meta.status)) errors.push(`${where}/meta.json: "status" doit valoir ${STATUSES.join(', ')}`)
       if (meta.chosen && !listVersions(taskId).includes(meta.chosen)) errors.push(`${where}/meta.json: "chosen" pointe vers ${meta.chosen}, qui n'existe pas`)
-      if (meta.status === 'chosen' && !meta.chosen) warnings.push(`${where}/meta.json: statut « chosen » sans version retenue (yarn proto status ${taskId} chosen vXXX)`)
+      if (meta.status === 'chosen' && !meta.chosen) warnings.push(`${where}/meta.json: statut « chosen » sans version retenue (yarn mockup status ${taskId} chosen vXXX)`)
 
       for (const entry of listDirs(taskDir)) {
          if (!VERSION_PATTERN.test(entry)) {
@@ -146,7 +146,7 @@ function checkCommittedVersionsUntouched(onlyTask, warnings) {
    for (const [version, files] of touched) {
       const [, taskId, versionId] = version.split('/')
       const reason = frozenReason(taskId, versionId)
-      if (reason) warnings.push(`${version} est figée (${reason}) et a été modifiée (${files.join(', ')}). Demandé? Sinon: git restore ${version}, puis yarn proto iterate pour une nouvelle version.`)
+      if (reason) warnings.push(`${version} est figée (${reason}) et a été modifiée (${files.join(', ')}). Demandé? Sinon: git restore ${version}, puis yarn mockup iterate pour une nouvelle version.`)
    }
 }
 
@@ -175,7 +175,7 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
 
    // Generated files must match the components
    for (const { file, content } of expectedFiles(catalog)) {
-      if (!existsSync(file) || readFileSync(file, 'utf8') !== content) errors.push(`${rel(file)}: pas à jour avec les composants: yarn proto catalog`)
+      if (!existsSync(file) || readFileSync(file, 'utf8') !== content) errors.push(`${rel(file)}: pas à jour avec les composants: yarn mockup catalog`)
    }
 
    if (!onlyTask) {
@@ -288,7 +288,7 @@ function checkTokenNames(files, errors) {
          const [, prefix, name] = match
          const next = ALL_RENAMES[name]
          const hint = next ? `renommé en ${prefix}${next}` : `retiré: ${REMOVED_HINTS[name]}`
-         errors.push(`${where(match.index)}: ${match[0]}: ${hint} (yarn proto tokens migrate)`)
+         errors.push(`${where(match.index)}: ${match[0]}: ${hint} (yarn mockup tokens migrate)`)
       }
 
       for (const match of code.matchAll(/var\(--color-([a-z-]+)/g)) {

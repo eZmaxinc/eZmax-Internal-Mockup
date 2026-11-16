@@ -1,7 +1,7 @@
 /**
  * Token renames between ez-tokens versions: old name → new name (null = removed, see the message).
- * Used by `proto check` (catches old names in prototypes and components: Tailwind would silently
- * generate nothing for them) and by `proto tokens migrate` (rewrites them).
+ * Used by `mockup check` (catches old names in prototypes and components: Tailwind would silently
+ * generate nothing for them) and by `mockup tokens migrate` (rewrites them).
  * Names are the part after --color- (and after bg-, text-, border-… in utilities).
  */
 export const TOKEN_RENAMES = {

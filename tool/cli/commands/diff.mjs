@@ -1,12 +1,12 @@
 /**
- * yarn proto diff [tâche] [avant] [après] [--stat]
+ * yarn mockup diff [tâche] [avant] [après] [--stat]
  * Default: the latest version against the one it was based on (notes.md → based_on).
  */
 import { spawnSync } from 'node:child_process'
 import { join } from 'node:path'
 import { PROTOTYPES, fail, listVersions, parseArgs, readNotesHeader, rel, resolveTask } from '../lib.mjs'
 
-const USAGE = 'Usage: yarn proto diff <tâche> [avant] [après]'
+const USAGE = 'Usage: yarn mockup diff <tâche> [avant] [après]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)

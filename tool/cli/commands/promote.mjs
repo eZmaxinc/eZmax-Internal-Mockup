@@ -1,5 +1,5 @@
 /**
- * yarn proto promote <tâche> <version> <Composant> [-m "pourquoi"]
+ * yarn mockup promote <tâche> <version> <Composant> [-m "pourquoi"]
  * Moves a primitive of a version into the blueprint, on a human decision only:
  *   enhanced (same name as a blueprint primitive) → replaces the original, where it is
  *   created or suggested                          → blueprint/ez/components/<name>/ez-<name>.vue (+ ez-<name>.example.vue)
@@ -13,7 +13,7 @@ import { PROTOTYPES, ROOT, fail, findTask, flagString, listVersions, parseArgs, 
 import { CATALOG_MD, COMPONENTS_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
 import { run as regenerateCatalog } from './catalog.mjs'
 
-const USAGE = 'Usage: yarn proto promote <tâche> <version> <Composant> [-m "pourquoi"]'
+const USAGE = 'Usage: yarn mockup promote <tâche> <version> <Composant> [-m "pourquoi"]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -25,7 +25,7 @@ export async function run(argv) {
 
    const sourceName = componentInput.startsWith('ez-') ? toPascal(componentInput) : componentInput.replace(/\.vue$/, '')
    const source = join(PROTOTYPES, taskId, version, 'components', `${sourceName}.vue`)
-   if (!existsSync(source)) fail(`Composant introuvable: ${rel(source)}`, 'Voir: yarn proto proposals')
+   if (!existsSync(source)) fail(`Composant introuvable: ${rel(source)}`, 'Voir: yarn mockup proposals')
 
    // In the blueprint every component is an ez- one: FolderTimeline becomes EzFolderTimeline
    const name = sourceName.startsWith('Ez') ? sourceName : `Ez${sourceName}`
@@ -99,7 +99,7 @@ export async function run(argv) {
       console.log(`   2. Il est dans la galerie (Autres composants); ajuster son exemple: ${rel(join(targetDir, `${tag}.example.vue`))}`)
       console.log(`   3. Les prochaines versions l'utilisent sans import; ${version} garde sa copie`)
    }
-   console.log('   4. yarn proto check')
+   console.log('   4. yarn mockup check')
 }
 
 
@@ -122,7 +122,7 @@ function exampleFor(component) {
       ]
       : [`   <${open} />`]
    return [
-      '<!-- Exemple de la galerie, généré par proto promote: à ajuster pour montrer les cas utiles. -->',
+      '<!-- Exemple de la galerie, généré par mockup promote: à ajuster pour montrer les cas utiles. -->',
       '<template>',
       ...body,
       '</template>',

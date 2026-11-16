@@ -121,7 +121,7 @@ export function checkShared(source, changelog) {
    if (!version) problems.push({ line: 1, message: 'en-tête « ez-tokens X.Y.Z — AAAA-MM-JJ » absent' })
    else {
       const logged = changelog.match(/^## (\d+\.\d+\.\d+)/m)?.[1]
-      if (logged !== version.text) problems.push({ line: 1, message: `version ${version.text} dans l'en-tête, ${logged ?? 'aucune'} en haut de CHANGELOG.md (yarn proto tokens bump)` })
+      if (logged !== version.text) problems.push({ line: 1, message: `version ${version.text} dans l'en-tête, ${logged ?? 'aucune'} en haut de CHANGELOG.md (yarn mockup tokens bump)` })
    }
 
    return problems

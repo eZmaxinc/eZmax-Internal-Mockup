@@ -1,6 +1,6 @@
 ---
-name: "source-command-export-proto"
-description: "Export a prototype version as a single interactive HTML file. Use when the user asks for `export-proto`."
+name: "source-command-export-mockup"
+description: "Export a prototype version as a single interactive HTML file. Use when the user asks for `export-mockup`."
 ---
 
 # Export prototype
