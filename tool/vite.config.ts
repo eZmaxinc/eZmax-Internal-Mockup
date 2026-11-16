@@ -157,6 +157,9 @@ function protoRefreshEndpoint(): Plugin {
 
 export default defineConfig({
    root: TOOL,
+   // Relative paths in the build: dist/ works from any folder, e.g. https://ezmaxinc.github.io/eZmax-Internal-Mockup/
+   // (the dev server still serves from /). The routes are hashes, so no server rewrite is needed.
+   base: './',
    plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), protoStatusEndpoint(), watchContentFolders()],
    resolve: { alias: aliases },
    server: {

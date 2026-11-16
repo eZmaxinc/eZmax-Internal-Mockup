@@ -52,7 +52,7 @@ const theTarget = computed(() => {
       const meta: Partial<ProtoMeta> = task?.meta ?? {}
       const latest = task?.versions.at(-1)?.id
       return {
-         shellUrl: `/#/p/${id}/${version}`,
+         shellUrl: `${import.meta.env.BASE_URL}#/p/${id}/${version}`,
          newer: latest && latest !== version ? { id: latest, url: `#/p/${id}/${latest}` } : null,
          key: `p/${id}/${version}`,
          load: () => loadModule(`prototypes/${id}/${version}`),
@@ -63,7 +63,7 @@ const theTarget = computed(() => {
 
    if (kind === 'e' && id) {
       return {
-         shellUrl: `/#/e/${id}`,
+         shellUrl: `${import.meta.env.BASE_URL}#/e/${id}`,
          newer: null,
          key: `e/${id}`,
          load: () => loadModule(`blueprint/patterns/${id}`),
