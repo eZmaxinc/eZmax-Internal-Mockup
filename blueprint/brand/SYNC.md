@@ -12,7 +12,7 @@ Fait dans `ez-tokens` 2.0.0. On n'a pas recopié `quasar.variables.scss`: on en 
 2. **Icônes**: aligner les clés de `blueprint/ez/icons.ts` sur celles d'`ez.icons` en prod.
 3. **Composants**: noms, props, slots et émissions des composants `ez-` de `ezmax-library-quasar`; noter les écarts dans `blueprint/ez/CATALOG.md` (« ⚠ à valider »).
 4. **Captures**: rafraîchir `blueprint/brand/screens/`.
-5. **Vérifier**: `pnpm dev`, ouvrir la galerie et un patron de `blueprint/patterns/` à côté de la vraie app.
+5. **Vérifier**: `yarn dev`, ouvrir la galerie et un patron de `blueprint/patterns/` à côté de la vraie app.
 6. Ajouter une ligne au tableau ci-dessous.
 
 ## Dernières observations

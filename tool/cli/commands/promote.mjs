@@ -1,5 +1,5 @@
 /**
- * pnpm proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]
+ * yarn proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]
  * Moves a component of a version into the blueprint, on a human decision only:
  *   enhanced (same name as a blueprint component) → replaces the original, where it is
  *   created or suggested, domain                  → blueprint/ez/domain/<object>/<Name>.vue
@@ -13,7 +13,7 @@ import { PROTOTYPES, ROOT, fail, findTask, flagString, listVersions, parseArgs, 
 import { CATALOG_MD, DOMAIN_DIR, PRIMITIVES_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
 import { run as regenerateCatalog } from './catalog.mjs'
 
-const USAGE = 'Usage: pnpm proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]'
+const USAGE = 'Usage: yarn proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -25,7 +25,7 @@ export async function run(argv) {
 
    const sourceName = componentInput.startsWith('ez-') ? toPascal(componentInput) : componentInput.replace(/\.vue$/, '')
    const source = join(PROTOTYPES, taskId, version, 'components', `${sourceName}.vue`)
-   if (!existsSync(source)) fail(`Composant introuvable: ${rel(source)}`, 'Voir: pnpm proto proposals')
+   if (!existsSync(source)) fail(`Composant introuvable: ${rel(source)}`, 'Voir: yarn proto proposals')
 
    // In the blueprint every component is an ez- one: FolderTimeline becomes EzFolderTimeline
    const name = sourceName.startsWith('Ez') ? sourceName : `Ez${sourceName}`
@@ -84,5 +84,5 @@ export async function run(argv) {
       console.log('   2. L\'ajouter à la galerie (tool/frame/GalleryPage.vue)')
       console.log(`   3. Les prochaines versions l'utilisent sans import; ${version} garde sa copie`)
    }
-   console.log('   4. pnpm proto check')
+   console.log('   4. yarn proto check')
 }

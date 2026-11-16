@@ -1,5 +1,5 @@
 /**
- * pnpm proto list [--status review] [--mine] [--all]
+ * yarn proto list [--status review] [--mine] [--all]
  * Archived tasks are hidden unless --all or --status archived.
  */
 import { STATUSES, STATUS_LABELS, fail, flagString, gitUserName, listTasks, parseArgs } from '../lib.mjs'

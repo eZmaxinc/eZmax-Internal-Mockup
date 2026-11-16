@@ -14,7 +14,7 @@ git switch main && git pull
 git status --short
 ```
 
-`git status --short` doit être vide. Lancer un seul shell (`pnpm dev`), l'ouvrir dans le navigateur de Cursor, puis ouvrir une conversation d'agent neuve avec `ez-proto` comme dossier racine. Noter le commit (`git rev-parse --short HEAD`) et le modèle.
+`git status --short` doit être vide. Lancer un seul shell (`yarn dev`), l'ouvrir dans le navigateur de Cursor, puis ouvrir une conversation d'agent neuve avec `ez-proto` comme dossier racine. Noter le commit (`git rev-parse --short HEAD`) et le modèle.
 
 Coller chaque demande telle quelle, sans aider l'agent, et chronométrer jusqu'au moment où le résultat est à l'écran.
 
@@ -45,7 +45,7 @@ Coller chaque demande telle quelle, sans aider l'agent, et chronométrer jusqu'a
 | 3 | Temps de la nouvelle version | moins de 4 min |
 | 4 | La retouche s'est faite en place: pas de `v003`, pas de navigateur | oui |
 | 5 | `v001` n'a pas bougé après la nouvelle version (`git status`) | oui |
-| 6 | `pnpm proto check 90003` passe, lancé par l'agent | oui |
+| 6 | `yarn proto check 90003` passe, lancé par l'agent | oui |
 | 7 | Ce qui existe est réutilisé: `ez-btn`, `ez-table`, `ez-badge-folder-state`; rien de refait à la main | oui |
 | 8 | Ce qui est inventé reste dans le genre eZsign, en clair et en sombre (à juger à l'œil, à côté des captures de `blueprint/brand/screens/`) | note sur 5 |
 | 9 | `blueprint/` et `tool/` n'ont pas changé (`git status`) | oui |
@@ -54,7 +54,7 @@ Coller chaque demande telle quelle, sans aider l'agent, et chronométrer jusqu'a
 Ensuite, regarder ce que l'essai a produit:
 
 ```bash
-pnpm proto proposals
+yarn proto proposals
 ```
 
 ## Journal

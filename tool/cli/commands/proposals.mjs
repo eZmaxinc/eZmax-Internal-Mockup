@@ -1,5 +1,5 @@
 /**
- * pnpm proto proposals [--all]
+ * yarn proto proposals [--all]
  * What prototypes ask of the blueprint, for the team to decide:
  *   - components proposed in prototypes (components/ of a version, with a @proposal header), most requested first
  *   - what the latest version of each task built by hand (local components, scoped styles)
@@ -74,7 +74,7 @@ function showLocalVisuals() {
          const kind = original ? ` (rehausse ${original.file}${diffStat(join(ROOT, original.file), file)})` : isLocalComponent ? ' (créé)' : ''
          items.push(`${basename(file)}${kind}${styleLines ? `: ${styleLines} ligne(s) de style` : ''}`)
          if (original) items.push(`  Voir l'écart: git diff --no-index ${original.file} ${rel(file)}`)
-         if (isLocalComponent) items.push(`  Promouvoir: pnpm proto promote ${taskId} ${version} ${basename(file, '.vue')}`)
+         if (isLocalComponent) items.push(`  Promouvoir: yarn proto promote ${taskId} ${version} ${basename(file, '.vue')}`)
       }
       if (!items.length) continue
       found = true
@@ -106,7 +106,7 @@ function showComponents(all) {
       if (group.header?.reason) console.log(`   ${group.header.reason}`)
       for (const occurrence of group.occurrences) console.log(`   - ${occurrence.taskId}/${occurrence.version}`)
       const latest = group.occurrences.at(-1)
-      if (!group.promoted) console.log(`   Promouvoir: pnpm proto promote ${latest.taskId} ${latest.version} ${group.name}`)
+      if (!group.promoted) console.log(`   Promouvoir: yarn proto promote ${latest.taskId} ${latest.version} ${group.name}`)
       console.log('')
    }
 }

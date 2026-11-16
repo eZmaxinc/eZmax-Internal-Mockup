@@ -1,5 +1,5 @@
 /**
- * pnpm proto iterate [tâche] [-m "Résumé"] [--from v001] [--variant]
+ * yarn proto iterate [tâche] [-m "Résumé"] [--from v001] [--variant]
  *   default      → v(max+1), copied from the latest version
  *   --from v001  → copy that version instead of the latest
  *   --variant    → parallel variant of the source: v002 → v002b (then v002c…)
@@ -9,7 +9,7 @@ import { cpSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { PROTOTYPES, VERSION_PATTERN, ask, fail, flagString, isInteractive, listVersions, notifyDevServer, parseArgs, resolveTask, today } from '../lib.mjs'
 
-const USAGE = 'Usage: pnpm proto iterate <tâche> -m "Résumé" [--from v001] [--variant]'
+const USAGE = 'Usage: yarn proto iterate <tâche> -m "Résumé" [--from v001] [--variant]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -55,6 +55,6 @@ export async function run(argv) {
    console.log(`  Fichiers: ${readdirSync(targetDir).join(', ')}`)
    console.log('')
    console.log(`  Ensuite: modifier ${target}/ seulement (jamais ${source}/), tenir ${target}/notes.md à jour (résumé, signalements et questions nouveaux),`)
-   console.log(`  puis pnpm proto check ${taskId}`)
+   console.log(`  puis yarn proto check ${taskId}`)
    await notifyDevServer(`${taskId}/${target}`)
 }

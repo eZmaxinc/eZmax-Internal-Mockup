@@ -1,7 +1,7 @@
 /**
- * pnpm proto tokens                                       version, last change, how to copy into the mono
- * pnpm proto tokens bump <patch|minor|major> -m "…"       new version: header of ez-tokens.css + CHANGELOG entry
- * pnpm proto tokens migrate                               rewrites old token names (tool/cli/token-renames.mjs)
+ * yarn proto tokens                                       version, last change, how to copy into the mono
+ * yarn proto tokens bump <patch|minor|major> -m "…"       new version: header of ez-tokens.css + CHANGELOG entry
+ * yarn proto tokens migrate                               rewrites old token names (tool/cli/token-renames.mjs)
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -18,7 +18,7 @@ export async function run(argv) {
    if (!action) return show()
    if (action === 'bump') return bump(level, flagString(flags, 'message'))
    if (action === 'migrate') return migrateAll()
-   fail(`Action inconnue « ${action} ».`, 'Usage: pnpm proto tokens [bump <patch|minor|major> -m "…" | migrate]')
+   fail(`Action inconnue « ${action} ».`, 'Usage: yarn proto tokens [bump <patch|minor|major> -m "…" | migrate]')
 }
 
 function show() {
@@ -33,7 +33,7 @@ function show() {
 }
 
 function bump(level, message) {
-   if (!LEVELS.includes(level)) fail('Niveau requis: patch (une valeur), minor (un ajout) ou major (un renommage ou un retrait).', 'Usage: pnpm proto tokens bump <patch|minor|major> -m "Ce qui change"')
+   if (!LEVELS.includes(level)) fail('Niveau requis: patch (une valeur), minor (un ajout) ou major (un renommage ou un retrait).', 'Usage: yarn proto tokens bump <patch|minor|major> -m "Ce qui change"')
    if (!message) fail('Décrire le changement avec -m "…": il va dans le CHANGELOG.')
 
    const source = readFileSync(SHARED_FILE, 'utf8')
@@ -55,7 +55,7 @@ function bump(level, message) {
    console.log(`✓ ez-tokens ${current.text} → ${next}`)
    console.log(`  ${rel(SHARED_FILE)} (en-tête) et ${rel(CHANGELOG_FILE)} mis à jour`)
    console.log('')
-   console.log('  Ensuite: pnpm proto check, puis copier dans le mono (blueprint/tokens/COPY.md)')
+   console.log('  Ensuite: yarn proto check, puis copier dans le mono (blueprint/tokens/COPY.md)')
 }
 
 function migrateAll() {

@@ -1,5 +1,5 @@
 /**
- * pnpm proto new [numéro] [lien] ["Titre"] [--from <patron>|vide] [--chrome none] [--owner "Nom"] [--slug <slug>]
+ * yarn proto new [numéro] [lien] ["Titre"] [--from <patron>|vide] [--chrome none] [--owner "Nom"] [--slug <slug>]
  * Creates prototypes/<numéro>-<slug>/ with meta.json and v001.
  */
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
@@ -9,7 +9,7 @@ import {
    ask, choose, fail, flagString, gitUserName, isInteractive, listPatterns, listTasks, normalizeGoodDayUrl, notifyDevServer, parseArgs, slugify, today, writeMeta,
 } from '../lib.mjs'
 
-const USAGE = 'Usage: pnpm proto new <numéro GoodDay> <lien GoodDay> "Titre" [--from <patron>]'
+const USAGE = 'Usage: yarn proto new <numéro GoodDay> <lien GoodDay> "Titre" [--from <patron>]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -33,7 +33,7 @@ export async function run(argv) {
       const latest = existing.versions.at(-1) ?? 'aucune version'
       fail(
          `La tâche #${number} a déjà un prototype: prototypes/${existing.id} (dernière version: ${latest}).`,
-         `Ne pas le recommencer. Demander quoi faire: retoucher ${latest} en place, ou une nouvelle version (pnpm proto iterate ${number} -m "…").`,
+         `Ne pas le recommencer. Demander quoi faire: retoucher ${latest} en place, ou une nouvelle version (yarn proto iterate ${number} -m "…").`,
       )
    }
 
@@ -97,7 +97,7 @@ export async function run(argv) {
    console.log('  Ensuite:')
    console.log(`   1. Le brief est la tâche GoodDay. Des contraintes ont été données? Les écrire dans prototypes/${taskId}/README.md (sinon, pas de README)`)
    console.log('   2. Construire v001/index.vue et v001/mocks.ts')
-   console.log(`   3. pnpm proto check ${number}`)
-   console.log(`   4. pnpm proto open ${number}`)
+   console.log(`   3. yarn proto check ${number}`)
+   console.log(`   4. yarn proto open ${number}`)
    await notifyDevServer(taskId)
 }

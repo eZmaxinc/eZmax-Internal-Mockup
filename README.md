@@ -7,23 +7,25 @@ Projet distinct du mono, sans lien avec sa librairie. `blueprint/` est le relev�
 ## Démarrer
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:5180
+yarn install
+yarn dev        # http://localhost:5180
 ```
+
+Yarn 1 (`packageManager` dans `package.json`). Pas de commande `yarn`: `corepack enable yarn`.
 
 Ouvrir `ez-proto` comme dossier racine dans Cursor (pas le mono), le shell dans le navigateur de Cursor, puis demander:
 
 > Nouveau prototype pour la tâche #49198 (https://www.goodday.work/t/M2nSjU): permettre au propriétaire de relancer les signataires en retard depuis la fiche du dossier.
 
-Un seul shell à la fois: le port est fixe. Une version créée s'affiche sans le relancer. Sur un lecteur réseau où les modifications n'apparaissent pas: `PROTO_POLL=1 pnpm dev`. Un autre port: `PROTO_PORT=5190 pnpm dev`.
+Un seul shell à la fois: le port est fixe. Une version créée s'affiche sans le relancer. Sur un lecteur réseau où les modifications n'apparaissent pas: `PROTO_POLL=1 yarn dev`. Un autre port: `PROTO_PORT=5190 yarn dev`.
 
 ## Comment ça marche
 
 - **Un prototype = une tâche GoodDay.** Son dossier porte le nom de la branche: `feature/49198-relance-signataires` → `prototypes/49198-relance-signataires/`.
 - **L'agent réutilise ce qui existe et invente le reste dans le même genre.** Un composant `ez-` quand il y en a un, les tokens pour toute couleur. Ce qui n'existe pas (une ligne du temps, un canevas) se construit dans la version. Il peut aussi rehausser un composant existant, dans une copie locale.
 - **Le dev marque les versions.** Un retour s'applique en place dans la dernière version; une nouvelle version (`v002`) ou une variante (`v002b`) se demande.
-- **Le check à chaque fois, le navigateur quand ça paie.** `pnpm proto check` garde la conformité (couleurs, composants, types) en quelques secondes. L'agent ne refait pas le tour du navigateur à chaque retouche: tu regardes la même page que lui.
-- **L'humain synchronise.** `pnpm proto proposals` montre ce que les prototypes ont créé, rehaussé ou proposé; `pnpm proto promote` le fait entrer dans `blueprint/`. Rien de ça ne bloque un prototype.
+- **Le check à chaque fois, le navigateur quand ça paie.** `yarn proto check` garde la conformité (couleurs, composants, types) en quelques secondes. L'agent ne refait pas le tour du navigateur à chaque retouche: tu regardes la même page que lui.
+- **L'humain synchronise.** `yarn proto proposals` montre ce que les prototypes ont créé, rehaussé ou proposé; `yarn proto promote` le fait entrer dans `blueprint/`. Rien de ça ne bloque un prototype.
 
 Les règles de l'agent sont dans [`AGENTS.md`](AGENTS.md), et seulement là: `.cursor/` et `.agents/` y renvoient. Commandes prêtes dans Cursor: `/new-proto`, `/iterate-proto`, `/variant-proto`, `/export-proto`.
 
@@ -35,20 +37,20 @@ Le tableau de bord liste les prototypes, les patrons de référence et la galeri
 
 | Commande | Effet |
 |---|---|
-| `pnpm proto new <numéro> <lien> "Titre"` | Nouvelle tâche + `v001` (`--from list-page`, `detail-page` ou `edit-form`) |
-| `pnpm proto iterate <tâche> -m "Résumé"` | Version suivante copiée de la dernière (`--from v001`, `--variant`) |
-| `pnpm proto check [tâche]` | Couleurs, composants et props connus, structure, imports, types |
-| `pnpm proto open [tâche] [version]` | Donne l'adresse du shell |
-| `pnpm proto diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |
-| `pnpm proto status <tâche> <statut> [version]` | `draft`, `review`, `chosen` (avec la version retenue) ou `archived`. Aussi d'un clic dans le shell: le statut de la tâche ouvre la liste des statuts, et l'étoile (☆) sur la ligne d'une version la retient |
-| `pnpm proto list` | Les tâches et leur état (`--status review`, `--mine`, `--all`) |
-| `pnpm proto export <tâche> [version]` | `exports/<tâche>-<version>.html`, un seul fichier, interactif |
-| `pnpm proto proposals` | Ce que les prototypes ont créé, rehaussé ou proposé, et leurs signalements |
-| `pnpm proto promote <tâche> <version> <Nom>` | Fait entrer un composant d'une version dans `blueprint/ez` (un rehaussé remplace l'original) |
-| `pnpm proto catalog` | Régénère le catalogue après un changement dans `blueprint/ez` |
-| `pnpm proto tokens` | Version des tokens (`bump patch\|minor\|major -m …`) |
+| `yarn proto new <numéro> <lien> "Titre"` | Nouvelle tâche + `v001` (`--from list-page`, `detail-page` ou `edit-form`) |
+| `yarn proto iterate <tâche> -m "Résumé"` | Version suivante copiée de la dernière (`--from v001`, `--variant`) |
+| `yarn proto check [tâche]` | Couleurs, composants et props connus, structure, imports, types |
+| `yarn proto open [tâche] [version]` | Donne l'adresse du shell |
+| `yarn proto diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |
+| `yarn proto status <tâche> <statut> [version]` | `draft`, `review`, `chosen` (avec la version retenue) ou `archived`. Aussi d'un clic dans le shell: le statut de la tâche ouvre la liste des statuts, et l'étoile (☆) sur la ligne d'une version la retient |
+| `yarn proto list` | Les tâches et leur état (`--status review`, `--mine`, `--all`) |
+| `yarn proto export <tâche> [version]` | `exports/<tâche>-<version>.html`, un seul fichier, interactif |
+| `yarn proto proposals` | Ce que les prototypes ont créé, rehaussé ou proposé, et leurs signalements |
+| `yarn proto promote <tâche> <version> <Nom>` | Fait entrer un composant d'une version dans `blueprint/ez` (un rehaussé remplace l'original) |
+| `yarn proto catalog` | Régénère le catalogue après un changement dans `blueprint/ez` |
+| `yarn proto tokens` | Version des tokens (`bump patch\|minor\|major -m …`) |
 
-Une tâche se désigne par son numéro GoodDay, son lien ou une partie du nom de son dossier. Sans arguments, dans un terminal, `pnpm proto new` pose les questions.
+Une tâche se désigne par son numéro GoodDay, son lien ou une partie du nom de son dossier. Sans arguments, dans un terminal, `yarn proto new` pose les questions.
 
 ## Structure
 
@@ -75,9 +77,9 @@ Tout est en fichiers, sans base de données: JSON pour ce qu'on interroge, Markd
 | Il utilise mal un composant | sa fiche dans `blueprint/ez/CATALOG.md` |
 | Il assemble mal une page | un patron dans `blueprint/patterns/` |
 | Il contourne une règle sans que rien ne le dise | `tool/cli/commands/check.mjs` |
-| Couleurs, typo, rayons | `blueprint/tokens/ez-tokens.css`, puis `pnpm proto tokens bump` |
+| Couleurs, typo, rayons | `blueprint/tokens/ez-tokens.css`, puis `yarn proto tokens bump` |
 | Ton, principes visuels, captures | `blueprint/brand/` |
-| Un composant | `blueprint/ez/`, puis `pnpm proto catalog`; ou `pnpm proto promote` depuis un prototype |
+| Un composant | `blueprint/ez/`, puis `yarn proto catalog`; ou `yarn proto promote` depuis un prototype |
 | Objets métier partagés | `blueprint/mocks/` |
 
 ## Vers le mono

@@ -1,5 +1,5 @@
 /**
- * pnpm proto catalog
+ * yarn proto catalog
  * Rebuilds what is generated from the ez- components (blueprint/ez/primitives, blueprint/ez/domain):
  *   catalog.json             the API of every component (read by proto check and by agents)
  *   components.generated.ts  global registration + types (no hand-written list anymore)

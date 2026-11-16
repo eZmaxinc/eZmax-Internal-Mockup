@@ -1,5 +1,5 @@
 {
-   "generatedBy": "pnpm proto catalog",
+   "generatedBy": "yarn proto catalog",
    "components": [
       {
          "tag": "ez-app-shell",

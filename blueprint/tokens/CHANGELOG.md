@@ -1,6 +1,6 @@
 # ez-tokens — changements
 
-Le plus récent en haut. `pnpm proto tokens bump` ajoute les entrées. Copie vers le mono: `COPY.md`.
+Le plus récent en haut. `yarn proto tokens bump` ajoute les entrées. Copie vers le mono: `COPY.md`.
 
 ## 2.1.0 — 2026-11-11
 

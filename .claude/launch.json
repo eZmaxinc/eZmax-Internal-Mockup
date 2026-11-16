@@ -3,7 +3,7 @@
    "configurations": [
       {
          "name": "ez-proto",
-         "runtimeExecutable": "pnpm",
+         "runtimeExecutable": "yarn",
          "runtimeArgs": ["dev", "--port", "5182"],
          "port": 5182
       }

@@ -22,5 +22,5 @@ export const aliases = {
    '@': TOOL,
 }
 
-/** The shell's port. Fixed on purpose (strictPort): a second `pnpm dev` fails instead of quietly taking 5181. */
+/** The shell's port. Fixed on purpose (strictPort): a second `yarn dev` fails instead of quietly taking 5181. */
 export const DEV_PORT = Number(process.env.PROTO_PORT) || 5180

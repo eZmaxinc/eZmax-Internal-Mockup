@@ -5,7 +5,7 @@ import { gettext } from './i18n'
 
 /**
  * Every ez- component, registered globally. The list is generated from the files in
- * primitives/ and domain/ by `pnpm proto catalog` (components.generated.ts): never by hand.
+ * primitives/ and domain/ by `yarn proto catalog` (components.generated.ts): never by hand.
  */
 export { components }
 

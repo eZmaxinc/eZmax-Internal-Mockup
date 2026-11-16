@@ -49,7 +49,7 @@ function protoExportEndpoint(): Plugin {
 
 /**
  * Vite's root is tool/, so by default it only watches tool/. Without this, a prototype created while
- * the dev server runs (pnpm proto new / iterate) stays « Introuvable » until a restart: the registry's
+ * the dev server runs (yarn proto new / iterate) stays « Introuvable » until a restart: the registry's
  * import.meta.glob never hears about the new files.
  */
 function watchContentFolders(): Plugin {
@@ -161,11 +161,11 @@ export default defineConfig({
    resolve: { alias: aliases },
    server: {
       port: DEV_PORT,
-      // One shell at a time: a second `pnpm dev` says the port is taken instead of starting on 5181,
+      // One shell at a time: a second `yarn dev` says the port is taken instead of starting on 5181,
       // where nobody looks (an agent then tests an old server, or starts a third one).
       strictPort: true,
       fs: { allow: [ROOT] },
-      // PROTO_POLL=1 pnpm dev — for a drive that sends no file events at all (edits never show up)
+      // PROTO_POLL=1 yarn dev — for a drive that sends no file events at all (edits never show up)
       watch: process.env.PROTO_POLL ? { usePolling: true, interval: 300 } : undefined,
    },
    build: {

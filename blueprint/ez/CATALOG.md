@@ -1,6 +1,6 @@
 # Catalogue `ez-`
 
-Composants enregistrés globalement: on les utilise directement dans les templates (`<ez-btn>`), sans import. Ce fichier dit **quand utiliser quoi**; l'API exacte (props, valeurs permises, slots, émissions) est dans la section générée à la fin, tirée du code par `pnpm proto catalog`. `proto check` refuse un composant, une prop ou une valeur qui n'y est pas.
+Composants enregistrés globalement: on les utilise directement dans les templates (`<ez-btn>`), sans import. Ce fichier dit **quand utiliser quoi**; l'API exacte (props, valeurs permises, slots, émissions) est dans la section générée à la fin, tirée du code par `yarn proto catalog`. `proto check` refuse un composant, une prop ou une valeur qui n'y est pas.
 
 ## Deux niveaux
 
@@ -130,13 +130,13 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 ```
 
 - `@proposal domain <objet>` ou `@proposal primitive`, puis pourquoi il existe. Une proposition suit les règles de son niveau (`proto check` les vérifie): une proposition métier n'a ni couleur, ni bordure, ni ombre, ni arrondi à elle.
-- Rien de tout ça ne bloque le prototype. `pnpm proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `pnpm proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande.
+- Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande.
 
-<!-- api:start — généré par pnpm proto catalog, ne pas modifier à la main -->
+<!-- api:start — généré par yarn proto catalog, ne pas modifier à la main -->
 
 ## API (généré)
 
-Tiré du code des composants par `pnpm proto catalog`. `*` = prop obligatoire. Le texte au-dessus de cette section est écrit à la main: quand utiliser quoi.
+Tiré du code des composants par `yarn proto catalog`. `*` = prop obligatoire. Le texte au-dessus de cette section est écrit à la main: quand utiliser quoi.
 
 ### Primitives
 

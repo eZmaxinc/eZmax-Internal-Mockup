@@ -1,5 +1,5 @@
 /**
- * pnpm proto open [tâche] [version] [--scenario <nom>] [--print]
+ * yarn proto open [tâche] [version] [--scenario <nom>] [--print]
  *
  * In a terminal: opens the shell in the system browser, starting the dev server first if needed.
  * For an agent (no terminal, or --print): never starts anything, prints the URL to open in the agent's
@@ -28,7 +28,7 @@ export async function run(argv) {
    if (!isInteractive || flags.print) {
       console.log(`Shell: ${origin}${shellPath}`)
       if (taskId) console.log('       Paramètres de l\'adresse: ?scenario=<nom de mocks.ts>&theme=dark&width=mobile (ou tablet, desktop)')
-      if (!serverUp) fail(`Le shell ne tourne pas sur ${origin}.`, 'Le lancer en arrière-plan: pnpm dev')
+      if (!serverUp) fail(`Le shell ne tourne pas sur ${origin}.`, 'Le lancer en arrière-plan: yarn dev')
       return
    }
 

@@ -134,7 +134,7 @@ export function readNotesHeader(taskId, versionId) {
 
 /* ───────────── Task lookup ───────────── */
 
-/** Task folder containing the directory the command was launched from (pnpm sets INIT_CWD). */
+/** Task folder containing the directory the command was launched from (yarn sets INIT_CWD). */
 export function taskFromCwd() {
    const cwd = process.env.INIT_CWD ?? process.cwd()
    const path = relative(PROTOTYPES, cwd)
@@ -162,7 +162,7 @@ export function findTask(input) {
 
    if (matches.length === 1) return matches[0].id
    if (matches.length > 1) fail(`« ${value} » correspond à plusieurs tâches: ${matches.map((task) => task.id).join(', ')}`)
-   fail(`Aucune tâche ne correspond à « ${value} ».`, 'Voir les tâches: pnpm proto list')
+   fail(`Aucune tâche ne correspond à « ${value} ».`, 'Voir les tâches: yarn proto list')
 }
 
 /** Task from the argument, else from the current folder, else asked (interactive), else an error. */
@@ -172,7 +172,7 @@ export async function resolveTask(input, usage) {
    if (fromCwd) return fromCwd
 
    const tasks = listTasks().filter((task) => task.meta.status !== 'archived')
-   if (!tasks.length) fail('Aucune tâche.', 'Créer: pnpm proto new')
+   if (!tasks.length) fail('Aucune tâche.', 'Créer: yarn proto new')
    if (!isInteractive) fail('Tâche manquante.', usage)
 
    return choose('Quelle tâche?', tasks.slice(0, 15).map((task) => ({ value: task.id, label: taskLabel(task) })))
@@ -219,7 +219,7 @@ export async function notifyDevServer(dir) {
       const response = await fetch(`${origin}/__proto/refresh?dir=${encodeURIComponent(dir)}`, { signal: AbortSignal.timeout(1500) })
       const answer = response.ok ? await response.json().catch(() => null) : null
       if (answer?.ok) console.log(`  Shell prévenu (${origin}): la version est visible sans le relancer.`)
-      else console.log(`  ⚠ Le shell sur ${origin} date d'avant une mise à jour: l'arrêter et relancer pnpm dev.`)
+      else console.log(`  ⚠ Le shell sur ${origin} date d'avant une mise à jour: l'arrêter et relancer yarn dev.`)
    }
    catch {
       // No shell running: nothing to tell

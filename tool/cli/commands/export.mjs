@@ -1,6 +1,6 @@
 /**
  * Exports one prototype version as a single self-contained, interactive HTML file.
- *   pnpm proto export [tâche] [version] [--quiet]    (default version: the chosen one, else the latest)
+ *   yarn proto export [tâche] [version] [--quiet]    (default version: the chosen one, else the latest)
  * Output: exports/<tâche>-<version>.html
  */
 import { build } from 'vite'
@@ -11,7 +11,7 @@ import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { EXPORTS, PROTOTYPES, ROOT, TOOL, aliases, fail, listVersions, parseArgs, readMeta, resolveTask } from '../lib.mjs'
 
-const USAGE = 'Usage: pnpm proto export <tâche> [version]'
+const USAGE = 'Usage: yarn proto export <tâche> [version]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)

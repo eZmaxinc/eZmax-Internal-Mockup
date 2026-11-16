@@ -5,20 +5,20 @@ You build **prototypes** of eZsign/eZmax screens, fast: existing screens look li
 ## Golden rules
 
 1. **Reuse what exists, invent the rest in the same family.** What exists is mandatory: an `ez-` component whenever one does the job (`blueprint/ez/CATALOG.md`), semantic tokens for every color (`blueprint/tokens/ez-tokens.css`, semantic layer), the scales for sizes and spaces, a pattern from `blueprint/patterns/` when the page is a list, a detail or a form. What doesn't exist, you build: a new interface (a timeline, a board, a canvas, a wizard…) is plain HTML, utilities and a scoped style in the version, made only of tokens. Never rebuild by hand something an `ez-` component already is (a button, a field, a table, a card, a badge, a dialog…). No raw colors, no Tailwind palette (`bg-blue-500` doesn't exist here), no `--prim-*`. `proto check` rejects a raw color, an unknown `ez-` component, prop or value, and a raw `<button>`, `<input>`, `<select>`, `<textarea>`, `<table>`.
-2. **Create or enhance in the version; the human syncs the app.** Everything you add lives in `vNNN/components/`, imported by `index.vue`, free in its markup and style (tokens only), with no header and no ceremony. *Create*: a piece that is big or used twice (`FolderTimeline.vue`). *Enhance*: an existing `ez-` component that lacks something (a prop, a slot, a state): copy its file from `blueprint/ez/` into `components/` under the same name (`EzCard.vue`), change the copy, import it; in that version it replaces the original. *Suggest*, optional, when a piece would clearly serve other tasks: name it `Ez…` and start it with `<!-- @proposal domain <object>: why -->` (or `@proposal primitive: why`). None of this blocks or slows the prototype: `pnpm proto proposals` finds what was created, enhanced and suggested by itself, and a human decides what goes into `blueprint/ez/` (`pnpm proto promote`) and into the app. Never edit `blueprint/ez/` yourself unless asked.
+2. **Create or enhance in the version; the human syncs the app.** Everything you add lives in `vNNN/components/`, imported by `index.vue`, free in its markup and style (tokens only), with no header and no ceremony. *Create*: a piece that is big or used twice (`FolderTimeline.vue`). *Enhance*: an existing `ez-` component that lacks something (a prop, a slot, a state): copy its file from `blueprint/ez/` into `components/` under the same name (`EzCard.vue`), change the copy, import it; in that version it replaces the original. *Suggest*, optional, when a piece would clearly serve other tasks: name it `Ez…` and start it with `<!-- @proposal domain <object>: why -->` (or `@proposal primitive: why`). None of this blocks or slows the prototype: `yarn proto proposals` finds what was created, enhanced and suggested by itself, and a human decides what goes into `blueprint/ez/` (`yarn proto promote`) and into the app. Never edit `blueprint/ez/` yourself unless asked.
 3. **One prototype = one GoodDay task.** Every task folder is `prototypes/<GoodDay number>-<slug>/`, named like the branch (`feature/49198-la-tache` → `49198-la-tache`), with `goodday: { number, url }` in `meta.json`. No number or link? Ask the user. **The task already has a folder** (`proto new` says so, or you find one): stop and tell the user (folder, latest version). Don't start it over; go on only on their instruction (golden rule 4 says where the changes go).
-4. **The human marks the versions.** Feedback is applied in place, in the **working version**: the latest version of the task. Create a new version (`pnpm proto iterate`) only when the user asks for one (« nouvelle version », `/iterate-proto`, `/variant-proto`); never on your own. A version is **frozen** when a later one exists, when it is the `chosen` one, or when the task has left `draft` (teammates have looked at it): never edit a frozen version. Feedback on a frozen version: say so and ask whether to create a new one. `proto check` flags an edited frozen version.
+4. **The human marks the versions.** Feedback is applied in place, in the **working version**: the latest version of the task. Create a new version (`yarn proto iterate`) only when the user asks for one (« nouvelle version », `/iterate-proto`, `/variant-proto`); never on your own. A version is **frozen** when a later one exists, when it is the `chosen` one, or when the task has left `draft` (teammates have looked at it): never edit a frozen version. Feedback on a frozen version: say so and ask whether to create a new one. `proto check` flags an edited frozen version.
 5. **One version = one folder, self-contained.** It imports only from `vue`, `@ez`, `@mocks` and its own files. Never `../` into another version.
 6. **Data lives in `mocks.ts` as named scenarios** (first = default). Cover at least the main state plus one edge state (empty, error, closed…). Use the business objects from `@mocks` and their methods (`stateLabel()`, `stateTone()`, `isStateClosed()`…).
-7. **Keep `notes.md` short.** First line = one-sentence summary: it labels the version in the shell, for the teammates who open it. Then only what must outlive the conversation, and only what is new in this version: « Signalements » and « Questions ouvertes ». No list of changes (`pnpm proto diff` shows them), no list of proposals (the `@proposal` header says why). Nothing to report: the summary alone is a complete `notes.md`.
-8. **Check every time, look in the browser only when it pays.** Run `pnpm proto check <task>` before saying you're done, and fix every ✗: it is the conformity gate, and it is fast. The browser is the user's: they watch the **Shell** (the versions and the dev bar around the prototype), and see your change as you save. So:
+7. **Keep `notes.md` short.** First line = one-sentence summary: it labels the version in the shell, for the teammates who open it. Then only what must outlive the conversation, and only what is new in this version: « Signalements » and « Questions ouvertes ». No list of changes (`yarn proto diff` shows them), no list of proposals (the `@proposal` header says why). Nothing to report: the summary alone is a complete `notes.md`.
+8. **Check every time, look in the browser only when it pays.** Run `yarn proto check <task>` before saying you're done, and fix every ✗: it is the conformity gate, and it is fast. The browser is the user's: they watch the **Shell** (the versions and the dev bar around the prototype), and see your change as you save. So:
    - **Adjusting** (the default): check, then stop. No browser.
    - **A new version** (`v001`, an iteration, a variant): check, then load its Shell URL once and read the page (no screenshot) to confirm the default scenario renders. Fix what is broken.
-   - **Full tour**, only when the user asks or before `pnpm proto status <task> review`: every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (`&width=mobile`, 390 px).
+   - **Full tour**, only when the user asks or before `yarn proto status <task> review`: every scenario (`?scenario=<name>`), the dark theme (`&theme=dark`) and a narrow width (`&width=mobile`, 390 px).
 
-   `pnpm proto open <task> <version>` prints the Shell URL, and says so if the shell is not running; only then start `pnpm dev` in a background terminal. There is one shell, on one port: never start a second one, a new version shows up in the running shell without a restart. Never open `frame.html` yourself. Drive the shell by its address, no clicking in the dev bar: `?scenario=<name>&theme=dark&width=mobile` (or `tablet`, `desktop`); a parameter left out is the default. A new version says « Introuvable »: the shell missed it, tell the user instead of touching `tool/` or starting a second server.
-9. **Tokens change only on purpose.** Never add a token in a prototype. A new or changed token is an explicit edit of `blueprint/tokens/ez-tokens.css` followed by `pnpm proto tokens bump`, and only when the user asks.
-10. **Flat files only.** No database: structured data in JSON (`meta.json`), prose in Markdown, history in git and in the version folders. Change a task's status with `pnpm proto status`, not by hand.
+   `yarn proto open <task> <version>` prints the Shell URL, and says so if the shell is not running; only then start `yarn dev` in a background terminal. There is one shell, on one port: never start a second one, a new version shows up in the running shell without a restart. Never open `frame.html` yourself. Drive the shell by its address, no clicking in the dev bar: `?scenario=<name>&theme=dark&width=mobile` (or `tablet`, `desktop`); a parameter left out is the default. A new version says « Introuvable »: the shell missed it, tell the user instead of touching `tool/` or starting a second server.
+9. **Tokens change only on purpose.** Never add a token in a prototype. A new or changed token is an explicit edit of `blueprint/tokens/ez-tokens.css` followed by `yarn proto tokens bump`, and only when the user asks.
+10. **Flat files only.** No database: structured data in JSON (`meta.json`), prose in Markdown, history in git and in the version folders. Change a task's status with `yarn proto status`, not by hand.
 
 ## Read before building
 
@@ -31,11 +31,11 @@ You build **prototypes** of eZsign/eZmax screens, fast: existing screens look li
 | Starting a task | `prototypes/<task>/README.md`, when there is one (the constraints given with the request) |
 | Iterating | the source version's `index.vue`, `mocks.ts`, `notes.md` |
 
-That is enough to build. **Don't read `tool/`** (the CLI explains itself: `pnpm proto help`) **nor the source of `blueprint/ez` or `blueprint/mocks`**: the catalog and `API.md` are generated from it. The one exception is the file of a component you are enhancing (golden rule 2), which you copy.
+That is enough to build. **Don't read `tool/`** (the CLI explains itself: `yarn proto help`) **nor the source of `blueprint/ez` or `blueprint/mocks`**: the catalog and `API.md` are generated from it. The one exception is the file of a component you are enhancing (golden rule 2), which you copy.
 
 ## Starter: a version in three files
 
-`pnpm proto new` (or `iterate`) creates them; this is the shape to aim for.
+`yarn proto new` (or `iterate`) creates them; this is the shape to aim for.
 
 `mocks.ts`: named scenarios, the first is the default. Dates always through `daysFromToday()`; set only what matters to the story, the factories fill the rest.
 
@@ -105,7 +105,7 @@ Liste des dossiers qui expirent bientôt, avec prolongation.
 - …
 ```
 
-**Something is wrong in `blueprint/`**: don't fix it there. A component that is wrong or lacks something: enhance it in the version (golden rule 2), the copy is the suggested fix. A helper or a mock that is wrong or missing: work around it in the version and write one line under « Signalements » (`Bug helper: …`, `Mock manquant: …`). `pnpm proto proposals` collects both for the team.
+**Something is wrong in `blueprint/`**: don't fix it there. A component that is wrong or lacks something: enhance it in the version (golden rule 2), the copy is the suggested fix. A helper or a mock that is wrong or missing: work around it in the version and write one line under « Signalements » (`Bug helper: …`, `Mock manquant: …`). `yarn proto proposals` collects both for the team.
 
 **Your final message** is the report, said once and briefly: the task, the version, what changed in a few lines, the scenarios, one line naming the components you created, enhanced or suggested (or none), the « Signalements » and the open questions (or « aucun »). Don't paste `notes.md` into it, and don't repeat what an earlier version already reported. Give the user the **Shell** URL of the version you worked in, without parameters.
 
@@ -115,7 +115,7 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 
 **New** (`/new-proto`)
 1. Get the GoodDay number and link (ask if either is missing). Use the French title of the GoodDay task. Pick the closest pattern if one fits.
-2. `pnpm proto new <number> <link> "<Titre>" [--from <pattern>]`. The task already has a prototype: stop (golden rule 3).
+2. `yarn proto new <number> <link> "<Titre>" [--from <pattern>]`. The task already has a prototype: stop (golden rule 3).
 3. The brief is the GoodDay task: its title and link are in `meta.json`, nothing to copy. Only when the user stated constraints or an out-of-scope, write them in `prototypes/<task>/README.md`, in their words: a list, no title, no link, no paraphrase of the request. No constraints: no `README.md`. Ask only if something blocking is missing.
 4. Build `v001/index.vue`, `v001/mocks.ts` (at least two scenarios) and `v001/notes.md`: the smallest screen that answers the task, not every idea around it. Don't read other prototypes to get started: the catalog, the patterns and the starter below are the references.
 
@@ -126,40 +126,40 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 
 **Iterate** (`/iterate-proto`, or the user asks for a new version): mark a step, then go on in the new version.
 1. Identify the task (ask if ambiguous). Read the latest version's `index.vue`, `mocks.ts`, `notes.md`, and the task `README.md` if there is one, unless they are already in this conversation.
-2. `pnpm proto iterate <task> -m "<one-line summary>"` (`--from vNNN` to start from an older version).
+2. `yarn proto iterate <task> -m "<one-line summary>"` (`--from vNNN` to start from an older version).
 3. Edit only the new folder: apply the feedback, keep everything else identical. Its `notes.md` starts empty of the previous version's reports: write only the new ones.
 
 **Variant** (`/variant-proto`, or the user asks for another approach to compare): an alternative next to a version (`v002` → `v002b`), not a replacement.
 1. Read the source version, and the task `README.md` if there is one.
-2. `pnpm proto iterate <task> -m "Variante: <summary>" --variant [--from vNNN]`.
+2. `yarn proto iterate <task> -m "Variante: <summary>" --variant [--from vNNN]`.
 3. Change only what the alternative is about, so the two compare cleanly in the shell (« Comparer avec »). Its summary says what the variant tries; its open question is the one the comparison should answer.
 
 **Export** (`/export-proto`)
 1. Identify the task and version (default: the `chosen` version, else the latest).
-2. `pnpm proto check <task>`, fix every ✗, then `pnpm proto export <task> [version]`.
+2. `yarn proto check <task>`, fix every ✗, then `yarn proto export <task> [version]`.
 3. Report the path, `exports/<task>-<version>.html`: one file, offline, with the scenario switcher.
 
-**Team decision**: the human retains a version themselves, in the shell: the star (☆) on the line of the version, in the left panel. The status of the task is changed there too, by a click on it. Don't do it for them, and don't spend a turn on it. `pnpm proto status <task> review|chosen|archived [vNNN]` is for the other statuses, or when the user asks you to; set `chosen` only when the user says which version is retained.
+**Team decision**: the human retains a version themselves, in the shell: the star (☆) on the line of the version, in the left panel. The status of the task is changed there too, by a click on it. Don't do it for them, and don't spend a turn on it. `yarn proto status <task> review|chosen|archived [vNNN]` is for the other statuses, or when the user asks you to; set `chosen` only when the user says which version is retained.
 
 ## Commands
 
-One CLI, `pnpm proto` (`pnpm proto help` for everything). In a non-interactive shell it never prompts: pass every argument.
+One CLI, `yarn proto` (`yarn proto help` for everything). In a non-interactive shell it never prompts: pass every argument.
 
 ```bash
-pnpm proto new 49198 https://www.goodday.work/t/M2nSjU "Titre"            # new task + v001 (blank)
-pnpm proto new 49198 https://www.goodday.work/t/M2nSjU "Titre" --from detail-page
-pnpm proto iterate <task> -m "Résumé"                    # next version from the latest
-pnpm proto iterate <task> -m "Résumé" --from v001        # from an older version
-pnpm proto iterate <task> -m "Résumé" --variant          # v002 → v002b
-pnpm proto status <task> review|chosen|archived [vNNN]   # team decision, in meta.json
-pnpm proto list [--status review] [--mine] [--all]
-pnpm proto diff <task> [v001] [v002]
-pnpm proto check [task]                                  # rules + types
-pnpm proto export <task> [version]                       # → exports/<task>-<version>.html
-pnpm proto proposals                                     # components proposed in prototypes, most requested first
-pnpm proto catalog                                       # regenerate the catalog after a change in blueprint/ez (only when asked)
-pnpm proto tokens [bump patch|minor|major -m "…"]         # shared tokens: version, changelog (only when asked)
-pnpm proto open [task] [version]                         # shell on http://localhost:5180
+yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Titre"            # new task + v001 (blank)
+yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Titre" --from detail-page
+yarn proto iterate <task> -m "Résumé"                    # next version from the latest
+yarn proto iterate <task> -m "Résumé" --from v001        # from an older version
+yarn proto iterate <task> -m "Résumé" --variant          # v002 → v002b
+yarn proto status <task> review|chosen|archived [vNNN]   # team decision, in meta.json
+yarn proto list [--status review] [--mine] [--all]
+yarn proto diff <task> [v001] [v002]
+yarn proto check [task]                                  # rules + types
+yarn proto export <task> [version]                       # → exports/<task>-<version>.html
+yarn proto proposals                                     # components proposed in prototypes, most requested first
+yarn proto catalog                                       # regenerate the catalog after a change in blueprint/ez (only when asked)
+yarn proto tokens [bump patch|minor|major -m "…"]         # shared tokens: version, changelog (only when asked)
+yarn proto open [task] [version]                         # shell on http://localhost:5180
 ```
 
 `<task>` accepts the GoodDay number (`49198` or `#49198`), the GoodDay link, the folder name or a unique part of it.
