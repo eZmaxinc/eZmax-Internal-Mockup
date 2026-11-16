@@ -11,7 +11,7 @@ const USAGE = 'Usage: yarn proto diff <tâche> [avant] [après]'
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
    // "diff v001 v002" from inside the task folder: no task argument
-   const startsWithVersion = /^v\d{3}[a-z]?$/.test(positional[0] ?? '')
+   const startsWithVersion = /^v\d{3}$/.test(positional[0] ?? '')
    const taskId = await resolveTask(startsWithVersion ? undefined : positional[0], USAGE)
    const [before, after] = startsWithVersion ? positional : positional.slice(1)
 

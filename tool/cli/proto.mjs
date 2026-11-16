@@ -28,7 +28,7 @@ ${Object.entries(COMMANDS).map(([name, text]) => `  ${name.padEnd(10)} ${text}`)
 Exemples:
   yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Relance des signataires" --from detail-page
   yarn proto iterate 49198 -m "Relance groupée avec message"
-  yarn proto iterate 49198 --variant -m "Relance depuis la liste"
+  yarn proto iterate 49198 --from v001 -m "Variante: relance depuis la liste"
   yarn proto status 49198 chosen v002
   yarn proto open 49198
   yarn proto diff 49198 v001 v002

@@ -3,7 +3,7 @@ import type { Scenarios } from '@ez'
 
 /**
  * File-system registry. Everything is discovered from disk — no database:
- *   prototypes/<task>/meta.json, README.md, v###[a-z]/{index.vue, mocks.ts, notes.md}
+ *   prototypes/<task>/meta.json, README.md, v###/{index.vue, mocks.ts, notes.md}
  *   blueprint/patterns/<name>/{index.vue, mocks.ts, notes.md}
  *
  * Only meta.json, README.md and notes.md are read at startup. Components and scenarios
@@ -63,7 +63,7 @@ export interface PatternEntry {
    notes: VersionNotes
 }
 
-const VERSION_PATTERN = /^v\d{3}[a-z]?$/
+const VERSION_PATTERN = /^v\d{3}$/
 
 /** Glob keys are relative to this file ("../prototypes/…"); normalize them to project paths ("prototypes/…"). */
 function byProjectPath<T>(entries: Record<string, T>): Record<string, T> {

@@ -129,9 +129,9 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 2. `yarn proto iterate <task> -m "<one-line summary>"` (`--from vNNN` to start from an older version).
 3. Edit only the new folder: apply the feedback, keep everything else identical. Its `notes.md` starts empty of the previous version's reports: write only the new ones.
 
-**Variant** (`/variant-proto`, or the user asks for another approach to compare): an alternative next to a version (`v002` → `v002b`), not a replacement.
+**Variant** (`/variant-proto`, or the user asks for another approach to compare): an alternative to a version, not a replacement. Versions stay linear (`v001`, `v002`, `v003`…, no letters): a variant is simply the next version, and its `based_on` says which one it starts from.
 1. Read the source version, and the task `README.md` if there is one.
-2. `yarn proto iterate <task> -m "Variante: <summary>" --variant [--from vNNN]`.
+2. `yarn proto iterate <task> -m "Variante: <summary>" [--from vNNN]` (default source: the latest version).
 3. Change only what the alternative is about, so the two compare cleanly in the shell (« Comparer avec »). Its summary says what the variant tries; its open question is the one the comparison should answer.
 
 **Export** (`/export-proto`)
@@ -150,7 +150,7 @@ yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Titre"            # new 
 yarn proto new 49198 https://www.goodday.work/t/M2nSjU "Titre" --from detail-page
 yarn proto iterate <task> -m "Résumé"                    # next version from the latest
 yarn proto iterate <task> -m "Résumé" --from v001        # from an older version
-yarn proto iterate <task> -m "Résumé" --variant          # v002 → v002b
+yarn proto iterate <task> -m "Variante: Résumé" --from v001   # a variant is the next version too
 yarn proto status <task> review|chosen|archived [vNNN]   # team decision, in meta.json
 yarn proto list [--status review] [--mine] [--all]
 yarn proto diff <task> [v001] [v002]

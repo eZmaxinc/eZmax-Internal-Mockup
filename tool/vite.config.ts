@@ -19,7 +19,7 @@ function protoExportEndpoint(): Plugin {
             const url = new URL(req.url ?? '', 'http://localhost')
             const task = url.searchParams.get('task') ?? ''
             const version = url.searchParams.get('version') ?? ''
-            const valid = /^[\w-]+$/.test(task) && /^v\d{3}[a-z]?$/.test(version)
+            const valid = /^[\w-]+$/.test(task) && /^v\d{3}$/.test(version)
 
             if (!valid) {
                res.statusCode = 400
@@ -102,7 +102,7 @@ function protoStatusEndpoint(): Plugin {
             const task = url.searchParams.get('task') ?? ''
             const status = url.searchParams.get('status') ?? ''
             const version = url.searchParams.get('version') ?? ''
-            const valid = req.method === 'POST' && /^[\w-]+$/.test(task) && /^(draft|review|chosen|archived)$/.test(status) && /^(v\d{3}[a-z]?)?$/.test(version)
+            const valid = req.method === 'POST' && /^[\w-]+$/.test(task) && /^(draft|review|chosen|archived)$/.test(status) && /^(v\d{3})?$/.test(version)
 
             if (!valid) {
                res.statusCode = 400
@@ -143,7 +143,7 @@ function protoRefreshEndpoint(): Plugin {
             const dir = new URL(req.url ?? '', 'http://localhost').searchParams.get('dir') ?? ''
 
             res.setHeader('Content-Type', 'application/json')
-            if (!/^[\w-]+(\/v\d{3}[a-z]?)?$/.test(dir) || !existsSync(join(PROTOTYPES, dir))) {
+            if (!/^[\w-]+(\/v\d{3})?$/.test(dir) || !existsSync(join(PROTOTYPES, dir))) {
                res.statusCode = 400
                res.end('{"ok":false}')
                return

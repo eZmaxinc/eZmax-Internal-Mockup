@@ -1,5 +1,5 @@
 ---
-based_on: v001c
+based_on: v003
 date: 2026-11-11
 ---
 Variante: la frise n'est plus dans la page. Un bouton rond à côté du titre « Rappels et dates » l'ouvre dans un popover; la carte ne garde que les boîtes de données.

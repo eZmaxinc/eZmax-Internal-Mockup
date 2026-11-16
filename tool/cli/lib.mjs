@@ -10,7 +10,7 @@ import { DEV_PORT, PATTERNS, PROTOTYPES, ROOT } from '../paths.mjs'
 
 export * from '../paths.mjs'
 
-export const VERSION_PATTERN = /^v(\d{3})([a-z]?)$/
+export const VERSION_PATTERN = /^v(\d{3})$/
 export const STATUSES = ['draft', 'review', 'chosen', 'archived']
 export const STATUS_LABELS = { draft: 'brouillon', review: 'en revue', chosen: 'retenu', archived: 'archivé' }
 export const GOODDAY_URL = /^https?:\/\/(?:www\.)?goodday\.work\/t\/([A-Za-z0-9]+)\/?$/

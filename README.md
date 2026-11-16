@@ -23,7 +23,7 @@ Un seul shell à la fois: le port est fixe. Une version créée s'affiche sans l
 
 - **Un prototype = une tâche GoodDay.** Son dossier porte le nom de la branche: `feature/49198-relance-signataires` → `prototypes/49198-relance-signataires/`.
 - **L'agent réutilise ce qui existe et invente le reste dans le même genre.** Un composant `ez-` quand il y en a un, les tokens pour toute couleur. Ce qui n'existe pas (une ligne du temps, un canevas) se construit dans la version. Il peut aussi rehausser un composant existant, dans une copie locale.
-- **Le dev marque les versions.** Un retour s'applique en place dans la dernière version; une nouvelle version (`v002`) ou une variante (`v002b`) se demande.
+- **Le dev marque les versions.** Un retour s'applique en place dans la dernière version; une nouvelle version se demande. Les versions se suivent (`v001`, `v002`, `v003`…): une variante est la version suivante, son résumé commence par « Variante: » et le shell dit de quelle version elle part.
 - **Le check à chaque fois, le navigateur quand ça paie.** `yarn proto check` garde la conformité (couleurs, composants, types) en quelques secondes. L'agent ne refait pas le tour du navigateur à chaque retouche: tu regardes la même page que lui.
 - **L'humain synchronise.** `yarn proto proposals` montre ce que les prototypes ont créé, rehaussé ou proposé; `yarn proto promote` le fait entrer dans `blueprint/`. Rien de ça ne bloque un prototype.
 
@@ -38,7 +38,7 @@ Le tableau de bord liste les prototypes, les patrons de référence et la galeri
 | Commande | Effet |
 |---|---|
 | `yarn proto new <numéro> <lien> "Titre"` | Nouvelle tâche + `v001` (`--from list-page`, `detail-page` ou `edit-form`) |
-| `yarn proto iterate <tâche> -m "Résumé"` | Version suivante copiée de la dernière (`--from v001`, `--variant`) |
+| `yarn proto iterate <tâche> -m "Résumé"` | Version suivante copiée de la dernière (`--from v001` pour partir d'une autre, une variante par exemple) |
 | `yarn proto check [tâche]` | Couleurs, composants et props connus, structure, imports, types |
 | `yarn proto open [tâche] [version]` | Donne l'adresse du shell |
 | `yarn proto diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |

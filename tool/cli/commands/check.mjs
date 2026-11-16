@@ -102,7 +102,7 @@ function checkStructure(onlyTask, errors, warnings) {
 
       for (const entry of listDirs(taskDir)) {
          if (!VERSION_PATTERN.test(entry)) {
-            errors.push(`${rel(join(taskDir, entry))}: les versions se nomment v001, v002, v002b…`)
+            errors.push(`${rel(join(taskDir, entry))}: les versions se nomment v001, v002, v003… (une variante est la version suivante)`)
             continue
          }
          for (const file of ['index.vue', 'mocks.ts', 'notes.md']) {
@@ -142,7 +142,7 @@ function checkCommittedVersionsUntouched(onlyTask, warnings) {
    for (const line of result.stdout.split('\n')) {
       if (!line.trim() || line.startsWith('??')) continue
       const path = line.slice(3).trim().replace(/^"|"$/g, '').split(' -> ').pop()
-      const match = path.match(/^prototypes\/([^/]+)\/(v\d{3}[a-z]?)\//)
+      const match = path.match(/^prototypes\/([^/]+)\/(v\d{3})\//)
       if (!match || (onlyTask && match[1] !== onlyTask)) continue
       const key = `prototypes/${match[1]}/${match[2]}`
       touched.set(key, [...(touched.get(key) ?? []), path.split('/').pop()])
@@ -362,7 +362,7 @@ function checkContent(files, errors, warnings) {
       for (const match of code.matchAll(/\bfrom\s+['"]([^'"]+)['"]|\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)|^\s*import\s+['"]([^'"]+)['"]/gm)) {
          const specifier = match[1] ?? match[2] ?? match[3]
          // A component of the version (vNNN/components/X.vue) may read the version's own files: ../mocks
-         const ownVersionFile = /[\\/]v\d{3}[a-z]?[\\/]components[\\/][^\\/]+$/.test(file) && /^\.\.\/[\w.-]+$/.test(specifier)
+         const ownVersionFile = /[\\/]v\d{3}[\\/]components[\\/][^\\/]+$/.test(file) && /^\.\.\/[\w.-]+$/.test(specifier)
          if (!ownVersionFile && !ALLOWED_IMPORTS.some((allowed) => allowed.test(specifier))) {
             errors.push(`${rel(file)}:${lineOf(code, match.index)}: import "${specifier}": un prototype n'importe que vue, @ez, @mocks ou les fichiers de sa propre version (jamais ../ une autre version)`)
          }
