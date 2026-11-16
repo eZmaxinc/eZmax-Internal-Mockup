@@ -2,8 +2,8 @@
    <!--
       A vertical frieze, one row per event. The signature is dated from the sending (J0, J60); the retention
       is counted from the closing of the folder (F, F+180).
-      Every reminder is a small hollow dot; the long runs (the daily reminders, the archiving) are folded
-      into one dashed stretch that says what it holds.
+      Every reminder is a small hollow dot, and so is the early completion: a condition, explained
+      in the same bubble as a reminder. The daily reminders fold into one quiet dash.
    -->
    <ol class="rail">
       <li
@@ -11,6 +11,7 @@
          :key="index"
          class="rail__row"
          :class="[`rail__row--${theRow.kind}`, `rail__row--in-${index ? rows[index - 1].line : 'none'}`, `rail__row--out-${theRow.line}`, theRow.tone ? `rail__row--${theRow.tone}` : '']"
+         :style="theRow.span ? { '--rail-span': theRow.span } : undefined"
       >
          <span class="rail__code">{{ theRow.code }}</span>
          <span class="rail__track">
@@ -28,34 +29,59 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { gettext } from '@ez'
-import EzTooltip from './EzTooltip.vue'
-import { reminderDaysOf, rhythmOf, type FolderTypeLifecycle } from '../mocks'
+import { gettext } from "@ez";
+import { computed } from "vue";
+import { type FolderTypeLifecycle, reminderDaysOf, rhythmOf } from "../mocks";
+import EzTooltip from "./EzTooltip.vue";
 
 const props = defineProps<{
-   lifecycle: FolderTypeLifecycle
-}>()
+	lifecycle: FolderTypeLifecycle;
+}>();
 
 /** The line that leaves a row toward the next one */
-type Line = 'solid' | 'dashed' | 'quiet' | 'negative' | 'none'
+type Line = "solid" | "dashed" | "quiet" | "negative" | "none";
 
 interface Row {
-   /** major: a step of the lifecycle; minor: a reminder; gap: a folded run, no dot */
-   kind: 'major' | 'minor' | 'gap'
-   code: string
-   label: string
-   /** What the event is, said when the pointer or the keyboard is on its dot */
-   tooltip: string
-   note: string
-   tone: '' | 'closed' | 'archive' | 'negative'
-   line: Line
+	/** major: a step of the lifecycle; minor: a reminder; gap: a folded run, no dot */
+	kind: "major" | "minor" | "gap";
+	code: string;
+	label: string;
+	/** What the event is, said when the pointer or the keyboard is on its dot */
+	tooltip: string;
+	note: string;
+	tone: "" | "closed" | "archive" | "negative";
+	line: Line;
+	/** Min height of a gap, when a long wait should not look like the next step */
+	span?: string;
 }
 
-const days = (count: number) => gettext(count > 1 ? '%{count} jours' : '%{count} jour', { count })
+const days = (count: number) =>
+	gettext(count > 1 ? "%{count} jours" : "%{count} jour", { count });
 
-function row(kind: Row['kind'], day: number | string | null, label: string, tooltip: string, note = '', line: Line = 'solid', tone: Row['tone'] = ''): Row {
-   return { kind, code: typeof day === 'number' ? `J${day}` : day ?? '', label, tooltip, note, tone, line }
+/** Shared height of the long quiet dashes. A long wait still reads, without filling the card. */
+function longSpan(daysCount: number): string {
+	const rem = 1.5 + Math.sqrt(daysCount) / 2.6;
+	return `${rem.toFixed(2)}rem`;
+}
+
+function row(
+	kind: Row["kind"],
+	day: number | string | null,
+	label: string,
+	tooltip: string,
+	note = "",
+	line: Line = "solid",
+	tone: Row["tone"] = "",
+): Row {
+	return {
+		kind,
+		code: typeof day === "number" ? `J${day}` : (day ?? ""),
+		label,
+		tooltip,
+		note,
+		tone,
+		line,
+	};
 }
 
 /**
@@ -64,42 +90,197 @@ function row(kind: Row['kind'], day: number | string | null, label: string, tool
  * or at the automatic early completion, after the deadline.
  */
 const rows = computed(() => {
-   const { signatureDays, reminders, earlyCompletionDays, archiveDays, eliminationDays } = props.lifecycle
-   const list: Row[] = [row('major', 0, gettext('Envoi du dossier'), gettext('Le dossier est envoyé aux signataires. Le compte des jours commence ici.'))]
+	const {
+		signatureDays,
+		reminders,
+		earlyCompletionDays,
+		archiveDays,
+		eliminationDays,
+	} = props.lifecycle;
+	const list: Row[] = [
+		row(
+			"major",
+			0,
+			gettext("Envoi du dossier"),
+			gettext(
+				"Le dossier est envoyé aux signataires. Le compte des jours commence ici.",
+			),
+		),
+	];
 
-   // The reminders shown one by one: the first two, then the last one; the others are folded
-   const reminderDays = reminderDaysOf(props.lifecycle)
-   const lastReminder = reminderDays[reminderDays.length - 1]
-   const folded = reminderDays.length - 3
-   const shown = folded > 0 ? [reminderDays[0], reminderDays[1], lastReminder] : reminderDays
-   for (const day of shown) {
-      if (folded > 0 && day === lastReminder) {
-         list[list.length - 1].line = 'dashed'
-         list.push(row('gap', null, gettext('··· %{count} autres rappels, %{rhythm}', { count: folded, rhythm: rhythmOf(props.lifecycle) }), '', '', 'dashed'))
-      }
-      if (day === reminderDays[0]) list.push(row('minor', day, gettext('Premier rappel'), gettext('Envoyé %{delay} après l’envoi, puis un rappel %{rhythm} tant que le dossier n’est pas signé.', { delay: days(reminders?.firstAfterDays ?? 0), rhythm: rhythmOf(props.lifecycle) })))
-      else if (day === lastReminder) list.push(row('minor', day, gettext('Dernier rappel'), gettext('Le dernier rappel avant la date limite de signature.')))
-      else list.push(row('minor', day, gettext('Rappel'), gettext('Rappel envoyé aux signataires qui n’ont pas encore signé.')))
-   }
+	// The reminders shown one by one: the first two, then the last one; the others are folded
+	const reminderDays = reminderDaysOf(props.lifecycle);
+	const lastReminder = reminderDays[reminderDays.length - 1];
+	const folded = reminderDays.length - 3;
+	const shown =
+		folded > 0
+			? [reminderDays[0], reminderDays[1], lastReminder]
+			: reminderDays;
+	const span = longSpan(archiveDays);
+	for (const day of shown) {
+		if (folded > 0 && day === lastReminder) {
+			list[list.length - 1].line = "quiet";
+			const fold = row(
+				"gap",
+				null,
+				gettext("...%{count} autres rappels, %{rhythm}", {
+					count: folded,
+					rhythm: rhythmOf(props.lifecycle),
+				}),
+				"",
+				"",
+				"quiet",
+			);
+			fold.span = span;
+			list.push(fold);
+		}
+		if (day === reminderDays[0])
+			list.push(
+				row(
+					"minor",
+					day,
+					gettext("Premier rappel"),
+					gettext(
+						"Envoyé %{delay} après l’envoi, puis un rappel %{rhythm} tant que le dossier n’est pas signé.",
+						{
+							delay: days(reminders?.firstAfterDays ?? 0),
+							rhythm: rhythmOf(props.lifecycle),
+						},
+					),
+				),
+			);
+		else if (day === lastReminder)
+			list.push(
+				row(
+					"minor",
+					day,
+					gettext("Dernier rappel"),
+					gettext("Le dernier rappel avant la date limite de signature."),
+				),
+			);
+		else
+			list.push(
+				row(
+					"minor",
+					day,
+					gettext("Rappel"),
+					gettext("Rappel envoyé aux signataires qui n’ont pas encore signé."),
+				),
+			);
+	}
 
-   list.push(row('major', signatureDays, gettext('Date limite de signature'), gettext('Valeur par défaut à la création; elle peut être modifiée ensuite sur le dossier.'), days(signatureDays), 'dashed'))
+	list.push(
+		row(
+			"major",
+			signatureDays,
+			gettext("Date limite de signature"),
+			gettext(
+				"Valeur par défaut à la création; elle peut être modifiée ensuite sur le dossier.",
+			),
+			days(signatureDays),
+			"quiet",
+		),
+	);
 
-   // After the deadline, only a folder nobody signed is still open: the early completion closes it
-   const early = earlyCompletionDays === null ? null : { delay: days(earlyCompletionDays), day: signatureDays + earlyCompletionDays }
-   list.push(row('gap', null, early ? gettext('Si non signé: achèvement prématuré %{delay} plus tard (J%{day})', early) : '', '', '', 'dashed'))
-   const closing = gettext('Le dossier se ferme dès que tout est signé, n’importe quand avant la date limite.')
-   const otherwise = early ? gettext('Sinon, l’achèvement prématuré le ferme %{delay} après la date limite (J%{day}).', early) : gettext('Sinon, l’achèvement prématuré se fait à la main.')
-   list.push(row('major', 'F', gettext('Fermeture du dossier'), `${closing} ${otherwise}`, '', 'quiet', 'closed'))
+	// Only a folder nobody signed reaches this: a hollow dot, like a reminder, with the condition in the bubble.
+	const early =
+		earlyCompletionDays === null
+			? null
+			: {
+					delay: days(earlyCompletionDays),
+					day: signatureDays + earlyCompletionDays,
+				};
+	if (early) {
+		list.push(
+			row(
+				"minor",
+				early.day,
+				gettext("Achèvement prématuré"),
+				gettext(
+					"Si le dossier n’est pas signé, il est fermé automatiquement %{delay} après la date limite.",
+					early,
+				),
+				gettext("si non signé"),
+				"quiet",
+			),
+		);
+	}
+	const closing = gettext(
+		"Le dossier se ferme dès que tout est signé, n’importe quand avant la date limite.",
+	);
+	const otherwise = early
+		? gettext(
+				"Sinon, l’achèvement prématuré le ferme %{delay} après la date limite (J%{day}).",
+				early,
+			)
+		: gettext("Sinon, l’achèvement prématuré se fait à la main.");
+	list.push(
+		row(
+			"major",
+			"F",
+			gettext("Fermeture du dossier"),
+			`${closing} ${otherwise}`,
+			"",
+			"quiet",
+			"closed",
+		),
+	);
 
-   // From here the days are counted from the closing: F, F+180
-   list.push(row('gap', null, gettext('%{duration} après la fermeture', { duration: days(archiveDays) }), '', '', 'quiet'))
-   list.push(row('major', `F+${archiveDays}`, gettext('Archivage'), gettext('Le dossier est archivé %{duration} après sa fermeture.', { duration: days(archiveDays) }), '', eliminationDays === null ? 'none' : 'negative', 'archive'))
-   if (eliminationDays !== null) {
-      list.push(row('gap', null, gettext('%{duration} après l’archivage', { duration: days(eliminationDays) }), '', '', 'negative'))
-      list.push(row('major', `F+${archiveDays + eliminationDays}`, gettext('Élimination automatique'), gettext('Les données sont éliminées %{duration} après l’archivage.', { duration: days(eliminationDays) }), '', 'none', 'negative'))
-   }
-   return list
-})
+	// The quiet dash grows with the retention. The duration is written on it; the tooltip of Archivage repeats it.
+	const wait = row(
+		"gap",
+		null,
+		gettext("...%{duration} après la fermeture", {
+			duration: days(archiveDays),
+		}),
+		"",
+		"",
+		"quiet",
+	);
+	wait.span = span;
+	list.push(wait);
+	list.push(
+		row(
+			"major",
+			`F+${archiveDays}`,
+			gettext("Archivage"),
+			gettext("Le dossier est archivé %{duration} après sa fermeture.", {
+				duration: days(archiveDays),
+			}),
+			"",
+			eliminationDays === null ? "none" : "negative",
+			"archive",
+		),
+	);
+	if (eliminationDays !== null) {
+		list.push(
+			row(
+				"gap",
+				null,
+				gettext("...%{duration} après l’archivage", {
+					duration: days(eliminationDays),
+				}),
+				"",
+				"",
+				"negative",
+			),
+		);
+		list.push(
+			row(
+				"major",
+				`F+${archiveDays + eliminationDays}`,
+				gettext("Élimination automatique"),
+				gettext("Les données sont éliminées %{duration} après l’archivage.", {
+					duration: days(eliminationDays),
+				}),
+				"",
+				"none",
+				"negative",
+			),
+		);
+	}
+	return list;
+});
 </script>
 
 <style scoped>
@@ -123,15 +304,16 @@ const rows = computed(() => {
    min-height: 2.25rem;
 }
 
-/* A folded run takes more room than an event: time passes */
+/* A folded run takes more room than an event: time passes. A long retention sets --rail-span. */
 .rail__row--gap {
-   min-height: 4.5rem;
+   min-height: var(--rail-span, 4.5rem);
    color: var(--color-foreground-muted);
    font-size: var(--text-xs);
 }
 
 .rail__code {
    color: var(--color-foreground-muted);
+   font-family: var(--font-mono);
    font-size: var(--text-xs);
    font-weight: 500;
    text-align: right;
@@ -166,13 +348,50 @@ const rows = computed(() => {
 }
 
 .rail__row--in-solid { --rail-in: 2px solid var(--color-foreground); }
-.rail__row--in-dashed { --rail-in: 1px dashed var(--color-foreground); }
-.rail__row--in-quiet { --rail-in: 1px dashed var(--color-border-strong); }
+.rail__row--in-dashed { --rail-in: 2px dashed var(--color-foreground); }
+.rail__row--in-quiet { --rail-in: 2px dashed var(--color-accent); }
 .rail__row--in-negative { --rail-in: 2px solid var(--color-negative); }
 .rail__row--out-solid { --rail-out: 2px solid var(--color-foreground); }
-.rail__row--out-dashed { --rail-out: 1px dashed var(--color-foreground); }
-.rail__row--out-quiet { --rail-out: 1px dashed var(--color-border-strong); }
+.rail__row--out-dashed { --rail-out: 2px dashed var(--color-foreground); }
+.rail__row--out-quiet { --rail-out: 2px dashed var(--color-accent); }
 .rail__row--out-negative { --rail-out: 2px solid var(--color-negative); }
+
+/* A border dash stretches on a long run. Same 2 px stroke as the solid lines; a 2 px mark and a 3 px gap. */
+.rail__row--in-dashed.rail__row--out-dashed .rail__track,
+.rail__row--in-quiet.rail__row--out-quiet .rail__track {
+   background-repeat: no-repeat;
+   background-position: center top;
+   background-size: 2px 100%;
+}
+
+.rail__row--in-dashed.rail__row--out-dashed .rail__track {
+   background-image: repeating-linear-gradient(to bottom, var(--color-foreground) 0 2px, transparent 2px 5px);
+}
+
+.rail__row--in-quiet.rail__row--out-quiet .rail__track {
+   background-image: repeating-linear-gradient(to bottom, var(--color-accent) 0 2px, transparent 2px 5px);
+}
+
+.rail__row--in-dashed.rail__row--out-dashed .rail__track::before,
+.rail__row--in-dashed.rail__row--out-dashed .rail__track::after,
+.rail__row--in-quiet.rail__row--out-quiet .rail__track::before,
+.rail__row--in-quiet.rail__row--out-quiet .rail__track::after {
+   border-left-style: none;
+}
+
+.rail__row--in-dashed:not(.rail__row--out-dashed) .rail__track::before,
+.rail__row--out-dashed:not(.rail__row--in-dashed) .rail__track::after,
+.rail__row--in-quiet:not(.rail__row--out-quiet) .rail__track::before,
+.rail__row--out-quiet:not(.rail__row--in-quiet) .rail__track::after {
+   border-left: 0;
+   width: 2px;
+   background-image: repeating-linear-gradient(to bottom, var(--rail-dash, var(--color-foreground)) 0 2px, transparent 2px 5px);
+}
+
+.rail__row--in-quiet:not(.rail__row--out-quiet) .rail__track::before,
+.rail__row--out-quiet:not(.rail__row--in-quiet) .rail__track::after {
+   --rail-dash: var(--color-accent);
+}
 
 /* The dot of an event, explained by a tooltip; drawn over the line */
 .rail__step {
@@ -196,8 +415,8 @@ const rows = computed(() => {
 }
 
 .rail__row--archive .rail__dot {
-   border-color: var(--color-border-strong);
-   background: var(--color-border-strong);
+   border-color: var(--color-accent);
+   background: var(--color-accent);
 }
 
 .rail__row--negative .rail__dot {
@@ -223,6 +442,11 @@ const rows = computed(() => {
 
 .rail__row--gap .rail__text {
    font-size: var(--text-xs);
+   line-height: var(--text-xs--line-height);
+}
+
+.rail__row--archive .rail__text strong {
+   color: var(--color-foreground-accent);
 }
 
 .rail__row--negative .rail__text strong {
