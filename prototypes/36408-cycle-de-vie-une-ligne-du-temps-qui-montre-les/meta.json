@@ -4,8 +4,8 @@
       "number": 36408,
       "url": "https://www.goodday.work/t/3C49ft"
    },
-   "status": "draft",
-   "chosen": null,
+   "status": "chosen",
+   "chosen": "v003",
    "chrome": "app",
    "owner": "Mikhaël Aubut",
    "tags": [],
