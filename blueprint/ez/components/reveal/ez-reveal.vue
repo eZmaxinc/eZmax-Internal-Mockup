@@ -75,7 +75,6 @@ const props = withDefaults(
    },
 )
 
-const MOBILE_QUERY = '(max-width: 39.99rem)'
 const MOTION_MS = 280
 
 const theContentRef = useTemplateRef<HTMLElement>('content')
@@ -154,7 +153,9 @@ function onMediaChange(event: MediaQueryListEvent) {
 }
 
 onMounted(() => {
-   theMedia = window.matchMedia(MOBILE_QUERY)
+   // The same breakpoint as the style: --breakpoint-sm of ez-tokens.css, read from the component's variable
+   const breakpoint = theContentRef.value ? getComputedStyle(theContentRef.value).getPropertyValue('--ez-reveal-breakpoint').trim() : ''
+   theMedia = window.matchMedia(`(width < ${breakpoint || '37.5rem'})`)
    syncMobile(theMedia.matches)
    theMedia.addEventListener('change', onMediaChange)
 
@@ -181,8 +182,11 @@ watch(
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 .ez-reveal {
    /* Variables first: what the reveal's look depends on, read below (the two heights also come from the props) */
+   --ez-reveal-breakpoint: theme(--breakpoint-sm); /* collapsed below it; also read by the script */
    --ez-reveal-collapsed-height: 10rem;
    --ez-reveal-full-height: none;
    --ez-reveal-fade-to: var(--color-surface);
@@ -202,7 +206,7 @@ watch(
 
 /* Reduced by default under sm; only .ez-reveal--expanded shows the full content.
    Both heights are lengths, so the open and the close can ease instead of snapping. */
-@media (max-width: 39.99rem) {
+@media (width < theme(--breakpoint-sm)) {
    .ez-reveal__content {
       max-height: var(--ez-reveal-full-height);
       overflow: hidden;
@@ -307,7 +311,7 @@ watch(
    }
 }
 
-@media (max-width: 39.99rem) and (prefers-reduced-motion: reduce) {
+@media (width < theme(--breakpoint-sm)) and (prefers-reduced-motion: reduce) {
    .ez-reveal__content,
    .ez-reveal-scrim-enter-active,
    .ez-reveal-scrim-leave-active,
@@ -324,7 +328,7 @@ watch(
    }
 }
 
-@media (min-width: 40rem) {
+@media (width >= theme(--breakpoint-sm)) {
    .ez-reveal__scrim,
    .ez-reveal__footer {
       display: none;

@@ -62,6 +62,8 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 .ez-dialog {
    /* Variables first: what the dialog's look depends on, read below */
    --ez-dialog-overlay: var(--color-overlay);
@@ -82,7 +84,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    background: var(--ez-dialog-overlay);
 }
 
-@media (width < 37.5rem) { /* below sm */
+@media (width < theme(--breakpoint-sm)) {
    .ez-dialog {
       --ez-dialog-padding: var(--card-padding, var(--space-inset-md));
    }

@@ -193,6 +193,14 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
          else if (!/export default \w+/.test(readFileSync(index, 'utf8'))) errors.push(`${rel(index)}: doit faire export default de son composant`)
       }
 
+      // Breakpoints come from ez-tokens.css (the app's Quasar ones), never a width written in the component
+      for (const component of catalog.components) {
+         const style = readFileSync(join(ROOT, component.file), 'utf8').split('<style')[1] ?? ''
+         for (const query of style.match(/@media[^{]*\d(?:\.\d+)?(?:px|rem|em)[^{]*/g) ?? []) {
+            errors.push(`${component.file}: « ${query.trim()} »: largeur écrite à la main; utiliser theme(--breakpoint-sm|md|lg|xl) avec @reference "../../../tokens/ez-tokens.css"`)
+         }
+      }
+
       for (const component of catalog.components) {
          const file = join(ROOT, component.file)
          validateTier(file, component.tier).forEach(report(errors, file))

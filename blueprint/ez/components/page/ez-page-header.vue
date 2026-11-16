@@ -67,6 +67,8 @@ function onButton() {
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 /* Sits on the app background, as in production: no band of its own */
 .ez-page-header {
    /* Variables first: what the header's look depends on, read below */
@@ -135,7 +137,7 @@ function onButton() {
    flex-shrink: 0;
 }
 
-@media (width < 37.5rem) { /* below sm */
+@media (width < theme(--breakpoint-sm)) {
    .ez-page-header__inner {
       flex-wrap: wrap;
    }

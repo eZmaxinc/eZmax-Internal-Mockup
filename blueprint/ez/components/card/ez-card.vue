@@ -44,6 +44,8 @@ defineProps<{
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 /*
  * Self-contained: copies into the mono as is. Needs only ez-tokens.css, ez-icon.vue and icons.ts.
  * Its knob is read here with a scale step as fallback, never defined; a project sets --card-padding (and
@@ -64,7 +66,7 @@ defineProps<{
    scroll-margin-top: calc(var(--sizing-toolbar-height, 50px) + var(--space-gap-md));
 }
 
-@media (width < 37.5rem) { /* below sm */
+@media (width < theme(--breakpoint-sm)) {
    .ez-card {
       --ez-card-padding: var(--card-padding, var(--space-inset-md));
    }

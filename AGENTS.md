@@ -213,6 +213,7 @@ The rules of the app's library (`ezmax-library-quasar`), so that a component goe
 }
 ```
 
+- **Breakpoints come from `ez-tokens.css`**, the app's Quasar ones (`--breakpoint-sm` 600px, `md` 1024px, `lg` 1440px, `xl` 1920px, the same as the app's `tailwind.css`), never a width written in the component. The style opens with `@reference "../../../tokens/ez-tokens.css";`, then `@media (width < theme(--breakpoint-sm)) { … }`. A script that needs one reads it from a variable of the component (`--ez-reveal-breakpoint: theme(--breakpoint-sm)`, then `getComputedStyle(…)`). `proto check` refuses a raw width in a component's `@media`.
 - **Business components** (they know a folder, a signer…) are not written here: they are built in the app (golden rule 2).
 
 ## Repository map

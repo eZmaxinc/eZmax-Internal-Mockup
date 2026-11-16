@@ -91,6 +91,8 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 .ez-page-sections {
    /* Variables first: what the layout depends on, read below */
    --ez-page-sections-gap: var(--space-gap-lg);
@@ -113,7 +115,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
    display: none;
 }
 
-@media (width >= 64rem) { /* md: TOC on the right */
+@media (width >= theme(--breakpoint-md)) { /* TOC on the right */
    .ez-page-sections--with-toc {
       grid-template-columns: minmax(0, 1fr) var(--ez-page-sections-toc-width);
    }

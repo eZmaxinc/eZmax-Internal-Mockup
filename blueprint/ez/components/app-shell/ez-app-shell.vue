@@ -18,6 +18,8 @@
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 .ez-app-shell {
    /* Variables first: what the shell's look depends on, read below */
    --ez-app-shell-background: var(--color-background);
@@ -56,7 +58,7 @@
    min-width: 0;
 }
 
-@media (width < 64rem) { /* below md: drawer hidden — ⚠ à valider sur la prod */
+@media (width < theme(--breakpoint-md)) { /* drawer hidden — ⚠ à valider sur la prod */
    .ez-app-shell__nav {
       display: none;
    }

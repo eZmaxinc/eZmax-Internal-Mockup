@@ -31,6 +31,8 @@ const theSpanBase = computed(() => theSpan.value.base ?? 12)
 </script>
 
 <style scoped>
+@reference "../../../tokens/ez-tokens.css";
+
 /* Self-contained: copies into the mono as is, with ez-layout.vue. Override the gap with --card-gap. */
 .ez-layout-col {
    /* Variables first: the gap here, the spans from the cols prop (inline) */
@@ -43,19 +45,19 @@ const theSpanBase = computed(() => theSpan.value.base ?? 12)
    grid-column: span var(--ez-layout-col-span-base) / span var(--ez-layout-col-span-base);
 }
 
-@media (width >= 64rem) { /* md */
+@media (width >= theme(--breakpoint-md)) {
    .ez-layout-col {
       grid-column: span var(--ez-layout-col-span-md) / span var(--ez-layout-col-span-md);
    }
 }
 
-@media (width >= 90rem) { /* lg */
+@media (width >= theme(--breakpoint-lg)) {
    .ez-layout-col {
       grid-column: span var(--ez-layout-col-span-lg) / span var(--ez-layout-col-span-lg);
    }
 }
 
-@media (width < 64rem) { /* below md */
+@media (width < theme(--breakpoint-md)) {
    .ez-layout-col--first-below-md {
       order: -1;
    }
