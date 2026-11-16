@@ -45,7 +45,7 @@ export class EzsignSigner {
       return { pending: 'En attente', viewed: 'Consulté', signed: 'Signé', refused: 'Refusé' }[this.state]
    }
 
-   /** ez-badge tone of the state; prefer <ez-badge-signer-state> */
+   /** ez-badge tone of the state, for <ez-badge :tone="…stateTone()" :label="…stateLabel()"> */
    stateTone(): BadgeTone {
       return ({ pending: 'neutral', viewed: 'info', signed: 'success', refused: 'danger' } as const)[this.state]
    }
@@ -134,7 +134,7 @@ export class EzsignFolder {
       return { draft: 'Brouillon', sent: 'En signature', completed: 'Complété', expired: 'Expiré', refused: 'Refusé' }[this.state]
    }
 
-   /** ez-badge tone of the state; prefer <ez-badge-folder-state> */
+   /** ez-badge tone of the state, for <ez-badge :tone="…stateTone()" :label="…stateLabel()"> */
    stateTone(): BadgeTone {
       return ({ draft: 'neutral', sent: 'info', completed: 'success', expired: 'warning', refused: 'danger' } as const)[this.state]
    }

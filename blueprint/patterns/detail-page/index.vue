@@ -2,7 +2,7 @@
    <ez-page>
       <ez-page-header :title="theFolder.name" :breadcrumbs="[$gettext('Accueil'), $gettext('Dossiers eZsign'), $gettext('Informations du dossier')]" refresh>
          <template #meta>
-            <ez-badge-folder-state :folder="theFolder" />
+            <ez-badge :tone="theFolder.stateTone()" :label="theFolder.stateLabel()" />
          </template>
          <template #actions>
             <ez-btn :icon="ez.icons.download" :label="$gettext('Télécharger')" />
@@ -32,7 +32,7 @@
                         <div class="text-xs text-foreground-muted">{{ row.email }}</div>
                      </template>
                      <template #cell-state="{ row }">
-                        <ez-badge-signer-state :signer="row" />
+                        <ez-badge :tone="row.stateTone()" :label="row.stateLabel()" />
                      </template>
                      <template #cell-lastActivityAt="{ row }">{{ formatDateTime(row.lastActivityAt) }}</template>
                   </ez-table>

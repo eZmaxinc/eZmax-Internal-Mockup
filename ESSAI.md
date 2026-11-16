@@ -46,7 +46,7 @@ Coller chaque demande telle quelle, sans aider l'agent, et chronométrer jusqu'a
 | 4 | La retouche s'est faite en place: pas de `v003`, pas de navigateur | oui |
 | 5 | `v001` n'a pas bougé après la nouvelle version (`git status`) | oui |
 | 6 | `yarn proto check 90003` passe, lancé par l'agent | oui |
-| 7 | Ce qui existe est réutilisé: `ez-btn`, `ez-table`, `ez-badge-folder-state`; rien de refait à la main | oui |
+| 7 | Ce qui existe est réutilisé: `ez-btn`, `ez-table`, `ez-badge` (statut par `stateTone()`); rien de refait à la main | oui |
 | 8 | Ce qui est inventé reste dans le genre eZsign, en clair et en sombre (à juger à l'œil, à côté des captures de `blueprint/brand/screens/`) | note sur 5 |
 | 9 | `blueprint/` et `tool/` n'ont pas changé (`git status`) | oui |
 | 10 | Interventions: chaque fois qu'il a fallu répondre ou débloquer l'agent | 1 au plus |

@@ -6,12 +6,12 @@ Composants enregistrés globalement: on les utilise directement dans les templat
 
 | | Primitives (`blueprint/ez/primitives/`) | Composants métier (`blueprint/ez/domain/<objet>/`) |
 |---|---|---|
-| Ex. | `ez-btn`, `ez-card`, `ez-badge`, `ez-table` | `ez-badge-folder-state`, `ez-btn-submit-folder` |
+| Ex. | `ez-btn`, `ez-card`, `ez-badge`, `ez-table` | aucun pour l'instant |
 | Connaît | rien du métier: props visuelles (`variant`, `tone`) | un objet métier (`folder`, `signer`…) |
+| Naît | dans un prototype, puis promu ici (`yarn proto promote`), puis reporté dans l'app | dans l'app (`ezmax-library-quasar`), puis reflété ici; jamais proposé ni promu par un prototype |
 | Contient | le visuel: CSS et tokens | des primitives assemblées; pas de couleur, bordure, ombre ni arrondi |
-| Nom | `ez-{chose}` | `ez-{primitive}-{intention}` (`ez-btn-submit-folder`), ou `ez-{objet}-{chose}` pour un ensemble (`ez-signer-list`) |
 
-**Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
+**Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées (avec les méthodes du mock: `folder.stateTone()`, `folder.stateLabel()`) → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
 
 Les props `icon` prennent une clé de `ez.icons` (`:icon="ez.icons.send"` ou `icon="send"`). Liste: `add back calendar check chevronDown chevronRight clock close delete download edit error eye file filter folder home inbox info mail more refresh search send settings signature success user users warning`.
 
@@ -64,7 +64,7 @@ Fiche longue avec TOC sticky à droite (≥ 1024px) et scroll-spy.
 
 ### `ez-badge`
 - `label` ou slot, `tone`: `neutral info success warning danger action`, `dot`, `solid` (plein, pour un tableau)
-- Pour le statut d'un objet métier, utiliser son composant métier (`ez-badge-folder-state`, `ez-badge-signer-state`): même statut = même badge partout.
+- Le statut d'un objet métier: `:tone="folder.stateTone()" :label="folder.stateLabel()"` (de même pour `signer`). Les méthodes du mock donnent le même badge partout.
 
 ### `ez-message-important`
 - `type`: `info success warning danger`, `title`; slots `default`, `#actions`
@@ -105,11 +105,7 @@ Réduit un contenu long sur téléphone (moins de 640 px): il garde le haut, fon
 
 ## Composants métier
 
-### `ez-badge-folder-state` · folder
-Le statut d'un dossier. `:folder` (un `EzsignFolder` de `@mocks`), `dot` pour les listes denses. Remplace `<ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" />`.
-
-### `ez-badge-signer-state` · signer
-Le statut d'un signataire (en attente, consulté, signé, refusé). `:signer` (un `EzsignSigner`), `dot`.
+Aucun pour l'instant. Un composant métier (qui connaît un dossier, un signataire…) se construit dans l'app, `ezmax-library-quasar`, jamais d'abord ici: `blueprint/ez/domain/<objet>/` ne fait que refléter ce que l'app a déjà. En attendant, une primitive et les méthodes du mock suffisent: `<ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" />`.
 
 ## Helpers (`import { … } from '@ez'`)
 
@@ -124,16 +120,17 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 
 - **Un morceau local**: `prototypes/<tâche>/vNNN/components/FolderTimeline.vue`, importé par `index.vue`. Aucun en-tête, libre dans son balisage et son style. Il peut lire les fichiers de sa version (`../mocks`).
 - **Un composant rehaussé**: un `ez-` existant à qui il manque quelque chose (une prop, un slot, un état). Copier son fichier de `blueprint/ez/` dans `components/` sous le même nom (`EzCard.vue`), modifier la copie, l'importer dans `index.vue`: dans cette version, elle remplace l'original.
-- **Une proposition**, seulement si le morceau servirait clairement à d'autres tâches, ou sur demande: il se nomme `Ez…` et commence par son en-tête.
+- **Une proposition de primitive**, seulement si le morceau servirait clairement à d'autres tâches, ou sur demande: il se nomme `Ez…`, ne connaît aucun objet métier et commence par son en-tête.
 
 ```vue
-<!-- @proposal domain folder: Soumettre un dossier: libellé, icône et confirmation identiques partout -->
+<!-- @proposal primitive: Masque le bas d'un contenu long sur mobile et le dévoile au toucher -->
 <template>
-   <ez-btn variant="primary" icon="send" :label="$gettext('Soumettre')" :disabled="folder.isStateClosed()" />
+   …
 </template>
 ```
 
-- `@proposal domain <objet>` ou `@proposal primitive`, puis pourquoi il existe. Une proposition suit les règles de son niveau (`proto check` les vérifie): une proposition métier n'a ni couleur, ni bordure, ni ombre, ni arrondi à elle.
+- `@proposal primitive`, puis pourquoi il existe. `proto check` vérifie qu'il suit les règles d'une primitive.
+- **Un composant métier manquant** (un bouton « Soumettre » qui connaît le dossier, une liste de signataires): le construire localement, sans en-tête, et l'écrire dans `notes.md`, sous « Signalements »: `Composant métier manquant: …`. Il se construit ensuite dans l'app; il n'est jamais proposé ni promu ici.
 - Rien de tout ça ne bloque le prototype. `yarn proto proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn proto promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), avec un exemple généré dans `blueprint/ez/examples/<Nom>.vue`, à ajuster.
 
 <!-- api:start — généré par yarn proto catalog, ne pas modifier à la main -->
@@ -361,32 +358,6 @@ Slots: `défaut`
 Slots: `#cell-<…>`, `#empty`
 
 Émet: `row-click`
-
-### Composants métier
-
-#### `ez-badge-folder-state` · folder
-
-The state of an eZsign folder: same state, same badge, everywhere. Use it instead of `<ez-badge :tone="folder.stateTone()" :label="folder.stateLabel()" />`.
-
-Construit avec: `ez-badge`
-
-| Prop | Type | Défaut | |
-|---|---|---|---|
-| `folder` * | `EzsignFolder` |  |  |
-| `dot` | `boolean` |  | Small dot before the label, for dense lists |
-| `solid` | `boolean` |  | Filled badge, for tables |
-
-#### `ez-badge-signer-state` · signer
-
-The state of a signer (pending, viewed, signed, refused): same state, same badge, everywhere. Use it instead of `<ez-badge :tone="signer.stateTone()" :label="signer.stateLabel()" />`.
-
-Construit avec: `ez-badge`
-
-| Prop | Type | Défaut | |
-|---|---|---|---|
-| `signer` * | `EzsignSigner` |  |  |
-| `dot` | `boolean` |  | Small dot before the label, for dense lists |
-| `solid` | `boolean` |  | Filled badge, for tables |
 
 ### Helpers (`import { … } from '@ez'`)
 

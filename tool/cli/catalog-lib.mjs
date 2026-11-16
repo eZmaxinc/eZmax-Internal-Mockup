@@ -234,6 +234,7 @@ const cell = (text) => String(text ?? '').replaceAll('|', '\\|').replace(/\s+/g,
 export function renderApiMarkdown(catalog) {
    const section = (tier, title) => {
       const components = catalog.components.filter((component) => component.tier === tier)
+      if (!components.length) return []
       return [
          `### ${title}`,
          '',

@@ -22,7 +22,7 @@ A person who must sign the documents of a folder.
 | `isDone()` | `()` | Signed or refused: nothing left to do |
 | `canBeReminded()` | `()` | Still has to sign, so a reminder makes sense |
 | `stateLabel()` | `()` | French label of the state (« En attente »…) |
-| `stateTone()` | `(): BadgeTone` | ez-badge tone of the state; prefer `<ez-badge-signer-state>` |
+| `stateTone()` | `(): BadgeTone` | ez-badge tone of the state, for `<ez-badge :tone="…stateTone()" :label="…stateLabel()">` |
 
 ## `EzsignDocument`
 
@@ -59,7 +59,7 @@ An eZsign folder: documents to sign, signers, a due date.
 | `extendDueDate()` | `(days: number): Date` | Pushes the due date `days` days later (from the current due date, or from today without one). The mechanics only: which states may be extended is a product decision, left to the prototype. |
 | `isDueSoon()` | `(days = 3, now = daysFromToday(0))` | Still open and due within `days` days (3 by default), today included |
 | `stateLabel()` | `()` | French label of the state (« En signature »…) |
-| `stateTone()` | `(): BadgeTone` | ez-badge tone of the state; prefer `<ez-badge-folder-state>` |
+| `stateTone()` | `(): BadgeTone` | ez-badge tone of the state, for `<ez-badge :tone="…stateTone()" :label="…stateLabel()">` |
 
 ## Fonctions, constantes et types
 

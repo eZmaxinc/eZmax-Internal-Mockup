@@ -1,19 +1,19 @@
 /**
- * yarn proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]
- * Moves a component of a version into the blueprint, on a human decision only:
- *   enhanced (same name as a blueprint component) → replaces the original, where it is
- *   created or suggested, domain                  → blueprint/ez/domain/<object>/<Name>.vue
- *   created or suggested, primitive               → blueprint/ez/primitives/<Name>.vue
- * A @proposal header gives the tier, the object and the reason; without one, the flags do (primitive by default).
+ * yarn proto promote <tâche> <version> <Composant> [-m "pourquoi"]
+ * Moves a primitive of a version into the blueprint, on a human decision only:
+ *   enhanced (same name as a blueprint primitive) → replaces the original, where it is
+ *   created or suggested                          → blueprint/ez/primitives/<Name>.vue
+ * Business (domain) components are never promoted: they are built in the app (ezmax-library-quasar),
+ * and blueprint/ez/domain/ only mirrors what the app already has.
  * The version keeps its own copy (a version stays self-contained); the next versions use the global one.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { PROTOTYPES, ROOT, fail, findTask, flagString, listVersions, parseArgs, rel } from '../lib.mjs'
-import { CATALOG_MD, DOMAIN_DIR, EZ_DIR, PRIMITIVES_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
+import { CATALOG_MD, EZ_DIR, PRIMITIVES_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
 import { run as regenerateCatalog } from './catalog.mjs'
 
-const USAGE = 'Usage: yarn proto promote <tâche> <version> <Composant> [--tier primitive|domain] [--object <objet>] [-m "pourquoi"]'
+const USAGE = 'Usage: yarn proto promote <tâche> <version> <Composant> [-m "pourquoi"]'
 
 export async function run(argv) {
    const { positional, flags } = parseArgs(argv)
@@ -37,16 +37,19 @@ export async function run(argv) {
    const versionImport = readFileSync(source, 'utf8').match(/from\s+['"](\.\.?\/[^'"]+)['"]/)
    if (versionImport) fail(`${rel(source)} importe « ${versionImport[1]} », un fichier de la version.`, 'Le rendre autonome d\'abord: passer les données par des props, ou déplacer le type dans blueprint/mocks.')
 
-   const tier = original?.tier ?? proposal?.tier ?? flagString(flags, 'tier') ?? 'primitive'
-   if (!['primitive', 'domain'].includes(tier)) fail(`Niveau inconnu « ${tier} ».`, USAGE)
-   const object = original?.object ?? flagString(flags, 'object') ?? proposal?.object
-   if (tier === 'domain' && !object) fail('Un composant métier a un objet.', 'Ajouter --object folder (ou signer, template…)')
+   const tier = original?.tier ?? proposal?.tier ?? 'primitive'
+   if (tier === 'domain') {
+      fail(
+         `<${tag}> est un composant métier: il se construit dans l'app (ezmax-library-quasar), pas dans le blueprint.`,
+         'Le garder local à la version et l\'écrire dans notes.md, sous « Signalements »: Composant métier manquant: …',
+      )
+   }
    const reason = flagString(flags, 'message') ?? proposal?.reason ?? ''
 
    const problems = validateTier(source, tier)
-   if (problems.length) fail(`Le composant ne respecte pas les règles du niveau ${tier}:\n  ${problems.map((problem) => problem.message).join('\n  ')}`, tier === 'primitive' ? 'Un composant qui connaît un objet métier: --tier domain --object <objet>' : 'Un composant qui a son propre visuel: --tier primitive')
+   if (problems.length) fail(`Le composant ne respecte pas les règles d'une primitive:\n  ${problems.map((problem) => problem.message).join('\n  ')}`, 'Un composant qui connaît un objet métier se construit dans l\'app: le garder local et le signaler dans notes.md.')
 
-   const targetDir = tier === 'domain' ? join(DOMAIN_DIR, object) : PRIMITIVES_DIR
+   const targetDir = PRIMITIVES_DIR
    const target = original ? join(ROOT, original.file) : join(targetDir, `${name}.vue`)
 
    // The reason becomes the component's description (opening /** */ of its script)
@@ -62,10 +65,10 @@ export async function run(argv) {
    writeFileSync(target, content)
 
    if (!original) {
-      // A hand-written entry in CATALOG.md (when to use it): a primitive before the domain components, a domain one before the helpers
+      // A hand-written entry in CATALOG.md (when to use it), with the other primitives
       const catalog = readFileSync(CATALOG_MD, 'utf8')
-      const anchor = catalog.indexOf(tier === 'primitive' ? '## Composants métier' : '## Helpers')
-      const entry = `### \`${tag}\`${tier === 'domain' ? ` · ${object}` : ''}\n${reason ? `${reason} ` : ''}_(Promu depuis ${taskId}/${version}. Fiche à compléter: quand l'utiliser.)_\n\n`
+      const anchor = catalog.indexOf('## Composants métier')
+      const entry = `### \`${tag}\`\n${reason ? `${reason} ` : ''}_(Promu depuis ${taskId}/${version}. Fiche à compléter: quand l'utiliser.)_\n\n`
       writeFileSync(CATALOG_MD, anchor >= 0 ? catalog.slice(0, anchor) + entry + catalog.slice(anchor) : `${catalog.trimEnd()}\n\n${entry}`)
 
       // An example for the gallery, which shows it on its own (section « Autres composants »)

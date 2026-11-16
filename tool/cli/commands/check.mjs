@@ -225,7 +225,7 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
                continue
             }
             // What a proposal lacks to enter the blueprint never blocks the prototype: it matters at promotion
-            if (proposal.tier === 'domain' && !proposal.object) warnings.push(`${rel(file)}: une proposition métier nomme son objet: <!-- @proposal domain folder: … -->`)
+            if (proposal.tier === 'domain') warnings.push(`${rel(file)}: pas de proposition métier: un composant métier se construit dans l'app. Retirer l'en-tête @proposal et l'écrire dans notes.md, sous « Signalements » (Composant métier manquant: …)`)
             const component = extractComponent(file, { tier: proposal.tier, object: proposal.object })
             locals.set(component.tag, component)
             validateTier(file, proposal.tier).forEach(report(warnings, file))

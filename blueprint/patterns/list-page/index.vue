@@ -33,7 +33,7 @@
                      <span class="font-semibold">{{ row.name }}</span>
                   </template>
                   <template #cell-state="{ row }">
-                     <ez-badge-folder-state :folder="row" solid />
+                     <ez-badge :tone="row.stateTone()" :label="row.stateLabel()" solid />
                   </template>
                   <template #cell-signers="{ row }">
                      {{ row.signedCount() }} / {{ row.signers.length }}

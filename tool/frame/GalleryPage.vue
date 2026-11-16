@@ -39,6 +39,10 @@
                      <ez-badge v-for="theTone in tones" :key="theTone" :tone="theTone" :label="theTone" />
                      <ez-badge tone="success" dot label="Avec point" />
                   </div>
+                  <p class="m-0 mt-3 mb-2 text-sm text-foreground-muted">Statut d'un dossier: <code>:tone="folder.stateTone()" :label="folder.stateLabel()"</code></p>
+                  <div class="flex flex-wrap gap-2">
+                     <ez-badge v-for="theFolder in rows" :key="theFolder.id" :tone="theFolder.stateTone()" :label="theFolder.stateLabel()" />
+                  </div>
                </ez-card>
             </ez-page-section>
 
@@ -87,7 +91,7 @@
                <ez-card title="ez-table" toc-id="data-table" flush>
                   <ez-table :columns="columns" :rows="rows" clickable>
                      <template #cell-state="{ row }">
-                        <ez-badge-folder-state :folder="row" />
+                        <ez-badge :tone="row.stateTone()" :label="row.stateLabel()" />
                      </template>
                      <template #cell-dueAt="{ row }">{{ formatDate(row.dueAt) }}</template>
                   </ez-table>
@@ -114,19 +118,6 @@
                         <ez-btn variant="danger" label="Annuler le dossier" @click="isDialogOpen = false" />
                      </template>
                   </ez-dialog>
-               </ez-card>
-            </ez-page-section>
-
-            <ez-page-section id="domain" title="Composants métier" subtitle="blueprint/ez/domain: un objet métier, des primitives assemblées">
-               <ez-card title="ez-badge-folder-state" subtitle="Dossier" toc-id="domain-folder-state">
-                  <div class="flex flex-wrap gap-2">
-                     <ez-badge-folder-state v-for="theFolder in rows" :key="theFolder.id" :folder="theFolder" />
-                  </div>
-               </ez-card>
-               <ez-card title="ez-badge-signer-state" subtitle="Signataire" toc-id="domain-signer-state">
-                  <div class="flex flex-wrap gap-2">
-                     <ez-badge-signer-state v-for="theSigner in signers" :key="theSigner.id" :signer="theSigner" />
-                  </div>
                </ez-card>
             </ez-page-section>
 
@@ -181,7 +172,6 @@ const columns: EzTableColumn[] = [
    { key: 'dueAt', label: 'Échéance', align: 'right' },
 ]
 const rows = makeFolders(4)
-const signers = rows.flatMap((folder) => folder.signers).slice(0, 6)
 
 const infoItems = [
    { label: 'Créé le', value: '28 oct. 2026' },
