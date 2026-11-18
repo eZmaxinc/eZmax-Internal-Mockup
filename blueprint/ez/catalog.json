@@ -6,13 +6,25 @@
          "name": "EzAppShell",
          "tier": "primitive",
          "file": "blueprint/ez/components/app-shell/ez-app-shell.vue",
-         "description": "Placeholder frame of the production shell (toolbar + left drawer), empty on purpose: it only gives prototypes their real position and width inside the app.",
-         "props": [],
+         "description": null,
+         "props": [
+            {
+               "name": "withSkeleton",
+               "attr": "with-skeleton",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": "false",
+               "doc": "Shows pale grey skeleton placeholders in the left navigation drawer, shaped like the production menu"
+            }
+         ],
          "emits": [],
          "slots": [
             "default"
          ],
-         "uses": []
+         "uses": [
+            "ez-icon"
+         ]
       },
       {
          "tag": "ez-badge",

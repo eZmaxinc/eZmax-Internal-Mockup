@@ -13,12 +13,12 @@ Composants enregistrés globalement: on les utilise directement dans les templat
 
 **Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées (avec les méthodes du mock: `folder.stateTone()`, `folder.stateLabel()`) → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
 
-Les props `icon` prennent une clé de `ez.icons` (`:icon="ez.icons.send"` ou `icon="send"`). Liste: `add back calendar check chevronDown chevronRight clock close delete download edit error eye file filter folder home inbox info mail more refresh search send settings signature success user users warning`.
+Les props `icon` prennent une clé de `ez.icons` (`:icon="ez.icons.send"` ou `icon="send"`). Liste: `add back calendar check chevronDown chevronRight clock close delete download edit error eye file filter folder home inbox info mail menu more refresh search send settings signature success user users warning`.
 
 ## Structure de page
 
 ### `ez-app-shell`
-Cadre vide qui simule le shell de prod (barre du haut foncée + tiroir de gauche blanc, aux dimensions de la prod), pour placer le prototype à sa vraie position et largeur. Aucun contenu ni interaction. Ajouté automatiquement quand `meta.json` a `"chrome": "app"` (défaut); `"none"` pour un écran hors de l'app. Ne pas l'utiliser dans un prototype.
+Cadre qui simule le shell de prod (barre du haut foncée avec bouton menu burger + tiroir de gauche blanc rétractable, aux dimensions de la prod), pour placer le prototype à sa vraie position et largeur. Ajouté automatiquement quand `meta.json` a `"chrome": "app"` (défaut); `"none"` pour un écran hors de l'app. Ne pas l'utiliser dans un prototype.
 
 ### `ez-page` > `ez-page-header` + `ez-page-content`
 Toute page commence ainsi.
@@ -143,9 +143,9 @@ Tiré du code des composants par `yarn mockup catalog`. `*` = prop obligatoire. 
 
 #### `ez-app-shell`
 
-Placeholder frame of the production shell (toolbar + left drawer), empty on purpose: it only gives prototypes their real position and width inside the app.
-
-Aucune prop.
+| Prop | Type | Défaut | |
+|---|---|---|---|
+| `with-skeleton` | `boolean` | `false` | Shows pale grey skeleton placeholders in the left navigation drawer, shaped like the production menu |
 
 Slots: `défaut`
 
