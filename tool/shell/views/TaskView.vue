@@ -1,7 +1,5 @@
 <template>
-   <div v-if="!theTask" class="task-view__missing">Prototype introuvable: {{ taskId }}</div>
-
-   <div v-else class="task-view">
+   <div v-if="theTask" class="task-view">
       <!-- The task and its versions are in the shell's left panel; the notes in the panel on the right -->
       <proto-viewer v-if="theVersion" :frames="theFrames" :scenario-names="theScenarioNames">
          <template #devbar-start>
@@ -59,12 +57,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
 import ProtoViewer from '../ProtoViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
 import { shareUrl } from '../share'
 import { currentVersion, getTask } from '@/registry'
+
+const router = useRouter()
 
 const props = defineProps<{
    taskId: string
@@ -76,6 +77,13 @@ const isDev = import.meta.env.DEV
 const theTask = computed(() => getTask(props.taskId))
 
 const theVersion = computed(() => currentVersion(theTask.value, props.versionId))
+
+watchEffect(() => {
+   const hasUnknownVersion = Boolean(props.versionId && theTask.value && !theTask.value.versions.some((item) => item.id === props.versionId))
+   if (!theTask.value || hasUnknownVersion) {
+      router.replace({ path: '/', query: { notfound: '1' } })
+   }
+})
 
 const theScenarioNames = useScenarioNames(() => theVersion.value && `prototypes/${props.taskId}/${theVersion.value.id}`)
 
@@ -123,10 +131,6 @@ const theFrames = computed(() => {
    display: flex;
    flex-direction: column;
    height: 100%;
-}
-
-.task-view__missing {
-   padding: 24px;
 }
 
 .task-view__notes {

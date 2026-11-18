@@ -1,6 +1,5 @@
 <template>
-   <div v-if="!theExample" class="p-6">Exemple introuvable: {{ name }}</div>
-   <proto-viewer v-else :frames="[`e/${theExample.id}`]" :scenario-names="theScenarioNames">
+   <proto-viewer v-if="theExample" :frames="[`e/${theExample.id}`]" :scenario-names="theScenarioNames">
       <template #devbar-start>
          <strong>Référence · {{ theExample.id }}</strong>
       </template>
@@ -11,13 +10,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
 import ProtoViewer from '../ProtoViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
 import { listPatterns } from '@/registry'
 
+const router = useRouter()
 const props = defineProps<{ name: string }>()
 const theExample = computed(() => listPatterns().find((pattern) => pattern.id === props.name))
+
+watchEffect(() => {
+   if (!theExample.value) {
+      router.replace({ path: '/', query: { notfound: '1' } })
+   }
+})
+
 const theScenarioNames = useScenarioNames(() => theExample.value && `blueprint/patterns/${theExample.value.id}`)
 </script>

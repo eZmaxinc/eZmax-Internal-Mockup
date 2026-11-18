@@ -6,7 +6,7 @@
          Slides away when closed: the prototype gets all the width. Toggled from the dev bar or with [
       -->
       <aside v-if="!isHome && !isShare" class="shell__sidebar" :class="{ 'is-closed': !theSidebarOpen }" :inert="!theSidebarOpen" aria-label="Navigation">
-         <router-link to="/" class="shell-btn shell__back">
+         <router-link :to="linkWithHome('/')" class="shell-btn shell__back">
             <ez-icon name="back" :size="14" />
             <span>Prototypes</span>
          </router-link>
@@ -60,7 +60,7 @@
                   <router-link
                      class="shell__version"
                      :class="{ 'is-active': theItem.id === theVersion?.id, 'has-star': canChoose }"
-                     :to="`/p/${theTask.id}/${theItem.id}`"
+                     :to="linkWithHome(`/p/${theTask.id}/${theItem.id}`)"
                      :title="theItem.notes.summary"
                   >
                      <span class="shell__version-id shell-mono">{{ theItem.id }}</span>
@@ -101,14 +101,14 @@
          <template v-else>
             <p class="shell-heading shell__heading">Références</p>
             <nav class="shell__nav" aria-label="Références">
-               <router-link v-for="theExample in theExamples" :key="theExample.id" :to="`/e/${theExample.id}`" class="shell__item shell-mono">
+               <router-link v-for="theExample in theExamples" :key="theExample.id" :to="linkWithHome(`/e/${theExample.id}`)" class="shell__item shell-mono">
                   {{ theExample.id }}
                </router-link>
             </nav>
 
             <p class="shell-heading shell__heading">Système</p>
             <nav class="shell__nav" aria-label="Système">
-               <router-link to="/gallery" class="shell__item">Galerie des composants</router-link>
+               <router-link :to="linkWithHome('/gallery')" class="shell__item">Galerie des composants</router-link>
             </nav>
          </template>
       </aside>
@@ -129,6 +129,10 @@ import { useShareMode } from './share'
 
 const route = useRoute()
 const theExamples = listPatterns()
+
+function linkWithHome(path: string) {
+   return route.query.home === 'true' ? { path, query: { home: 'true' } } : path
+}
 
 const isHome = computed(() => route.path === '/')
 /** A shared link (?share): one version, no left panel */

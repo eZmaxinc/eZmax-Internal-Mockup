@@ -1,5 +1,7 @@
 <template>
-   <div class="home">
+   <RootGateView v-if="isGateVisible" />
+
+   <div v-else class="home">
       <header class="home__top">
          <h1>Prototypes</h1>
          <span class="shell-count">{{ theTasks.length }}</span>
@@ -28,7 +30,7 @@
       </div>
 
       <nav class="home__list" aria-label="Prototypes">
-         <router-link v-for="theTask in theVisibleTasks" :key="theTask.id" class="home__row" :to="`/p/${theTask.id}`">
+         <router-link v-for="theTask in theVisibleTasks" :key="theTask.id" class="home__row" :to="linkWithHome(`/p/${theTask.id}`)">
             <span class="home__number shell-mono">{{ theTask.number }}</span>
             <span class="home__title">{{ theTask.title }}</span>
             <span class="shell-status" :class="`shell-status--${theTask.status}`">{{ statusLabel[theTask.status] }}</span>
@@ -46,11 +48,11 @@
 
       <h2 class="shell-heading home__heading">Références</h2>
       <nav class="home__list" aria-label="Références">
-         <router-link v-for="thePattern in thePatterns" :key="thePattern.id" class="home__row home__row--reference" :to="`/e/${thePattern.id}`">
+         <router-link v-for="thePattern in thePatterns" :key="thePattern.id" class="home__row home__row--reference" :to="linkWithHome(`/e/${thePattern.id}`)">
             <span class="home__title shell-mono">{{ thePattern.id }}</span>
             <span class="home__summary">{{ thePattern.summary }}</span>
          </router-link>
-         <router-link class="home__row home__row--reference" to="/gallery">
+         <router-link class="home__row home__row--reference" :to="linkWithHome('/gallery')">
             <span class="home__title">Galerie des composants</span>
             <span class="home__summary">Les composants ez- et les tokens, tels qu'ils s'affichent.</span>
          </router-link>
@@ -60,9 +62,21 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { STATUS_LABEL as statusLabel, listPatterns, listTasks, type ProtoStatus } from '@/registry'
 import CopyButton from '../CopyButton.vue'
+import RootGateView from './RootGateView.vue'
 import { isEditingTarget } from '../sidebar-hotkey'
+
+const route = useRoute()
+const isGateVisible = computed(() => {
+   if (route.query.notfound === '1') return true
+   return !import.meta.env.DEV && route.query.home !== 'true'
+})
+
+function linkWithHome(path: string) {
+   return route.query.home === 'true' ? { path, query: { home: 'true' } } : path
+}
 
 const theUI = reactive({ search: '', status: 'all' as ProtoStatus | 'all' })
 const theSearchInput = ref<HTMLInputElement>()

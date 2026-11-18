@@ -1,10 +1,6 @@
 <template>
-   <div v-if="!theTarget || !theVersion" class="share-view__missing">
-      <p>Ce lien ne mène à aucune maquette.</p>
-   </div>
-
    <!-- What was shared and nothing else: one version, or with ?version=all the versions of its task -->
-   <proto-viewer v-else :frames="[`p/${theTarget.task.id}/${theVersion.id}`]" :scenario-names="theScenarioNames">
+   <proto-viewer v-if="theTarget && theVersion" :frames="[`p/${theTarget.task.id}/${theVersion.id}`]" :scenario-names="theScenarioNames">
       <!-- ?version=all: a menu to go from one version to another. One version: nothing to add -->
       <template v-if="isAllVersions" #devbar-start>
          <label class="shell-field">
@@ -28,21 +24,24 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ProtoViewer from '../ProtoViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
-import { resolveShareCode } from '../share'
+import { resolveShareTarget } from '../share'
 import { currentVersion } from '@/registry'
 
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps<{
-   code: string
+   taskId?: string
+   versionId?: string
+   code?: string
 }>()
 
-const theTarget = computed(() => resolveShareCode(props.code))
+const theTarget = computed(() => resolveShareTarget(props))
 /** ?version=all: the teammate may go through every version of this task (only this task) */
 const isAllVersions = computed(() => route.query.version === 'all')
 
@@ -55,6 +54,12 @@ watch(theTarget, (target) => {
 
 const theVersion = computed(() => currentVersion(theTarget.value?.task, theVersionId.value))
 
+watchEffect(() => {
+   if (!theTarget.value || !theVersion.value) {
+      router.replace({ path: '/', query: { notfound: '1' } })
+   }
+})
+
 const theScenarioNames = useScenarioNames(() => (theTarget.value && theVersion.value ? `prototypes/${theTarget.value.task.id}/${theVersion.value.id}` : undefined))
 
 /** The notes without their first line: the summary is shown on its own, above. */
@@ -66,10 +71,6 @@ const theNotesRest = computed(() => {
 </script>
 
 <style scoped>
-.share-view__missing {
-   padding: 24px;
-}
-
 .share-view__notes h2 {
    margin-bottom: 8px;
 }
