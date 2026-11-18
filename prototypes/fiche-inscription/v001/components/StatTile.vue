@@ -38,7 +38,12 @@ function onClick(event: Event) {
    border: 1px solid var(--stat-tile-border);
 }
 
+/* Hover only shifts the fill: enough to feel it is a link */
+.stat-tile--clickable {
+   transition: background-color 0.15s;
+}
+
 .stat-tile--clickable:hover {
-   --stat-tile-border: var(--color-accent);
+   background: var(--color-surface-accent);
 }
 </style>
