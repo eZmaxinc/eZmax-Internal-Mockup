@@ -20,7 +20,7 @@
       </header>
       <div class="ez-app-shell__body">
          <aside class="ez-app-shell__nav" aria-hidden="true">
-            <ul v-if="withSkeleton" class="ez-app-shell__skeleton-menu">
+            <ul v-if="isWithSkeleton" class="ez-app-shell__skeleton-menu">
                <li
                   v-for="(theItem, theIndex) in SKELETON_MENU_ITEMS"
                   :key="theIndex"
@@ -49,8 +49,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
+import { computed, onBeforeUnmount, onMounted, provide, ref, useTemplateRef } from 'vue'
 import EzIcon from '../icon/ez-icon.vue'
+import { appShellKey } from './app-shell'
 
 interface SkeletonMenuItem {
    width: string
@@ -75,7 +76,7 @@ const SKELETON_MENU_ITEMS: SkeletonMenuItem[] = [
  * Placeholder frame of the production shell (toolbar + collapsible left drawer):
  * places prototypes at their real position and width inside the app, with a burger toggle.
  */
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
    /** Shows pale grey skeleton placeholders in the left navigation drawer, shaped like the production menu */
    withSkeleton?: boolean
 }>(), {
@@ -86,6 +87,15 @@ const theRootRef = useTemplateRef<HTMLElement>('theRootRef')
 const isDesktopOpen = ref(false)
 const isMobileOpen = ref(false)
 const isMobileViewport = ref(false)
+const hasSkeletonOverride = ref<boolean | null>(null)
+
+const isWithSkeleton = computed(() => hasSkeletonOverride.value ?? props.withSkeleton)
+
+provide(appShellKey, {
+   setWithSkeleton(value: boolean | null) {
+      hasSkeletonOverride.value = value
+   },
+})
 
 const isDrawerCurrentlyOpen = computed(() =>
    isMobileViewport.value ? isMobileOpen.value : isDesktopOpen.value,

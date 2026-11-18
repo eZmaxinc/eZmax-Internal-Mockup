@@ -110,6 +110,7 @@ Aucun pour l'instant. Un composant métier (qui connaît un dossier, un signatai
 ## Helpers (`import { … } from '@ez'`)
 
 - `useScenario(scenarios)`: données du scénario choisi dans le shell (ref locale, modifiable)
+- `useAppShell({ withSkeleton?: boolean })`: configure le shell applicatif parent (ex. menu latéral en squelette)
 - `defineScenarios({ full: () => …, empty: () => … })`: dans `mocks.ts`
 - `formatDate`, `formatDateTime`, `formatRelative`
 - `gettext` (aussi `$gettext` dans les templates), `ez.icons`
