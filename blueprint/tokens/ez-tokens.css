@@ -1,5 +1,5 @@
 /*
- * ez-tokens 2.1.0 — 2026-11-11
+ * ez-tokens 2.1.1 — 2026-11-18
  * Source: ez-proto, blueprint/tokens/ez-tokens.css. Copied by hand into the mono: never edit the copy.
  * Changes: blueprint/tokens/CHANGELOG.md · Copy procedure: blueprint/tokens/COPY.md
  *
@@ -29,8 +29,8 @@
 
    /* Slate — the neutrals, tinted like the brand charcoal */
    --prim-slate-25: #f9fafb;
-   --prim-slate-50: #f1f3f4; /* ◆ eZsign light grey */
-   --prim-slate-100: #e2e5e8; /* ◆ app background in production */
+   --prim-slate-50: #f1f3f4; /* ◆ eZsign light grey, the app background */
+   --prim-slate-100: #e2e5e8; /* ◆ $background-main in the mono */
    --prim-slate-200: #d0d6dc;
    --prim-slate-300: #b4bdc5;
    --prim-slate-500: #71808e;
@@ -115,7 +115,7 @@
    --breakpoint-xl: 120rem; /* 1920px */
 
    /* Background and surfaces */
-   --color-background: var(--prim-slate-100);
+   --color-background: var(--prim-slate-50);
    --color-surface: var(--prim-white); /* cards, dialogs, tables, fields */
    --color-surface-muted: var(--prim-slate-25); /* inset zones: table header, quiet panels */
    --color-surface-inverse: var(--prim-slate-800); /* dark band: the app toolbar */

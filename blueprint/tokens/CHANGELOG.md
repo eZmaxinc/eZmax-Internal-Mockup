@@ -2,6 +2,10 @@
 
 Le plus récent en haut. `yarn mockup tokens bump` ajoute les entrées. Copie vers le mono: `COPY.md`.
 
+## 2.1.1 — 2026-11-18
+
+- Fond de l'app: le gris pâle de la marque (`#f1f3f4`), plus proche de l'app (`#f5f5f5` à l'écran) que `#e2e5e8`. Thème sombre inchangé.
+
 ## 2.1.0 — 2026-11-11
 
 - Police Poppins, lue sur les captures de prod (à confirmer dans le mono).
