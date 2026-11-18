@@ -27,3 +27,6 @@ dist-ssr
 exports
 .env
 .env.*
+
+# Agent tooling, local to each dev
+.claude
