@@ -44,6 +44,7 @@ const emit = defineEmits<{ 'pick-group': [key: string]; 'pick-item': [id: string
 .page-nav {
    --page-nav-icon: var(--size-control-sm);
    --page-nav-padding: var(--space-gap-sm);
+   --page-nav-radius: var(--radius-sm); /* the radius of ez-card */
 
    position: relative;
    display: flex;
@@ -51,7 +52,7 @@ const emit = defineEmits<{ 'pick-group': [key: string]; 'pick-item': [id: string
    gap: 2px;
    padding: var(--page-nav-padding);
    border: 1px solid var(--color-border);
-   border-radius: var(--radius-xl);
+   border-radius: var(--page-nav-radius);
    background: var(--color-surface);
 }
 
@@ -68,7 +69,7 @@ const emit = defineEmits<{ 'pick-group': [key: string]; 'pick-item': [id: string
 
 .page-nav__group {
    position: relative;
-   border-radius: var(--radius-lg);
+   border-radius: var(--page-nav-radius);
 }
 
 .page-nav__group--open {
@@ -81,7 +82,7 @@ const emit = defineEmits<{ 'pick-group': [key: string]; 'pick-item': [id: string
    align-items: center;
    gap: var(--space-gap-sm);
    padding: var(--page-nav-padding);
-   border-radius: var(--radius-lg);
+   border-radius: var(--page-nav-radius);
    color: var(--color-foreground-muted);
 }
 

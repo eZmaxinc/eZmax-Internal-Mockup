@@ -73,7 +73,7 @@ function onPickItem(id: string) {
    gap: var(--space-gap-sm);
    padding: var(--space-gap-sm) var(--space-gap-sm) var(--space-gap-sm) var(--space-inset-md);
    border: 1px solid var(--color-border);
-   border-radius: var(--radius-lg);
+   border-radius: var(--radius-sm);
    background: var(--color-surface);
    box-shadow: var(--shadow-card);
 }
@@ -83,7 +83,7 @@ function onPickItem(id: string) {
    top: calc(100% + var(--space-gap-sm));
    right: 0;
    width: min(100%, 20rem);
-   border-radius: var(--radius-xl);
+   border-radius: var(--radius-sm);
    box-shadow: var(--shadow-overlay);
 }
 </style>
