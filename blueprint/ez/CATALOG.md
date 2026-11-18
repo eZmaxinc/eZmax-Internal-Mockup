@@ -55,6 +55,11 @@ Fiche longue avec TOC sticky à droite (≥ 1024px) et scroll-spy.
 - `title`, `subtitle`, `icon`, `flush` (sans padding, pour tableau), `toc-id`
 - slots `default`, `#actions` (en-tête à droite), `#footer` (boutons alignés à droite), `#header` (remplace l'en-tête)
 
+### `ez-heading`
+Un titre hors des composants qui ont déjà le leur (`ez-page-header`, `ez-page-section`, `ez-card`, `ez-dialog` ont une prop `title`): le titre d'une zone construite à la main (une frise, un panneau, un groupe de champs).
+- `variant`: `page` (h1) · `section` (défaut, h2) · `card` (h3) · `group` (h3, petit: un groupe dans une carte)
+- `as`: `h1 h2 h3 h4 legend span`, pour changer la balise sans changer l'allure (`as="legend"` dans un `fieldset`); slot `default`
+
 ### `ez-btn`
 - `label` ou slot, `icon`, `icon-right`
 - `variant`: `positive` (vert: l'action principale d'une page) · `primary` (ardoise: l'action d'une zone, un seul par zone) · `secondary` (défaut) · `flat` (faible emphase, actions de carte) · `danger` (destructif, en contour rouge)
@@ -228,6 +233,15 @@ Slots: `#actions`
 | `disabled` | `boolean` |  |  |
 | `readonly` | `boolean` |  |  |
 | `model-value` | `string \| number \| null` |  | v-model |
+
+#### `ez-heading`
+
+| Prop | Type | Défaut | |
+|---|---|---|---|
+| `variant` | `HeadingVariant` | `'section'` | The level of the title in the page: it sets the look, and the tag when `as` is not given |
+| `as` | `HeadingTag` |  | Renders as another tag without changing the look (default: page → h1, section → h2, card and group → h3) |
+
+Slots: `défaut`
 
 #### `ez-icon`
 

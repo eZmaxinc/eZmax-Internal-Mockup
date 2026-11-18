@@ -504,6 +504,38 @@
          ]
       },
       {
+         "tag": "ez-heading",
+         "name": "EzHeading",
+         "tier": "primitive",
+         "file": "blueprint/ez/components/heading/ez-heading.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "variant",
+               "attr": "variant",
+               "type": "HeadingVariant",
+               "required": false,
+               "values": null,
+               "default": "'section'",
+               "doc": "The level of the title in the page: it sets the look, and the tag when `as` is not given"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "HeadingTag",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "Renders as another tag without changing the look (default: page → h1, section → h2, card and group → h3)"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": []
+      },
+      {
          "tag": "ez-icon",
          "name": "EzIcon",
          "tier": "primitive",

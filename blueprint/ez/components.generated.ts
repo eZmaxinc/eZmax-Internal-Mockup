@@ -6,6 +6,7 @@ import EzCard from './components/card/ez-card.vue'
 import EzDialog from './components/dialog/ez-dialog.vue'
 import EzEmptyState from './components/empty-state/ez-empty-state.vue'
 import EzField from './components/field/ez-field.vue'
+import EzHeading from './components/heading/ez-heading.vue'
 import EzIcon from './components/icon/ez-icon.vue'
 import EzInfoList from './components/info-list/ez-info-list.vue'
 import EzLayout from './components/layout/ez-layout.vue'
@@ -28,6 +29,7 @@ export const components = {
    EzDialog,
    EzEmptyState,
    EzField,
+   EzHeading,
    EzIcon,
    EzInfoList,
    EzLayout,
@@ -52,6 +54,7 @@ declare module 'vue' {
       EzDialog: typeof EzDialog
       EzEmptyState: typeof EzEmptyState
       EzField: typeof EzField
+      EzHeading: typeof EzHeading
       EzIcon: typeof EzIcon
       EzInfoList: typeof EzInfoList
       EzLayout: typeof EzLayout
