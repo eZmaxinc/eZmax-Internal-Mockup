@@ -54,8 +54,8 @@ const theTarget = computed(() => {
       const meta: Partial<ProtoMeta> = task?.meta ?? {}
       const latest = task?.versions.at(-1)?.id
       return {
-         shellUrl: `${import.meta.env.BASE_URL}#/p/${id}/${version}`,
-         newer: latest && latest !== version ? { id: latest, url: `#/p/${id}/${latest}` } : null,
+         shellUrl: `${import.meta.env.BASE_URL}p/${id}/${version}`,
+         newer: latest && latest !== version ? { id: latest, url: `${import.meta.env.BASE_URL}p/${id}/${latest}` } : null,
          key: `p/${id}/${version}`,
          load: () => loadModule(`prototypes/${id}/${version}`),
          chrome: theRoute.value.chrome ?? meta.chrome ?? 'app',
@@ -65,7 +65,7 @@ const theTarget = computed(() => {
 
    if (kind === 'e' && id) {
       return {
-         shellUrl: `${import.meta.env.BASE_URL}#/e/${id}`,
+         shellUrl: `${import.meta.env.BASE_URL}e/${id}`,
          newer: null,
          key: `e/${id}`,
          load: () => loadModule(`blueprint/patterns/${id}`),
@@ -75,7 +75,7 @@ const theTarget = computed(() => {
    }
 
    return {
-      shellUrl: '/#/gallery',
+      shellUrl: `${import.meta.env.BASE_URL}gallery`,
       newer: null,
       key: 'gallery',
       load: async () => ({ component: GalleryPage, scenarios: { default: () => ({}) } }),

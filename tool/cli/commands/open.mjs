@@ -22,7 +22,7 @@ export async function run(argv) {
 
    const origin = `http://localhost:${DEV_PORT}`
    const query = scenario ? `?scenario=${encodeURIComponent(scenario)}` : ''
-   const shellPath = taskId ? `/#/p/${taskId}/${version}${query}` : '/'
+   const shellPath = taskId ? `/p/${taskId}/${version}${query}` : '/'
    const serverUp = await isServerUp(origin)
 
    if (!isInteractive || flags.print) {

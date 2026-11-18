@@ -1,26 +1,30 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { listTasks, type ProtoTask } from '@/registry'
+import { getTask, listTasks, type ProtoTask } from '@/registry'
 
 /**
- * Share links: `#/s/<code>` shows one version of one task, and nothing that leads elsewhere (no left
- * panel, no other task, no compare, no export, no link back to the shell). Add `?version=all` to the
- * link to let the teammate go through every version of that task, and only that task.
- *
- * The code is opaque on purpose: the version is not in the address, so changing v003 into v004 leads
- * nowhere. It narrows what a teammate sees; it is not access control: the built site still holds every
- * prototype, for whoever goes looking.
+ * Share links: `/mockup/<taskId>` (or `/mockup/<taskId>/<versionId>`, and legacy `/s/<code>`)
+ * show one version of one task without exposing the shell sidebar, other tasks, compare, or export.
+ * Add `?version=all` to let the teammate browse every version of that task.
  */
 
 /** In a shared link: no left panel, no way out of what was shared. */
 export function useShareMode() {
    const route = useRoute()
-   return computed(() => route.path.startsWith('/s/'))
+   return computed(() => route.path.startsWith('/mockup/') || route.path.startsWith('/s/'))
 }
 
 export interface ShareTarget {
    task: ProtoTask
    versionId: string
+}
+
+/** Default version for a clean `/mockup/<taskId>` URL: retained version when valid, else latest. */
+export function defaultShareVersionId(task: ProtoTask): string {
+   if (task.meta.chosen && task.versions.some((item) => item.id === task.meta.chosen)) {
+      return task.meta.chosen
+   }
+   return task.versions.at(-1)?.id ?? ''
 }
 
 /** Short and stable: FNV-1a of the task and version, in base 36. Same task and version = same code. */
@@ -42,7 +46,26 @@ export function resolveShareCode(code: string): ShareTarget | null {
    return null
 }
 
-/** The address to send. The shell's own address and folder: works on localhost and on GitHub Pages. */
+/** Resolves either a readable `/mockup/<taskId>[/<versionId>]` route or a legacy `/s/<code>`. */
+export function resolveShareTarget(params: { taskId?: string; versionId?: string; code?: string }): ShareTarget | null {
+   if (params.taskId) {
+      const task = getTask(params.taskId)
+      if (!task) return null
+      const resolvedVersion = params.versionId || defaultShareVersionId(task)
+      if (!resolvedVersion || !task.versions.some((item) => item.id === resolvedVersion)) return null
+      return { task, versionId: resolvedVersion }
+   }
+   if (params.code) {
+      return resolveShareCode(params.code)
+   }
+   return null
+}
+
+/** Clean share URL without `#`, e.g. `https://host/mockup/<taskId>` (or `/<versionId>` for non-default versions). */
 export function shareUrl(taskId: string, versionId: string): string {
-   return `${window.location.origin}${window.location.pathname}#/s/${shareCode(taskId, versionId)}`
+   const task = getTask(taskId)
+   const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`
+   const isDefault = task ? versionId === defaultShareVersionId(task) : false
+   const path = isDefault ? `mockup/${taskId}` : `mockup/${taskId}/${versionId}`
+   return `${window.location.origin}${base}${path}`
 }
