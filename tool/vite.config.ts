@@ -2,7 +2,7 @@ import { defineConfig, type Plugin, type ViteDevServer } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { copyFileSync, existsSync, readFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { BLUEPRINT, DEV_PORT, PROTOTYPES, ROOT, TOOL, aliases } from './paths.mjs'
 
@@ -155,12 +155,30 @@ function protoRefreshEndpoint(): Plugin {
    }
 }
 
+/**
+ * GitHub Pages serves 404.html on unknown paths: copying index.html lets HTML5 history routes
+ * (/mockup/<slug>, /p/<task>/<version>, /?home=true) load directly without `#` in the URL.
+ */
+function spaFallback404(): Plugin {
+   return {
+      name: 'ez-proto-spa-404',
+      closeBundle() {
+         const outDir = join(ROOT, 'dist')
+         const indexFile = join(outDir, 'index.html')
+         if (existsSync(indexFile)) {
+            copyFileSync(indexFile, join(outDir, '404.html'))
+         }
+      },
+   }
+}
+
+const rawBasePath = process.env.VITE_BASE_PATH?.trim()
+const basePath = rawBasePath ? (rawBasePath.endsWith('/') ? rawBasePath : `${rawBasePath}/`) : '/'
+
 export default defineConfig({
    root: TOOL,
-   // Relative paths in the build: dist/ works from any folder, e.g. https://ezmaxinc.github.io/eZmax-Internal-Mockup/
-   // (the dev server still serves from /). The routes are hashes, so no server rewrite is needed.
-   base: './',
-   plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), protoStatusEndpoint(), watchContentFolders()],
+   base: basePath,
+   plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), protoStatusEndpoint(), watchContentFolders(), spaFallback404()],
    resolve: { alias: aliases },
    server: {
       port: DEV_PORT,
