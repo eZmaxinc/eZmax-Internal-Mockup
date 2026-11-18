@@ -2,8 +2,8 @@
    "title": "Exécution de tests serveur",
    "goodday": null,
    "status": "chosen",
-   "chosen": "v001",
-   "chrome": "none",
+   "chosen": "v002",
+   "chrome": "app",
    "owner": "Patrick Perron",
    "tags": [],
    "created": "2026-11-18"
