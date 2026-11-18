@@ -2,10 +2,10 @@
    <section id="v-apercu" data-anchor="v-apercu" class="scroll-mt-28 md:scroll-mt-20">
       <ez-card :title="$gettext('Vente #%{id}', { id: sale.id })">
          <template #actions>
-            <ez-badge v-for="theCounter in sale.counters" :key="theCounter.label">
+            <ez-badge v-for="theCounter in sale.counters" :key="theCounter.label" as="a" href="#" outline @click.prevent>
                <span class="flex items-center gap-1"><ez-icon :name="theCounter.icon" :size="14" />{{ theCounter.label }}</span>
             </ez-badge>
-            <ez-badge :tone="sale.stateTone" strong :label="sale.stateLabel" />
+            <ez-badge :tone="sale.stateTone" :label="sale.stateLabel" />
          </template>
 
          <div class="flex flex-col gap-2">
@@ -61,15 +61,15 @@
                   <GroupTitle icon="success" :label="$gettext('Protections')" />
                   <TileBox :label="$gettext('Tranquilli-T')">
                      <div class="flex flex-wrap gap-2">
-                        <ez-badge :label="$gettext('Non admissible')" />
-                        <ez-badge :label="$gettext('Vendeur non couvert')" />
-                        <ez-badge :label="$gettext('Acheteur non couvert')" />
+                        <ez-badge outline :label="$gettext('Non admissible')" />
+                        <ez-badge outline :label="$gettext('Vendeur non couvert')" />
+                        <ez-badge outline :label="$gettext('Acheteur non couvert')" />
                      </div>
                      <div class="text-xs text-foreground-subtle">{{ $gettext('Note du courtier · —') }}</div>
                   </TileBox>
                   <TileBox :label="$gettext('Protection domiciliaire')">
                      <div class="flex flex-wrap gap-2">
-                        <ez-badge :label="$gettext('Non admissible')" />
+                        <ez-badge outline :label="$gettext('Non admissible')" />
                      </div>
                      <div class="text-xs text-foreground-subtle">{{ $gettext('Commentaire · —') }}</div>
                   </TileBox>

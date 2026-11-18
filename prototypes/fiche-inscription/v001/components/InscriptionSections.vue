@@ -2,10 +2,10 @@
    <section id="ins-info" data-anchor="ins-info" class="scroll-mt-28 md:scroll-mt-20">
       <ez-card :title="$gettext('Informations')">
          <template #actions>
-            <ez-badge v-for="theCounter in inscription.counters" :key="theCounter.label">
+            <ez-badge v-for="theCounter in inscription.counters" :key="theCounter.label" as="a" href="#" outline @click.prevent>
                <span class="flex items-center gap-1"><ez-icon :name="theCounter.icon" :size="14" />{{ theCounter.label }}</span>
             </ez-badge>
-            <ez-badge tone="success" dot strong :label="$gettext('Actif')" />
+            <ez-badge tone="success" dot :label="$gettext('Actif')" />
          </template>
 
          <div class="flex flex-col gap-2">
