@@ -68,20 +68,58 @@
                "doc": null
             },
             {
+               "name": "pulse",
+               "attr": "pulse",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "With dot: the dot pulses, for a live status (ez-dot)"
+            },
+            {
                "name": "solid",
                "attr": "solid",
                "type": "boolean",
                "required": false,
                "values": null,
                "default": null,
-               "doc": "Filled with the solid color, squarer: the badges of a table in production"
+               "doc": "Filled with the solid color: the badges of a table in production"
+            },
+            {
+               "name": "outline",
+               "attr": "outline",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "No fill, only the outline on the surface: a secondary fact beside a status (counters, conditions)"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string | object",
+               "required": false,
+               "values": null,
+               "default": "'span'",
+               "doc": "Renders as another element or component; a link or a button (`a`, `button`, `router-link`) becomes clickable, with a light hover"
+            },
+            {
+               "name": "href",
+               "attr": "href",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "With as=\"a\": where the link goes"
             }
          ],
          "emits": [],
          "slots": [
             "default"
          ],
-         "uses": []
+         "uses": [
+            "ez-dot"
+         ]
       },
       {
          "tag": "ez-btn",
@@ -327,6 +365,52 @@
          "uses": [
             "ez-btn"
          ]
+      },
+      {
+         "tag": "ez-dot",
+         "name": "EzDot",
+         "tier": "primitive",
+         "file": "blueprint/ez/components/dot/ez-dot.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "tone",
+               "attr": "tone",
+               "type": "'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'action'",
+               "required": false,
+               "values": [
+                  "neutral",
+                  "info",
+                  "success",
+                  "warning",
+                  "danger",
+                  "action"
+               ],
+               "default": "'neutral'",
+               "doc": "Same tone = same meaning everywhere, as ez-badge"
+            },
+            {
+               "name": "pulse",
+               "attr": "pulse",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "A ring that grows out of the dot and fades, in a loop: something live (active, in progress, online)"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'span'",
+               "doc": "Renders as another element"
+            }
+         ],
+         "emits": [],
+         "slots": [],
+         "uses": []
       },
       {
          "tag": "ez-empty-state",

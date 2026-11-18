@@ -4,6 +4,7 @@ import EzBadge from './components/badge/ez-badge.vue'
 import EzBtn from './components/btn/ez-btn.vue'
 import EzCard from './components/card/ez-card.vue'
 import EzDialog from './components/dialog/ez-dialog.vue'
+import EzDot from './components/dot/ez-dot.vue'
 import EzEmptyState from './components/empty-state/ez-empty-state.vue'
 import EzField from './components/field/ez-field.vue'
 import EzHeading from './components/heading/ez-heading.vue'
@@ -27,6 +28,7 @@ export const components = {
    EzBtn,
    EzCard,
    EzDialog,
+   EzDot,
    EzEmptyState,
    EzField,
    EzHeading,
@@ -52,6 +54,7 @@ declare module 'vue' {
       EzBtn: typeof EzBtn
       EzCard: typeof EzCard
       EzDialog: typeof EzDialog
+      EzDot: typeof EzDot
       EzEmptyState: typeof EzEmptyState
       EzField: typeof EzField
       EzHeading: typeof EzHeading

@@ -39,9 +39,19 @@
                      <ez-badge v-for="theTone in tones" :key="theTone" :tone="theTone" :label="theTone" />
                      <ez-badge tone="success" dot label="Avec point" />
                   </div>
-                  <p class="m-0 mt-3 mb-2 text-sm text-foreground-muted">Statut d'un dossier: <code>:tone="folder.stateTone()" :label="folder.stateLabel()"</code></p>
+                  <p class="m-0 mt-3 mb-2 text-sm text-foreground-muted"><code>outline</code>: sans fond, le contour seul</p>
                   <div class="flex flex-wrap gap-2">
-                     <ez-badge v-for="theFolder in rows" :key="theFolder.id" :tone="theFolder.stateTone()" :label="theFolder.stateLabel()" />
+                     <ez-badge v-for="theTone in tones" :key="theTone" :tone="theTone" :label="theTone" outline />
+                  </div>
+                  <p class="m-0 mt-3 mb-2 text-sm text-foreground-muted"><code>as="a"</code> ou <code>as="button"</code>: cliquable, un voile léger au survol</p>
+                  <div class="flex flex-wrap gap-2">
+                     <ez-badge as="button" outline label="3 fichiers" />
+                     <ez-badge as="button" label="0 document" />
+                     <ez-badge as="button" tone="info" label="1 communication" />
+                  </div>
+                  <p class="m-0 mt-3 mb-2 text-sm text-foreground-muted"><code>solid</code>: plein, pour un tableau</p>
+                  <div class="flex flex-wrap gap-2">
+                     <ez-badge v-for="theTone in tones" :key="theTone" :tone="theTone" :label="theTone" solid />
                   </div>
                </ez-card>
             </ez-page-section>

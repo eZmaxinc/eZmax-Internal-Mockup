@@ -7,7 +7,7 @@
                role="dialog"
                aria-modal="true"
                :aria-label="title"
-               :style="{ width: width }"
+               :style="{ '--ez-dialog-width': width }"
             >
                <header class="ez-dialog__header">
                   <h2 class="ez-dialog__title">{{ title }}</h2>
@@ -73,6 +73,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    --ez-dialog-surface: var(--color-surface);
    --ez-dialog-radius: var(--radius-lg);
    --ez-dialog-shadow: var(--shadow-overlay);
+   --ez-dialog-enter-offset: 8px;
 
    position: fixed;
    inset: 0;
@@ -88,7 +89,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 
 @media (width < theme(--breakpoint-sm)) {
    .ez-dialog {
-      --ez-dialog-top: var(--space-inset-lg);
       --ez-dialog-padding: var(--card-padding, var(--space-inset-md));
    }
 }
@@ -96,6 +96,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 .ez-dialog__panel {
    display: flex;
    flex-direction: column;
+   width: var(--ez-dialog-width);
    max-width: 100%;
    max-height: calc(100vh - var(--ez-dialog-top) - var(--ez-dialog-margin));
    border-radius: var(--ez-dialog-radius);
@@ -138,12 +139,30 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    text-transform: uppercase;
 }
 
-.ez-dialog-enter-active,
-.ez-dialog-leave-active {
-   transition: opacity 140ms;
+/* After the panel's own rules, so they win. Phone and tablet: a sheet that rises from the bottom, as wide as the screen */
+@media (width < theme(--breakpoint-md)) {
+   .ez-dialog {
+      --ez-dialog-top: var(--space-inset-xl);
+      --ez-dialog-enter-offset: 100%;
+
+      align-items: end;
+      padding: var(--ez-dialog-top) 0 0;
+   }
 
    .ez-dialog__panel {
-      transition: transform 140ms;
+      width: 100%;
+      max-height: calc(100vh - var(--ez-dialog-top));
+      border-radius: var(--ez-dialog-radius) var(--ez-dialog-radius) 0 0;
+      padding-bottom: env(safe-area-inset-bottom);
+   }
+}
+
+.ez-dialog-enter-active,
+.ez-dialog-leave-active {
+   transition: opacity 180ms;
+
+   .ez-dialog__panel {
+      transition: transform 180ms ease-out;
    }
 }
 
@@ -152,7 +171,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    opacity: 0;
 
    .ez-dialog__panel {
-      transform: translateY(8px);
+      transform: translateY(var(--ez-dialog-enter-offset));
    }
 }
 </style>

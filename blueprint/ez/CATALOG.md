@@ -68,8 +68,15 @@ Un titre hors des composants qui ont déjà le leur (`ez-page-header`, `ez-page-
 - Bouton icône seule: `aria-label` obligatoire
 
 ### `ez-badge`
-- `label` ou slot, `tone`: `neutral info success warning danger action`, `dot`, `solid` (plein, pour un tableau)
+- `label` ou slot, `tone`: `neutral info success warning danger action`, `dot`, `solid` (plein, pour un tableau), `outline` (sans fond, le contour seul: un fait secondaire à côté d'un statut, des compteurs)
+- Cliquable: `as="a"` avec `href` (un lien), ou `as="button"` (une action); un voile léger de la couleur du texte au survol, quel que soit le ton (les compteurs « 3 fichiers » qui ouvrent la liste)
 - Le statut d'un objet métier: `:tone="folder.stateTone()" :label="folder.stateLabel()"` (de même pour `signer`). Les méthodes du mock donnent le même badge partout.
+
+### `ez-dot`
+Un point de couleur: un statut en un coup d'œil, à côté d'un libellé. `ez-badge` le dessine avec `dot`, dans la couleur de son texte.
+- `tone`: `neutral info success warning danger action` (les mêmes sens que `ez-badge`)
+- `pulse`: un anneau fin qui grandit et s'efface, en boucle, pour un statut vivant (actif, en cours, en ligne); arrêté si l'utilisateur réduit les animations. Dans un badge: `<ez-badge dot pulse>`
+- Réglages: `--dot-size` (défaut 6px), `--dot-color`
 
 ### `ez-message-important`
 - `type`: `info success warning danger`, `title`; slots `default`, `#actions`
@@ -106,7 +113,7 @@ Réduit un contenu long sur téléphone (moins de 640 px): il garde le haut, fon
 
 ### `ez-dialog`
 - `v-model`, `title` (requis), `width`, `persistent`; slots `default`, `#actions`
-- Se téléporte dans `body`. Actions: annuler en `flat`, confirmer en `primary` (ou `danger`).
+- Se téléporte dans `body`. Sous 1024 px (téléphone, tablette), il monte du bas de l'écran, sur toute la largeur; `width` ne compte qu'au-dessus. Actions: annuler en `flat`, confirmer en `primary` (ou `danger`).
 
 ## Composants métier
 
@@ -162,7 +169,11 @@ Slots: `défaut`
 | `label` | `string` |  |  |
 | `tone` | `neutral` `info` `success` `warning` `danger` `action` | `'neutral'` | Same tone = same meaning everywhere (see brand.md) |
 | `dot` | `boolean` |  |  |
-| `solid` | `boolean` |  | Filled with the solid color, squarer: the badges of a table in production |
+| `pulse` | `boolean` |  | With dot: the dot pulses, for a live status (ez-dot) |
+| `solid` | `boolean` |  | Filled with the solid color: the badges of a table in production |
+| `outline` | `boolean` |  | No fill, only the outline on the surface: a secondary fact beside a status (counters, conditions) |
+| `as` | `string \| object` | `'span'` | Renders as another element or component; a link or a button (`a`, `button`, `router-link`) becomes clickable, with a light hover |
+| `href` | `string` |  | With as="a": where the link goes |
 
 Slots: `défaut`
 
@@ -206,6 +217,14 @@ Slots: `#header`, `#actions`, `défaut`, `#footer`
 | `model-value` | `boolean` |  | v-model |
 
 Slots: `défaut`, `#actions`
+
+#### `ez-dot`
+
+| Prop | Type | Défaut | |
+|---|---|---|---|
+| `tone` | `neutral` `info` `success` `warning` `danger` `action` | `'neutral'` | Same tone = same meaning everywhere, as ez-badge |
+| `pulse` | `boolean` |  | A ring that grows out of the dot and fades, in a loop: something live (active, in progress, online) |
+| `as` | `string` | `'span'` | Renders as another element |
 
 #### `ez-empty-state`
 
