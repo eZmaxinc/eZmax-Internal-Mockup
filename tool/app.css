@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@import "./palette-reset.css";
+@import "../blueprint/tokens/ez-tokens.css";
+@import "../blueprint/tokens/components.css";
+
+/* Scan the blueprint, the prototypes and the tool for utility classes */
+@source "../prototypes";
+@source "../blueprint";
+@source "./";
+
+/* Gallery renders text sizes dynamically */
+@source inline("text-{xs,sm,base,lg,xl,2xl}");
+
+@layer base {
+   html {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--color-foreground);
+      background: var(--color-background);
+      -webkit-font-smoothing: antialiased;
+   }
+
+   /* Repeated on body: the dark theme class (.body--dark) lives on <body>, below <html> */
+   body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--color-foreground);
+      background: var(--color-background);
+      font-size: var(--text-base);
+      line-height: var(--text-base--line-height);
+   }
+
+   :focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+   }
+
+   a {
+      color: var(--color-accent);
+   }
+}
