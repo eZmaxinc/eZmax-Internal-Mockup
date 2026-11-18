@@ -68,6 +68,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    /* Variables first: what the dialog's look depends on, read below */
    --ez-dialog-overlay: var(--color-overlay);
    --ez-dialog-margin: var(--space-inset-md);
+   --ez-dialog-top: clamp(2.5rem, 8vh, 4.5rem);
    --ez-dialog-padding: var(--card-padding, var(--space-inset-lg));
    --ez-dialog-surface: var(--color-surface);
    --ez-dialog-radius: var(--radius-lg);
@@ -79,13 +80,15 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    display: grid;
    /* One column as wide as the screen: without it, the column takes the panel's width and max-width: 100% never applies */
    grid-template-columns: minmax(0, 1fr);
-   place-items: center;
-   padding: var(--ez-dialog-margin);
+   align-items: start;
+   justify-items: center;
+   padding: var(--ez-dialog-top) var(--ez-dialog-margin) var(--ez-dialog-margin);
    background: var(--ez-dialog-overlay);
 }
 
 @media (width < theme(--breakpoint-sm)) {
    .ez-dialog {
+      --ez-dialog-top: var(--space-inset-lg);
       --ez-dialog-padding: var(--card-padding, var(--space-inset-md));
    }
 }
@@ -94,7 +97,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    display: flex;
    flex-direction: column;
    max-width: 100%;
-   max-height: calc(100vh - 2 * var(--ez-dialog-margin));
+   max-height: calc(100vh - var(--ez-dialog-top) - var(--ez-dialog-margin));
    border-radius: var(--ez-dialog-radius);
    background: var(--ez-dialog-surface);
    box-shadow: var(--ez-dialog-shadow);
@@ -124,6 +127,15 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
    justify-content: flex-end;
    gap: var(--space-gap-sm);
    padding: var(--space-inset-sm) var(--ez-dialog-padding) var(--ez-dialog-padding);
+}
+
+.ez-dialog__footer :deep(.ez-btn.ez-btn) {
+   --ez-btn-radius: var(--radius-full);
+}
+
+.ez-dialog__footer :deep(.ez-btn.ez-btn:not(.ez-btn--icon-only)) {
+   --ez-btn-padding-x: var(--space-inset-lg);
+   text-transform: uppercase;
 }
 
 .ez-dialog-enter-active,
