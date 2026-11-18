@@ -7,6 +7,7 @@
    "scripts": {
       "dev": "vite --config tool/vite.config.ts",
       "build": "vue-tsc --noEmit && vite build --config tool/vite.config.ts",
+      "preview": "vite preview --config tool/vite.config.ts",
       "typecheck": "vue-tsc --noEmit",
       "mockup": "node tool/cli/mockup.mjs"
    },

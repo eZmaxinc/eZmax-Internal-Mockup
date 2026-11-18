@@ -169,6 +169,28 @@ function spaFallback404(): Plugin {
             copyFileSync(indexFile, join(outDir, '404.html'))
          }
       },
+      configurePreviewServer(server) {
+         const outDir = join(ROOT, 'dist')
+         const indexFile = join(outDir, 'index.html')
+         server.middlewares.use((req, res, next) => {
+            const path = (req.url ?? '/').split('?')[0]
+            if (req.method !== 'GET' || path.startsWith('/assets/') || path === '/frame.html') {
+               next()
+               return
+            }
+            const candidate = join(outDir, path.replace(/^\/+/, ''))
+            if (path !== '/' && existsSync(candidate)) {
+               next()
+               return
+            }
+            if (existsSync(indexFile)) {
+               res.setHeader('Content-Type', 'text/html; charset=utf-8')
+               res.end(readFileSync(indexFile))
+               return
+            }
+            next()
+         })
+      },
    }
 }
 
@@ -188,6 +210,10 @@ export default defineConfig({
       fs: { allow: [ROOT] },
       // PROTO_POLL=1 yarn dev — for a drive that sends no file events at all (edits never show up)
       watch: process.env.PROTO_POLL ? { usePolling: true, interval: 300 } : undefined,
+   },
+   preview: {
+      port: DEV_PORT,
+      strictPort: true,
    },
    build: {
       outDir: join(ROOT, 'dist'),
