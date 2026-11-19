@@ -27,7 +27,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Panel } from '../mocks'
-import EzBadge from './EzBadge.vue'
 import SubPanel from './SubPanel.vue'
 
 const props = defineProps<{ panel: Panel; addable?: boolean }>()

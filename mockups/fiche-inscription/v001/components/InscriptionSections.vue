@@ -54,7 +54,6 @@ import { computed } from 'vue'
 import { formatDateTime, gettext, type IInfoCategory } from '@ez'
 import type { Inscription } from '../mocks'
 import DataPanel from './DataPanel.vue'
-import EzBadge from './EzBadge.vue'
 import EmptySlots from './EmptySlots.vue'
 import { flagsOf, statsOf, tilesOf } from './info'
 

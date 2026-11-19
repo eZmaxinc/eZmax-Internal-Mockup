@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import type { IconName } from '@ez'
-import EzBadge from './EzBadge.vue'
 
 defineProps<{ title: string; icon?: IconName; count?: number }>()
 </script>

@@ -7,18 +7,7 @@
          <ez-badge :tone="sale.stateTone" :label="sale.stateLabel" />
       </template>
 
-      <div class="flex flex-col gap-5">
-         <!-- The key figures: no ez-info element for a big number with its line of context -->
-         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div v-for="theKpi in sale.kpis" :key="theKpi.label" class="kpi" :class="{ 'kpi--total': theKpi.isTotal }">
-               <div class="text-xs text-foreground-muted">{{ theKpi.label }}</div>
-               <div class="text-lg font-bold">{{ theKpi.value }}</div>
-               <div class="text-xs text-foreground-subtle">{{ theKpi.sub }}</div>
-            </div>
-         </div>
-
-         <ez-info :data="theFinancing" />
-      </div>
+      <ez-info :data="theOverview" />
    </ez-card>
 
    <ez-card :toc-id="`sale-${sale.id}-dates`" :title="$gettext('Échéancier et notaires')">
@@ -30,13 +19,7 @@
 
    <ez-card :toc-id="`sale-${sale.id}-cond`" :title="$gettext('Conditions, protections et suivi')">
       <div class="flex flex-col gap-5">
-         <div class="flex flex-col gap-2">
-            <ez-info :data="theToDo" />
-            <div class="flex items-center gap-2 text-xs text-foreground-muted">
-               {{ $gettext('Validation direction · admin.') }}
-               <ez-badge :label="$gettext('Non demandée')" />
-            </div>
-         </div>
+         <ez-info :data="theToDo" />
 
          <div class="grid gap-5 md:grid-cols-2">
             <ez-info :data="theConditions" />
@@ -79,17 +62,28 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatDate, gettext, type IInfoCategory } from '@ez'
+import { formatDate, gettext, type IInfoCategory, type IInfoCategoryItems } from '@ez'
 import type { Sale } from '../mocks'
 import DataPanel from './DataPanel.vue'
-import EzBadge from './EzBadge.vue'
 import EmptySlots from './EmptySlots.vue'
 import SaleTimeline from './SaleTimeline.vue'
 import { flagsOf, statsOf, tilesOf } from './info'
 
 const props = defineProps<{ sale: Sale }>()
 
-const theFinancing = computed<IInfoCategory[]>(() => [
+// The key figures: a bigger value and its line of context; the total in the positive color
+const theOverview = computed<IInfoCategory[]>(() => [
+   {
+      name: 'kpis',
+      items: props.sale.kpis.map((theKpi, index): IInfoCategoryItems => ({
+         key: `kpi-${index}`,
+         label: theKpi.label,
+         value: theKpi.value,
+         hint: theKpi.sub,
+         valueStyle: { fontSize: 'var(--text-lg)', fontWeight: '700', ...(theKpi.isTotal ? { color: 'var(--color-foreground-positive)' } : {}) },
+         col: { xs: 12, sm: 6, lg: 3 },
+      })),
+   },
    {
       name: 'financing',
       title: gettext('Transaction et financement'),
@@ -100,7 +94,14 @@ const theFinancing = computed<IInfoCategory[]>(() => [
 const theNotaries = computed<IInfoCategory[]>(() => [{ name: 'notaries', items: tilesOf('notaries', props.sale.notaries) }])
 
 const theToDo = computed<IInfoCategory[]>(() => [
-   { name: 'to-do', title: gettext('À traiter'), items: statsOf('follow-up', props.sale.followUp, { col: { xs: 12, sm: 6, lg: 4 }, isLink: true }) },
+   {
+      name: 'to-do',
+      title: gettext('À traiter'),
+      items: [
+         ...statsOf('follow-up', props.sale.followUp, { col: { xs: 12, sm: 6, lg: 4 }, isLink: true }),
+         { key: 'approval', label: gettext('Validation direction · admin.'), value: [{ label: gettext('Non demandée') }], col: { xs: 12, sm: 6, lg: 4 } },
+      ],
+   },
 ])
 
 const theConditions = computed<IInfoCategory[]>(() => [
@@ -143,21 +144,3 @@ const theBalance = computed<IInfoCategory[]>(() => [
    { name: 'balance', items: statsOf('balance', [{ label: gettext('Sommaire des activités bancaires · Solde'), value: props.sale.balance }], { col: 12 }) },
 ])
 </script>
-
-<style scoped>
-/* A key figure: the neutral tile of ez-info, the positive tint for the total */
-.kpi {
-   --kpi-surface: color-mix(in srgb, var(--color-foreground-subtle) 4%, var(--color-surface));
-   --kpi-border: color-mix(in srgb, var(--color-foreground-subtle) 15%, transparent);
-
-   padding: var(--space-gap-sm) var(--space-inset-sm);
-   border: 1px solid var(--kpi-border);
-   border-radius: var(--radius-md);
-   background: var(--kpi-surface);
-}
-
-.kpi--total {
-   --kpi-surface: var(--color-surface-positive);
-   --kpi-border: color-mix(in srgb, var(--color-positive) 28%, transparent);
-}
-</style>

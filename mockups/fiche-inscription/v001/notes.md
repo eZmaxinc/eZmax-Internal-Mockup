@@ -6,6 +6,7 @@ Fiche d'inscription en page continue: quatre cartes pour l'inscription, six par 
 
 ## Signalements
 - Composant métier manquant: les sections de la fiche d'inscription et d'une vente (`InscriptionSections`, `SaleSections`).
+- Sans équivalent dans le blueprint, donc locaux: le panneau de tableau dans une carte (`DataPanel`, `SubPanel`: titre, compte, « Ajouter », résumé), les rangées « Ajouter » (`EmptySlots`) et la frise de l'échéancier (`SaleTimeline`).
 - Mock manquant: les objets eZmax (inscription, vente, rétribution); leurs données sont locales à la version, les montants en texte.
 - Bug primitive: ez-info n'a pas de compte en alerte; « Documents requis 20 » d'une vente n'est plus en rouge.
 - Icônes manquantes dans `ez.icons`: lieu, pourcentage, bouclier, banque, étiquette de vente; remplacées par les plus proches.
