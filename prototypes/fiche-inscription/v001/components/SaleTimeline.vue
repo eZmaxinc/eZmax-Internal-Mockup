@@ -1,5 +1,5 @@
 <template>
-   <div class="overflow-x-auto rounded-sm border border-border bg-surface-muted px-5 py-4">
+   <div class="sale-timeline-panel overflow-x-auto px-5 py-4">
       <ol class="sale-timeline">
          <li v-for="theStep in steps" :key="theStep.step" class="sale-timeline__step">
             <span class="sale-timeline__dot" :class="{ 'sale-timeline__dot--done': theStep.isDone }">
@@ -20,6 +20,15 @@ defineProps<{ steps: TimelineStep[] }>()
 </script>
 
 <style scoped>
+/* The panel of the ez-info tiles beside it: the same neutral fill, border and corner */
+.sale-timeline-panel {
+   --sale-timeline-surface: color-mix(in srgb, var(--color-foreground-subtle) 4%, var(--color-surface));
+
+   border: 1px solid color-mix(in srgb, var(--color-foreground-subtle) 15%, transparent);
+   border-radius: var(--radius-md);
+   background: var(--sale-timeline-surface);
+}
+
 .sale-timeline {
    --sale-timeline-dot: 1.25rem;
 
@@ -69,7 +78,7 @@ defineProps<{ steps: TimelineStep[] }>()
    border-radius: var(--radius-full);
    background: var(--color-border-strong);
    color: var(--color-accent-foreground);
-   box-shadow: 0 0 0 3px var(--color-surface-muted);
+   box-shadow: 0 0 0 3px var(--sale-timeline-surface);
 }
 
 .sale-timeline__dot--done {

@@ -1,6 +1,6 @@
 <template>
-   <div class="sub-panel overflow-hidden rounded-sm">
-      <div class="sub-panel__head flex items-center gap-2 bg-surface-muted px-3 py-1">
+   <div class="sub-panel overflow-hidden">
+      <div class="sub-panel__head flex items-center gap-2 px-3 py-1">
          <span v-if="icon" class="text-foreground-muted"><ez-icon :name="icon" :size="16" /></span>
          <span class="flex flex-1 items-center gap-2 py-1 text-sm font-semibold">
             {{ title }}
@@ -20,14 +20,17 @@ defineProps<{ title: string; icon?: IconName; count?: number }>()
 </script>
 
 <style scoped>
-/* The same quiet outline as the tiles of this version (EzInfoList, TileBox) */
+/* The neutral fill and border of the ez-info tiles beside it */
 .sub-panel {
-   --sub-panel-border: color-mix(in srgb, var(--color-border-muted) 50%, var(--color-surface-muted));
+   --sub-panel-surface: color-mix(in srgb, var(--color-foreground-subtle) 4%, var(--color-surface));
+   --sub-panel-border: color-mix(in srgb, var(--color-foreground-subtle) 15%, transparent);
 
    border: 1px solid var(--sub-panel-border);
+   border-radius: var(--radius-md);
 }
 
 .sub-panel__head {
    border-bottom: 1px solid var(--sub-panel-border);
+   background: var(--sub-panel-surface);
 }
 </style>

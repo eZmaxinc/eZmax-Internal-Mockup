@@ -7,68 +7,40 @@
          <ez-badge :tone="sale.stateTone" :label="sale.stateLabel" />
       </template>
 
-      <div class="flex flex-col gap-2">
-         <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            <div
-               v-for="theKpi in sale.kpis"
-               :key="theKpi.label"
-               class="rounded-sm border border-border px-3 py-2"
-               :class="theKpi.isTotal ? 'bg-surface-positive' : 'bg-surface-muted'"
-            >
+      <div class="flex flex-col gap-5">
+         <!-- The key figures: no ez-info element for a big number with its line of context -->
+         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div v-for="theKpi in sale.kpis" :key="theKpi.label" class="kpi" :class="{ 'kpi--total': theKpi.isTotal }">
                <div class="text-xs text-foreground-muted">{{ theKpi.label }}</div>
                <div class="text-lg font-bold">{{ theKpi.value }}</div>
                <div class="text-xs text-foreground-subtle">{{ theKpi.sub }}</div>
             </div>
          </div>
 
-         <GroupTitle :label="$gettext('Transaction et financement')" />
-         <ez-info-list :items="sale.financing" tiles />
-         <FlagList :flags="sale.flags" />
+         <ez-info :data="theFinancing" />
       </div>
    </ez-card>
 
    <ez-card :toc-id="`sale-${sale.id}-dates`" :title="$gettext('Échéancier et notaires')">
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-5">
          <SaleTimeline :steps="sale.timeline" />
-         <ez-info-list :items="sale.notaries" tiles />
+         <ez-info :data="theNotaries" />
       </div>
    </ez-card>
 
    <ez-card :toc-id="`sale-${sale.id}-cond`" :title="$gettext('Conditions, protections et suivi')">
-      <div class="flex flex-col gap-2">
-         <GroupTitle :label="$gettext('À traiter')" />
-         <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-            <StatTile v-for="theStat in sale.followUp" :key="theStat.label" :stat="theStat" clickable />
-         </div>
-         <div class="flex items-center gap-2 text-xs text-foreground-muted">
-            {{ $gettext('Validation direction · admin.') }}
-            <ez-badge :label="$gettext('Non demandée')" />
+      <div class="flex flex-col gap-5">
+         <div class="flex flex-col gap-2">
+            <ez-info :data="theToDo" />
+            <div class="flex items-center gap-2 text-xs text-foreground-muted">
+               {{ $gettext('Validation direction · admin.') }}
+               <ez-badge :label="$gettext('Non demandée')" />
+            </div>
          </div>
 
-         <div class="grid gap-4 md:grid-cols-2">
-            <div class="flex flex-col gap-2">
-               <GroupTitle :label="$gettext('Conditions')" />
-               <FlagList :flags="[{ on: false, label: $gettext('Vente non conditionnelle') }]" class="sm:grid-cols-1" />
-               <ez-info-list :items="theConditions" tiles />
-            </div>
-
-            <div class="flex flex-col gap-2">
-               <GroupTitle :label="$gettext('Protections')" />
-               <TileBox :label="$gettext('Tranquilli-T')">
-                  <div class="flex flex-wrap gap-2">
-                     <ez-badge outline :label="$gettext('Non admissible')" />
-                     <ez-badge outline :label="$gettext('Vendeur non couvert')" />
-                     <ez-badge outline :label="$gettext('Acheteur non couvert')" />
-                  </div>
-                  <div class="text-xs text-foreground-subtle">{{ $gettext('Note du courtier · —') }}</div>
-               </TileBox>
-               <TileBox :label="$gettext('Protection domiciliaire')">
-                  <div class="flex flex-wrap gap-2">
-                     <ez-badge outline :label="$gettext('Non admissible')" />
-                  </div>
-                  <div class="text-xs text-foreground-subtle">{{ $gettext('Commentaire · —') }}</div>
-               </TileBox>
-            </div>
+         <div class="grid gap-5 md:grid-cols-2">
+            <ez-info :data="theConditions" />
+            <ez-info :data="theProtections" />
          </div>
       </div>
    </ez-card>
@@ -84,7 +56,7 @@
       <div class="flex flex-col gap-2">
          <DataPanel v-for="thePanel in sale.partyPanels" :key="thePanel.title" :panel="thePanel" addable />
          <EmptySlots :items="sale.partyEmpty" />
-         <StatTile :stat="{ label: $gettext('Sommaire des activités bancaires · Solde'), value: sale.balance }" />
+         <ez-info :data="theBalance" />
       </div>
    </ez-card>
 
@@ -106,22 +78,86 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, gettext, type EzInfoItem } from '@ez'
+import { computed } from 'vue'
+import { formatDate, gettext, type IInfoCategory } from '@ez'
 import type { Sale } from '../mocks'
 import DataPanel from './DataPanel.vue'
 import EzBadge from './EzBadge.vue'
 import EmptySlots from './EmptySlots.vue'
-import EzInfoList from './EzInfoList.vue'
-import FlagList from './FlagList.vue'
-import GroupTitle from './GroupTitle.vue'
 import SaleTimeline from './SaleTimeline.vue'
-import StatTile from './StatTile.vue'
-import TileBox from './TileBox.vue'
+import { flagsOf, statsOf, tilesOf } from './info'
 
-defineProps<{ sale: Sale }>()
+const props = defineProps<{ sale: Sale }>()
 
-const theConditions: EzInfoItem[] = [
-   { label: gettext("Date d'échéance · Conditions remplies le"), value: '—' },
-   { label: gettext("# Promesse d'achat"), value: '—' },
-]
+const theFinancing = computed<IInfoCategory[]>(() => [
+   {
+      name: 'financing',
+      title: gettext('Transaction et financement'),
+      items: [...tilesOf('financing', props.sale.financing), flagsOf('flags', props.sale.flags)],
+   },
+])
+
+const theNotaries = computed<IInfoCategory[]>(() => [{ name: 'notaries', items: tilesOf('notaries', props.sale.notaries) }])
+
+const theToDo = computed<IInfoCategory[]>(() => [
+   { name: 'to-do', title: gettext('À traiter'), items: statsOf('follow-up', props.sale.followUp, { col: { xs: 12, sm: 6, lg: 4 }, isLink: true }) },
+])
+
+const theConditions = computed<IInfoCategory[]>(() => [
+   {
+      name: 'conditions',
+      title: gettext('Conditions'),
+      items: [
+         flagsOf('conditional', [{ on: false, label: gettext('Vente non conditionnelle') }]),
+         { key: 'conditions-met', label: gettext("Date d'échéance · Conditions remplies le"), value: '—', col: { xs: 12, sm: 6 } },
+         { key: 'promise', label: gettext("# Promesse d'achat"), value: '—', col: { xs: 12, sm: 6 } },
+      ],
+   },
+])
+
+// The coverages are plain facts: neutral pills; the note of each beside it (a tile with pills shows no hint)
+const theProtections = computed<IInfoCategory[]>(() => [
+   {
+      name: 'protections',
+      title: gettext('Protections'),
+      items: [
+         {
+            key: 'tranquilli-t',
+            label: gettext('Tranquilli-T'),
+            value: [{ label: gettext('Non admissible') }, { label: gettext('Vendeur non couvert') }, { label: gettext('Acheteur non couvert') }],
+            col: 12,
+         },
+         { key: 'tranquilli-t-note', label: gettext('Note du courtier'), value: '—', col: 12 },
+         {
+            key: 'home-protection',
+            label: gettext('Protection domiciliaire'),
+            value: [{ label: gettext('Non admissible') }],
+            col: 12,
+         },
+         { key: 'home-protection-comment', label: gettext('Commentaire'), value: '—', col: 12 },
+      ],
+   },
+])
+
+const theBalance = computed<IInfoCategory[]>(() => [
+   { name: 'balance', items: statsOf('balance', [{ label: gettext('Sommaire des activités bancaires · Solde'), value: props.sale.balance }], { col: 12 }) },
+])
 </script>
+
+<style scoped>
+/* A key figure: the neutral tile of ez-info, the positive tint for the total */
+.kpi {
+   --kpi-surface: color-mix(in srgb, var(--color-foreground-subtle) 4%, var(--color-surface));
+   --kpi-border: color-mix(in srgb, var(--color-foreground-subtle) 15%, transparent);
+
+   padding: var(--space-gap-sm) var(--space-inset-sm);
+   border: 1px solid var(--kpi-border);
+   border-radius: var(--radius-md);
+   background: var(--kpi-surface);
+}
+
+.kpi--total {
+   --kpi-surface: var(--color-surface-positive);
+   --kpi-border: color-mix(in srgb, var(--color-positive) 28%, transparent);
+}
+</style>
