@@ -15,6 +15,7 @@ import {
    symOutlinedCheckCircle,
    symOutlinedChevronRight,
    symOutlinedClose,
+   symOutlinedDataTable,
    symOutlinedDelete,
    symOutlinedDescription,
    symOutlinedDownload,
@@ -26,18 +27,23 @@ import {
    symOutlinedInbox,
    symOutlinedInfo,
    symOutlinedKeyboardArrowDown,
+   symOutlinedLayers,
    symOutlinedMail,
    symOutlinedMenu,
    symOutlinedMoreHoriz,
+   symOutlinedNotifications,
+   symOutlinedPalette,
    symOutlinedPerson,
    symOutlinedSchedule,
    symOutlinedSearch,
    symOutlinedSettings,
    symOutlinedSignature,
+   symOutlinedTune,
    symOutlinedVisibility,
    symOutlinedWarning,
+   symOutlinedWidgets,
 } from '@quasar/extras/material-symbols-outlined'
-import { mdiHome, mdiSend } from '@quasar/extras/mdi-v7'
+import { mdiHome, mdiSend, mdiShieldLock } from '@quasar/extras/mdi-v7'
 
 export const iconPaths = {
    add: symOutlinedAdd,
@@ -48,6 +54,7 @@ export const iconPaths = {
    chevronRight: symOutlinedChevronRight,
    clock: symOutlinedSchedule, // schedule
    close: symOutlinedClose,
+   dataTable: symOutlinedDataTable,
    delete: symOutlinedDelete,
    download: symOutlinedDownload,
    edit: symOutlinedEdit,
@@ -59,18 +66,24 @@ export const iconPaths = {
    home: mdiHome, // MDI, as production
    inbox: symOutlinedInbox,
    info: symOutlinedInfo,
+   layers: symOutlinedLayers,
    mail: symOutlinedMail, // email
    menu: symOutlinedMenu,
    more: symOutlinedMoreHoriz, // moreHoriz
+   notifications: symOutlinedNotifications,
+   palette: symOutlinedPalette,
    refresh: symOutlinedCached, // cached: the refresh of the page header
    search: symOutlinedSearch,
    send: mdiSend, // MDI, as production
    settings: symOutlinedSettings,
+   shieldLock: mdiShieldLock, // MDI, as production
    signature: symOutlinedSignature,
    success: symOutlinedCheckCircle, // checkCircle
+   tune: symOutlinedTune,
    user: symOutlinedPerson, // person
    users: symOutlinedGroup, // group
    warning: symOutlinedWarning,
+   widgets: symOutlinedWidgets,
 } as const
 
 export type IconName = keyof typeof iconPaths

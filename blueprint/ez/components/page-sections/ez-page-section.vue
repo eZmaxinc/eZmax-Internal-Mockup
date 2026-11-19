@@ -1,71 +1,73 @@
 <template>
-   <section :id="id" ref="section" class="ez-page-section">
-      <header class="ez-page-section__header">
-         <h2 class="ez-page-section__title">{{ title }}</h2>
-         <p v-if="subtitle" class="ez-page-section__subtitle">{{ subtitle }}</p>
-      </header>
+   <!-- A level of the TOC: its label, centered and small above its content, and its icon in the TOC -->
+   <component :is="as" :id="id" ref="section" class="ez-page-section">
+      <ez-heading v-if="!hideLabel" variant="group" as="h2" class="ez-page-section__label">{{ label }}</ez-heading>
       <div class="ez-page-section__body">
          <slot />
       </div>
-   </section>
+   </component>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, onUpdated, useTemplateRef } from 'vue'
-import { usePageSections } from './page-sections'
+import { onBeforeUnmount, onMounted, provide, useTemplateRef } from 'vue'
+import type { IconName } from '../../icons'
+import EzHeading from '../heading/ez-heading.vue'
+import { pageSectionKey, usePageSections } from './page-sections'
+
+const props = withDefaults(defineProps<{
+   /** Unique in the page: the anchor of the section */
+   id: string
+   /** Its name, above its content and in the TOC */
+   label: string
+   /** Its icon in the TOC */
+   icon?: IconName
+   /** In the TOC only, not above the content */
+   hideLabel?: boolean
+   /** Renders as another element */
+   as?: string
+}>(), {
+   icon: undefined,
+   as: 'section',
+})
 
 const theContext = usePageSections('ez-page-section')
-
-const props = defineProps<{
-   id: string
-   title: string
-   subtitle?: string
-}>()
+provide(pageSectionKey, { id: props.id })
 
 const theSectionRef = useTemplateRef<HTMLElement>('section')
+let unregister: (() => void) | null = null
 
-/** Cards inside this section with a `toc-id` become TOC sub-entries. */
-function sync() {
+onMounted(() => {
    if (!theSectionRef.value) return
-   const children = Array.from(theSectionRef.value.querySelectorAll<HTMLElement>('[data-toc-title]'))
-      .map((element) => ({ id: element.id, title: element.dataset.tocTitle ?? '' }))
-      .filter((child) => child.id && child.title)
-   theContext.register({ id: props.id, title: props.title, children })
-}
+   unregister = theContext.register({ id: props.id, label: props.label, icon: props.icon, el: theSectionRef.value })
+})
 
-onMounted(sync)
-onUpdated(sync)
-onBeforeUnmount(() => theContext.unregister(props.id))
+onBeforeUnmount(() => unregister?.())
 </script>
 
 <style scoped>
 .ez-page-section {
    /* Variables first: what the section's look depends on, read below */
-   --ez-page-section-gap: var(--card-gap, var(--space-gap-md));
-   --ez-page-section-muted: var(--color-foreground-muted);
+   --ez-page-section-gap: var(--card-gap, 1.25rem);
+   --ez-page-section-label: var(--color-foreground-subtle);
 
-   scroll-margin-top: calc(var(--sizing-toolbar-height) + var(--space-gap-md));
+   min-width: 0;
 }
 
-.ez-page-section__header {
+/* As production: small, uppercase, centered above the cards */
+.ez-page-section__label {
+   --ez-heading-color: var(--ez-page-section-label);
+
    margin-bottom: var(--space-inset-sm);
-}
-
-.ez-page-section__title {
-   margin: 0;
-   font-size: var(--text-lg);
-   font-weight: 700;
-}
-
-.ez-page-section__subtitle {
-   margin: 2px 0 0;
-   color: var(--ez-page-section-muted);
-   font-size: var(--text-sm);
+   font-weight: 600;
+   letter-spacing: 0.04em;
+   text-align: center;
+   text-transform: uppercase;
 }
 
 .ez-page-section__body {
    display: flex;
    flex-direction: column;
    gap: var(--ez-page-section-gap);
+   min-width: 0;
 }
 </style>

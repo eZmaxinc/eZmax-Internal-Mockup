@@ -18,14 +18,19 @@
                </template>
             </ez-message-important>
 
-            <ez-page-section id="summary" :title="$gettext('Résumé')">
+            <ez-page-section id="summary" :label="$gettext('Résumé')" icon="info">
                <ez-card :title="$gettext('Informations')" toc-id="summary-info">
                   <ez-info :data="theInfoData" />
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="signers" :title="$gettext('Signataires')" :subtitle="$gettext('%{done} sur %{total} ont signé', { done: theFolder.signedCount(), total: theFolder.signers.length })">
-               <ez-card :title="$gettext('Ordre de signature')" toc-id="signers-list" flush>
+            <ez-page-section id="signers" :label="$gettext('Signataires')" icon="users">
+               <ez-card
+                  :title="$gettext('Ordre de signature')"
+                  :subtitle="$gettext('%{done} sur %{total} ont signé', { done: theFolder.signedCount(), total: theFolder.signers.length })"
+                  toc-id="signers-list"
+                  flush
+               >
                   <ez-table :columns="signerColumns" :rows="theFolder.signers">
                      <template #cell-fullName="{ row }">
                         <div class="font-semibold">{{ row.fullName }}</div>
@@ -39,7 +44,7 @@
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="documents" :title="$gettext('Documents')">
+            <ez-page-section id="documents" :label="$gettext('Documents')" icon="file">
                <ez-card
                   v-for="theDocument in theFolder.documents"
                   :key="theDocument.id"

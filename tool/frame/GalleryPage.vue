@@ -3,7 +3,7 @@
       <ez-page-header title="Galerie ez-" subtitle="Composants disponibles pour les prototypes — voir blueprint/ez/CATALOG.md" />
       <ez-page-content>
          <ez-page-sections>
-            <ez-page-section id="tokens" title="Tokens sémantiques">
+            <ez-page-section id="tokens" label="Tokens sémantiques" icon="palette">
                <ez-card title="Couleurs" toc-id="tokens-colors">
                   <div class="gallery__swatches">
                      <div v-for="theToken in colorTokens" :key="theToken" class="gallery__swatch">
@@ -21,7 +21,7 @@
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="actions" title="Actions">
+            <ez-page-section id="actions" label="Actions" icon="check">
                <ez-card title="ez-btn" toc-id="actions-btn">
                   <div class="flex flex-wrap items-center gap-2">
                      <ez-btn variant="primary" label="Primaire" icon="send" />
@@ -56,7 +56,7 @@
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="feedback" title="Messages et états">
+            <ez-page-section id="feedback" label="Messages et états" icon="info">
                <ez-card title="ez-message-important" toc-id="feedback-message">
                   <div class="flex flex-col gap-3">
                      <ez-message-important type="info" title="Info">Le dossier sera envoyé aux signataires.</ez-message-important>
@@ -75,7 +75,7 @@
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="forms" title="Formulaires">
+            <ez-page-section id="forms" label="Formulaires" icon="edit">
                <ez-card title="ez-field" toc-id="forms-field">
                   <ez-layout>
                      <ez-layout-col :cols="{ base: 12, md: 6 }">
@@ -97,7 +97,7 @@
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="data" title="Données">
+            <ez-page-section id="data" label="Données" icon="dataTable">
                <ez-card title="ez-table" toc-id="data-table" flush>
                   <ez-table :columns="columns" :rows="rows" clickable>
                      <template #cell-state="{ row }">
@@ -108,7 +108,7 @@
                </ez-card>
             </ez-page-section>
 
-            <ez-page-section id="overlays" title="Overlays">
+            <ez-page-section id="overlays" label="Overlays" icon="layers">
                <ez-card title="ez-dialog" toc-id="overlays-dialog">
                   <ez-btn label="Ouvrir le dialog" @click="isDialogOpen = true" />
                   <ez-dialog v-model="isDialogOpen" title="Annuler le dossier?">
@@ -121,8 +121,8 @@
                </ez-card>
             </ez-page-section>
 
-            <!-- Automatic: every catalog component the sections above don't show, with its example when it has one -->
-            <ez-page-section v-if="theOtherComponents.length" id="others" title="Autres composants" subtitle="Automatique: les composants du catalogue absents des sections ci-dessus, avec leur exemple (ez-….example.vue, à côté du composant)">
+            <!-- Automatic: every catalog component the sections above don't show, with its example (ez-….example.vue, beside the component) -->
+            <ez-page-section v-if="theOtherComponents.length" id="others" label="Autres composants" icon="widgets">
                <ez-card v-for="theComponent in theOtherComponents" :key="theComponent.tag" :title="theComponent.tag" :toc-id="`others-${theComponent.tag}`">
                   <component :is="theComponent.example" v-if="theComponent.example" />
                   <p v-else class="m-0 text-sm text-foreground-muted">Pas encore d'exemple: {{ theComponent.file.replace(/\.vue$/, '.example.vue') }}</p>

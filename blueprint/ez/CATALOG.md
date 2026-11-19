@@ -59,11 +59,13 @@ Une mise en page déclarée en données plutôt qu'en balises: des sections, pui
 - Une section: `key`, `title`, `span`, `columns`, `gap`, `direction`, `cols`. Une colonne: `id` et soit `slot` (+ `label`, `props`, `span`), soit `cols` (un groupe, avec `direction`, `columns`, `gap`)
 - Slots: `#<slot>` par feuille (typé d'après la définition), sinon `#field="{ slot, label, props }"` pour toutes; `debug`
 
-### `ez-page-sections` > `ez-page-section` (+ `ez-page-toc`)
-Fiche longue avec TOC sticky à droite (≥ 1024px) et scroll-spy.
-- `ez-page-sections` `toc` (défaut `true`), `toc-title`
-- `ez-page-section` `id` (requis, unique), `title` (requis), `subtitle`
-- Les `ez-card` avec `toc-id` deviennent des sous-entrées de la TOC
+### `ez-page-sections` > `ez-page-section` > `ez-page-section-anchor` (+ `ez-page-sections-toc`)
+La fiche longue de la prod (`page/sections`), telle quelle. Des sections, chacune un niveau de la TOC; leurs ancres, des sous-entrées qui se déplient sous la section active. TOC en carte collante à droite dès md (un rail, une pastille d'icône par section); sous md, une barre collante « Section - sous-section » dont le bouton ouvre la TOC en menu. Scroll-spy sur le vrai conteneur de défilement (la fenêtre, ou le shell).
+- `ez-page-sections` `toc` (défaut `true`), `scroll-target` (une fonction; défaut: le parent qui défile), `active-offset`; slot `#toc` pour remplacer la TOC; expose `scrollTo(id)`
+- `ez-page-section` `id` et `label` (requis), `icon` (sa pastille dans la TOC), `hide-label` (dans la TOC seulement). Son libellé s'affiche petit, en majuscules, centré au-dessus de ses cartes
+- `ez-page-section-anchor` `id` (requis), `label`, `hide-label`: une sous-entrée (un groupe de champs, un bloc); son libellé entre deux traits
+- Raccourci: une `ez-card` avec `toc-id` dans une section en devient une ancre, nommée par son titre
+- `ez-page-sections-toc` `min-subs`: une section montre ses ancres à partir de ce nombre (défaut 1)
 - Se place dans `ez-page-content`. Ne pas mettre la TOC à gauche.
 
 ## Contenu
@@ -103,7 +105,7 @@ Un point de couleur: un statut en un coup d'œil, à côté d'un libellé. `ez-b
 
 ### `ez-info`
 Les informations d'une fiche, en tuiles grises, comme en prod (`EzInfo`, variante `flat`; promu depuis la refonte des types de dossiers, v001). Les données ont la forme de la prod: un `theInfoData` de l'app se recopie tel quel.
-- `data`: `IInfoCategory[]` (types de `@ez`). Une catégorie: `name`, `title`, `icon`, `tone`, `items`, `groups` (sous-catégories encadrées). Un `false` dans `items` est ignoré: `isAllowed && { … }`
+- `data`: `IInfoCategory[]` (types de `@ez`). Une catégorie: `name`, `title`, `tone`, `items`, `groups` (sous-catégories encadrées). Elle accepte `icon` comme la prod, mais un titre de groupe se passe d’icône (brand.md). Un `false` dans `items` est ignoré: `isAllowed && { … }`
 - Un item: `key`, `label`, `value`, `col` (span de `ez-layout`, ou une classe Quasar `'col-12 col-md-4'`; défaut `{ xs: 6, sm: 4, lg: 3 }`), `hint`, `tooltip` (ⓘ après le libellé), `onClick` (la tuile devient un lien), `valueStyle`, `separator`
 - La valeur choisit le dessin: un texte → la tuile; `{ amount, unit }` → un compte encadré à droite; un tableau → des pastilles dans la tuile
 - `variant: 'list'`: une ligne par entrée (`{ label, value: true/false }`: activé en vert ✓, désactivé en gris ✕), sur deux colonnes dès md · `variant: 'pill'`: une pastille par item, côte à côte avec les suivantes
@@ -231,7 +233,7 @@ Slots: `défaut`
 | `subtitle` | `string` |  | A line under the title |
 | `icon` | `IconName` |  |  |
 | `flush` | `boolean` |  | No body padding — for tables and lists that touch the edges |
-| `toc-id` | `string` |  | Makes this card a sub-entry of the parent ez-page-section in the TOC |
+| `toc-id` | `string` |  | In an ez-page-section: the card becomes a sub-entry of the TOC, named by its title (a shortcut for ez-page-section-anchor) |
 
 Slots: `#header`, `#actions`, `défaut`, `#footer`
 
@@ -383,9 +385,22 @@ Slots: `#meta`, `#actions`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `id` * | `string` |  |  |
-| `title` * | `string` |  |  |
-| `subtitle` | `string` |  |  |
+| `id` * | `string` |  | Unique in the page: the anchor of the section |
+| `label` * | `string` |  | Its name, above its content and in the TOC |
+| `icon` | `IconName` | `undefined` | Its icon in the TOC |
+| `hide-label` | `boolean` |  | In the TOC only, not above the content |
+| `as` | `string` | `'section'` | Renders as another element |
+
+Slots: `défaut`
+
+#### `ez-page-section-anchor`
+
+| Prop | Type | Défaut | |
+|---|---|---|---|
+| `id` * | `string` |  | Unique in the page: the anchor of the sub-entry |
+| `label` | `string \| null` | `undefined` | Its name in the TOC, and above its content |
+| `hide-label` | `boolean` |  | In the TOC only, not above the content (a card that has its own title) |
+| `as` | `string` | `'div'` | Renders as another element |
 
 Slots: `défaut`
 
@@ -393,16 +408,17 @@ Slots: `défaut`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `toc` | `boolean` | `true` | Sticky TOC on the right (≥ 1024px) |
-| `toc-title` | `string` |  | Title of the TOC (default: « Sur cette page ») |
+| `scroll-target` | `() => ScrollTarget \| null` | `undefined` | What scrolls the page; default: the nearest ancestor that scrolls, else the window |
+| `active-offset` | `number` | `undefined` | Where a section becomes the active one, in px from the top of the visible area; default: under the app toolbar |
+| `toc` | `boolean` | `true` | The table of contents: on the right from md, in a menu below |
 
-Slots: `défaut`
+Slots: `#toc`, `défaut`
 
-#### `ez-page-toc`
+#### `ez-page-sections-toc`
 
 | Prop | Type | Défaut | |
 |---|---|---|---|
-| `title` | `string` |  |  |
+| `min-subs` | `number` | `1` | A section shows its anchors from this many on (default 1) |
 
 #### `ez-reveal`
 

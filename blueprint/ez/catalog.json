@@ -299,7 +299,7 @@
                "required": false,
                "values": null,
                "default": null,
-               "doc": "Makes this card a sub-entry of the parent ez-page-section in the TOC"
+               "doc": "In an ez-page-section: the card becomes a sub-entry of the TOC, named by its title (a shortcut for ez-page-section-anchor)"
             }
          ],
          "emits": [],
@@ -1064,25 +1064,95 @@
                "required": true,
                "values": null,
                "default": null,
-               "doc": null
+               "doc": "Unique in the page: the anchor of the section"
             },
             {
-               "name": "title",
-               "attr": "title",
+               "name": "label",
+               "attr": "label",
                "type": "string",
                "required": true,
                "values": null,
                "default": null,
-               "doc": null
+               "doc": "Its name, above its content and in the TOC"
             },
             {
-               "name": "subtitle",
-               "attr": "subtitle",
-               "type": "string",
+               "name": "icon",
+               "attr": "icon",
+               "type": "IconName",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Its icon in the TOC"
+            },
+            {
+               "name": "hideLabel",
+               "attr": "hide-label",
+               "type": "boolean",
                "required": false,
                "values": null,
                "default": null,
-               "doc": null
+               "doc": "In the TOC only, not above the content"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'section'",
+               "doc": "Renders as another element"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default"
+         ],
+         "uses": [
+            "ez-heading"
+         ]
+      },
+      {
+         "tag": "ez-page-section-anchor",
+         "name": "EzPageSectionAnchor",
+         "tier": "primitive",
+         "file": "blueprint/ez/components/page-sections/ez-page-section-anchor.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "id",
+               "attr": "id",
+               "type": "string",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": "Unique in the page: the anchor of the sub-entry"
+            },
+            {
+               "name": "label",
+               "attr": "label",
+               "type": "string | null",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Its name in the TOC, and above its content"
+            },
+            {
+               "name": "hideLabel",
+               "attr": "hide-label",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "In the TOC only, not above the content (a card that has its own title)"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'div'",
+               "doc": "Renders as another element"
             }
          ],
          "emits": [],
@@ -1099,52 +1169,65 @@
          "description": null,
          "props": [
             {
+               "name": "scrollTarget",
+               "attr": "scroll-target",
+               "type": "() => ScrollTarget | null",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "What scrolls the page; default: the nearest ancestor that scrolls, else the window"
+            },
+            {
+               "name": "activeOffset",
+               "attr": "active-offset",
+               "type": "number",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Where a section becomes the active one, in px from the top of the visible area; default: under the app toolbar"
+            },
+            {
                "name": "toc",
                "attr": "toc",
                "type": "boolean",
                "required": false,
                "values": null,
                "default": "true",
-               "doc": "Sticky TOC on the right (≥ 1024px)"
-            },
-            {
-               "name": "tocTitle",
-               "attr": "toc-title",
-               "type": "string",
-               "required": false,
-               "values": null,
-               "default": null,
-               "doc": "Title of the TOC (default: « Sur cette page »)"
+               "doc": "The table of contents: on the right from md, in a menu below"
             }
          ],
          "emits": [],
          "slots": [
+            "toc",
             "default"
          ],
          "uses": [
-            "ez-page-toc"
+            "ez-btn",
+            "ez-page-sections-toc"
          ]
       },
       {
-         "tag": "ez-page-toc",
-         "name": "EzPageToc",
+         "tag": "ez-page-sections-toc",
+         "name": "EzPageSectionsToc",
          "tier": "primitive",
-         "file": "blueprint/ez/components/page-sections/ez-page-toc.vue",
+         "file": "blueprint/ez/components/page-sections/ez-page-sections-toc.vue",
          "description": null,
          "props": [
             {
-               "name": "title",
-               "attr": "title",
-               "type": "string",
+               "name": "minSubs",
+               "attr": "min-subs",
+               "type": "number",
                "required": false,
                "values": null,
-               "default": null,
-               "doc": null
+               "default": "1",
+               "doc": "A section shows its anchors from this many on (default 1)"
             }
          ],
          "emits": [],
          "slots": [],
-         "uses": []
+         "uses": [
+            "ez-icon"
+         ]
       },
       {
          "tag": "ez-reveal",

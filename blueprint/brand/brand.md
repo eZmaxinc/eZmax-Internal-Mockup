@@ -19,7 +19,7 @@ Un outil de travail sérieux et dense, pour des gens qui traitent des dossiers �
 
 - `ez-page` > `ez-page-header` (titre, fil d'Ariane, actualiser, action principale en pilule) + `ez-page-content`. L'en-tête est posé sur le fond gris, et le contenu prend toute la largeur.
 - Contenu en grille: colonne principale 8/12 + colonne de droite 4/12 (résumé, métadonnées). Sous `md`, la colonne de droite passe **en premier**.
-- Les fiches longues utilisent `ez-page-sections` avec une **TOC sticky à droite** qui liste aussi les sous-sections (les cartes).
+- Les fiches longues utilisent `ez-page-sections`: des sections avec une icône, une **TOC collante à droite** qui déplie les sous-sections (les cartes) de la section active, et sous md une barre « Section - sous-section » qui ouvre la TOC.
 
 ## Ton des textes
 
@@ -46,6 +46,7 @@ Les valeurs vivent dans `blueprint/tokens/ez-tokens.css`, la source partagée av
 - Celles de l'app: Material Symbols Outlined, du package `@quasar/extras` (MDI pour les quelques-unes où l'app prend MDI). Un trait plein, sobre, à 18 px par défaut.
 - Une icône a le sens qu'elle a dans l'app: le glyphe de `ez.icons.<clé>` est celui que la prod donne au même usage (`blueprint/ez/icons.ts`).
 - Jamais une icône dessinée à la main ni un autre jeu (Lucide, Heroicons…).
+- Pas d'icône devant un titre de groupe (« À traiter », « Dates et statut »): le texte seul. Une icône sert une action, un statut, une entrée de navigation (les sections de la TOC).
 
 ## Do / don't
 

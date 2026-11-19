@@ -18,8 +18,9 @@ import EzPage from './components/page/ez-page.vue'
 import EzPageContent from './components/page/ez-page-content.vue'
 import EzPageHeader from './components/page/ez-page-header.vue'
 import EzPageSection from './components/page-sections/ez-page-section.vue'
+import EzPageSectionAnchor from './components/page-sections/ez-page-section-anchor.vue'
 import EzPageSections from './components/page-sections/ez-page-sections.vue'
-import EzPageToc from './components/page-sections/ez-page-toc.vue'
+import EzPageSectionsToc from './components/page-sections/ez-page-sections-toc.vue'
 import EzReveal from './components/reveal/ez-reveal.vue'
 import EzTable from './components/table/ez-table.vue'
 import EzTooltip from './components/tooltip/ez-tooltip.vue'
@@ -44,8 +45,9 @@ export const components = {
    EzPageContent,
    EzPageHeader,
    EzPageSection,
+   EzPageSectionAnchor,
    EzPageSections,
-   EzPageToc,
+   EzPageSectionsToc,
    EzReveal,
    EzTable,
    EzTooltip,
@@ -72,8 +74,9 @@ declare module 'vue' {
       EzPageContent: typeof EzPageContent
       EzPageHeader: typeof EzPageHeader
       EzPageSection: typeof EzPageSection
+      EzPageSectionAnchor: typeof EzPageSectionAnchor
       EzPageSections: typeof EzPageSections
-      EzPageToc: typeof EzPageToc
+      EzPageSectionsToc: typeof EzPageSectionsToc
       EzReveal: typeof EzReveal
       EzTable: typeof EzTable
       EzTooltip: typeof EzTooltip

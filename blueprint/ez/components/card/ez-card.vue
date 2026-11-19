@@ -1,9 +1,9 @@
 <template>
    <section
       :id="tocId"
+      ref="card"
       class="ez-card"
       :class="{ 'ez-card--flush': flush, 'ez-card--header-only': !$slots.default }"
-      :data-toc-title="tocId ? title : undefined"
    >
       <header v-if="title || $slots.actions || $slots.header" class="ez-card__header">
          <slot name="header">
@@ -29,20 +29,25 @@
 </template>
 
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
 import EzHeading from '../heading/ez-heading.vue'
 import EzIcon from '../icon/ez-icon.vue'
 import type { IconName } from '../../icons'
+import { useSectionAnchor } from '../page-sections/page-sections'
 
-defineProps<{
+const props = defineProps<{
    title?: string
    /** A line under the title */
    subtitle?: string
    icon?: IconName
    /** No body padding — for tables and lists that touch the edges */
    flush?: boolean
-   /** Makes this card a sub-entry of the parent ez-page-section in the TOC */
+   /** In an ez-page-section: the card becomes a sub-entry of the TOC, named by its title (a shortcut for ez-page-section-anchor) */
    tocId?: string
 }>()
+
+const theCardRef = useTemplateRef<HTMLElement>('card')
+useSectionAnchor(() => ({ id: props.tocId, label: props.title }), theCardRef)
 </script>
 
 <style scoped>
