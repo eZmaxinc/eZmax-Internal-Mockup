@@ -66,6 +66,7 @@ La fiche longue de la prod (`page/sections`), telle quelle. Des sections, chacun
 - `ez-page-section-anchor` `id` (requis), `label`, `hide-label`: une sous-entrée (un groupe de champs, un bloc); son libellé entre deux traits
 - Raccourci: une `ez-card` avec `toc-id` dans une section en devient une ancre, nommée par son titre
 - `ez-page-sections-toc` `min-subs`: une section montre ses ancres à partir de ce nombre (défaut 1)
+- Crochets pour la page, sans style: l'ancre active porte `data-toc-active`; celle où mène un clic de la TOC porte `data-toc-arrived` pendant 2,5 s (assez pour une animation qui dure jusqu’à l’arrivée)
 - Se place dans `ez-page-content`. Ne pas mettre la TOC à gauche.
 
 ## Contenu

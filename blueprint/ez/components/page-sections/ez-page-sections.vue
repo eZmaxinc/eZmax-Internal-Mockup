@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, provide, readonly, ref, shallowReadonly, useTemplateRef } from 'vue'
+import { computed, onBeforeUnmount, onMounted, provide, readonly, ref, shallowReadonly, useTemplateRef, watch } from 'vue'
 import EzBtn from '../btn/ez-btn.vue'
 import EzPageSectionsToc from './ez-page-sections-toc.vue'
 import { createRegistry, findScroller, pageSectionsKey, viewportOf, type AnchorMeta, type PageSectionsContext, type ScrollTarget, type SectionMeta } from './page-sections'
@@ -75,6 +75,9 @@ const isCompact = ref(false)
 const isTocOpen = ref(false)
 let theFrame = 0
 let theCompactQuery: MediaQueryList | null = null
+let theArrivedTimer = 0
+/** How long the anchor reached by a click keeps data-toc-arrived */
+const ARRIVED_MS = 2500
 
 const theActiveSection = computed(() => theSections.value.find((section) => section.id === theActiveId.value) ?? theSections.value[0])
 
@@ -112,6 +115,16 @@ async function scrollTo(id: string) {
    const anchor = theAnchors.value.find((item) => item.id === id)
    theActiveId.value = anchor ? anchor.sectionId : id
    theActiveAnchorId.value = anchor ? anchor.id : null
+   // A section leads to its first anchor (the first card): that is where the eye lands
+   markArrived(anchor?.el ?? theAnchors.value.find((item) => item.sectionId === id)?.el ?? element)
+}
+
+/** A hook for the page: the element a click of the TOC leads to carries data-toc-arrived for a moment */
+function markArrived(element: HTMLElement) {
+   window.clearTimeout(theArrivedTimer)
+   document.querySelectorAll('[data-toc-arrived]').forEach((other) => other.removeAttribute('data-toc-arrived'))
+   element.setAttribute('data-toc-arrived', '')
+   theArrivedTimer = window.setTimeout(() => element.removeAttribute('data-toc-arrived'), ARRIVED_MS)
 }
 
 /** Scroll-spy: the last section whose top passed the line wins; then the last of its anchors that passed it */
@@ -124,8 +137,9 @@ function updateActive() {
    const section = isAtBottom ? theSections.value.at(-1) : (passed(theSections.value).at(-1) ?? theSections.value[0])
    theActiveId.value = section?.id ?? null
 
+   // None of its anchors passed the line yet (the top of the section): its first one
    const anchors = theAnchors.value.filter((anchor) => anchor.sectionId === section?.id)
-   theActiveAnchorId.value = (isAtBottom ? anchors.at(-1) : passed(anchors).at(-1))?.id ?? null
+   theActiveAnchorId.value = (isAtBottom ? anchors.at(-1) : (passed(anchors).at(-1) ?? anchors[0]))?.id ?? null
 }
 
 function onScroll() {
@@ -176,6 +190,11 @@ const theContext: PageSectionsContext = {
 
 provide(pageSectionsKey, theContext)
 
+// A hook for the page: the active anchor (a card, a block) carries data-toc-active; no style here, the page decides
+watch([theActiveAnchorId, theAnchors], () => {
+   for (const anchor of theAnchors.value) anchor.el.toggleAttribute('data-toc-active', anchor.id === theActiveAnchorId.value)
+})
+
 defineExpose({ scrollTo })
 
 onMounted(() => {
@@ -201,6 +220,7 @@ onBeforeUnmount(() => {
    document.removeEventListener('click', onDocumentClick)
    document.removeEventListener('keydown', onKeydown)
    cancelAnimationFrame(theFrame)
+   window.clearTimeout(theArrivedTimer)
 })
 </script>
 
