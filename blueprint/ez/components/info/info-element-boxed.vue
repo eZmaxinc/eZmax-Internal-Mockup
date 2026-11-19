@@ -176,7 +176,6 @@ function onClick() {
    flex-direction: column;
    align-items: center;
    justify-content: center;
-   gap: 0.125rem;
    width: var(--ez-info-element-boxed-metric-width);
    padding: 0 0.25rem;
    border-radius: var(--ez-info-element-boxed-radius);
@@ -190,9 +189,11 @@ function onClick() {
       font-weight: 600;
    }
 
+   /* Cut when too long: a line box tall enough that a descender (the g of « groupe ») is not cut with it */
    strong,
    span {
       max-width: 100%;
+      line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
