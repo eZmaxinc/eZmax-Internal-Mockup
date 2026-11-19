@@ -129,7 +129,8 @@ function getEntryIcons(entry: TInfoEntry): IconName[] {
 
    const boolean = typeof entry === 'boolean' ? entry : isInfoValue(entry) && typeof entry.value === 'boolean' ? entry.value : undefined
 
-   if (boolean !== undefined) return [boolean ? icons.success : icons.close]
+   // A plain check or cross: the round badge of the row or the pill draws the circle (production's booleanIcons)
+   if (boolean !== undefined) return [boolean ? icons.check : icons.close]
 
    return []
 }
