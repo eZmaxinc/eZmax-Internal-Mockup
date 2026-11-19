@@ -2,9 +2,17 @@
    <div class="proto-viewer">
       <div class="proto-viewer__body">
          <div class="proto-viewer__stage" :class="{ 'proto-viewer__stage--split': frames.length > 1 }">
-            <div v-for="theFrame in frames" :key="theFrame" class="proto-viewer__slot">
+            <div v-for="theFrame in frames" :key="theFrame" class="proto-viewer__slot" :class="{ 'proto-viewer__slot--inline': !isFramed }">
                <p v-if="frames.length > 1" class="proto-viewer__slot-label">{{ theFrame.split('/').pop() }}</p>
+               <!--
+                  Without a frame, the prototype is part of this page: a browser's element picker (Cursor's
+                  annotations) reaches into it, which it cannot do through an iframe.
+               -->
+               <div v-if="!isFramed" class="proto-viewer__frame proto-viewer__inline" :class="{ [DARK_CLASS]: theTheme === 'dark' }">
+                  <frame-root v-bind="inlineTarget(theFrame)" :scenario="theScenario" :theme="theTheme" embedded />
+               </div>
                <iframe
+                  v-else
                   class="proto-viewer__frame"
                   :src="frameUrl(theFrame)"
                   :style="{ width: theWidth }"
@@ -33,7 +41,8 @@
 
          <span v-if="!isShare" class="proto-viewer__divider" />
 
-         <div class="shell-segmented" role="group" aria-label="Largeur">
+         <!-- A width needs a frame: offered in a shared link, and to come back from a width the address asked for -->
+         <div v-if="isShare || theViewportKey !== 'fluid'" class="shell-segmented" role="group" aria-label="Largeur">
             <button
                v-for="theViewport in viewports"
                :key="theViewport.key"
@@ -91,9 +100,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PanelIcon from './PanelIcon.vue'
+import FrameRoot from '../frame/FrameRoot.vue'
+import { resolveTarget } from '../frame/target'
+import { DARK_CLASS, applyTheme } from '../frame/theme'
 import { useNotes, useSidebar } from './sidebar'
 import { useShareMode } from './share'
 
@@ -144,7 +156,8 @@ function pick<T extends string>(value: string, allowed: readonly T[]): T | undef
 
 // On arrival, what the address does not say comes from the viewer's remembered choices
 const theScenario = ref(pick(queryValue('scenario'), props.scenarioNames) ?? props.scenarioNames[0] ?? '')
-const theViewportKey = ref<ViewportKey>(pick(queryValue('width'), viewportKeys) ?? readStored('ez-proto:viewport', viewportKeys, 'fluid'))
+// The remembered width counts in a shared link only: elsewhere a width comes from the address alone
+const theViewportKey = ref<ViewportKey>(pick(queryValue('width'), viewportKeys) ?? (isShare.value ? readStored('ez-proto:viewport', viewportKeys, 'fluid') : 'fluid'))
 const theTheme = ref<ThemeKey>(pick(queryValue('theme'), themeKeys) ?? readStored('ez-proto:theme', themeKeys, 'light'))
 
 function writeAddress() {
@@ -178,7 +191,9 @@ watch(() => ({ path: route.path, query: route.query }), (now, before) => {
    theViewportKey.value = pick(queryValue('width'), viewportKeys) ?? 'fluid'
 })
 
-watch(theViewportKey, (key) => store('ez-proto:viewport', key))
+watch(theViewportKey, (key) => {
+   if (isShare.value) store('ez-proto:viewport', key)
+})
 watch(theTheme, (key) => store('ez-proto:theme', key))
 
 /** Per-viewer preferences, remembered across prototypes; storage may be unavailable. */
@@ -205,6 +220,22 @@ const theWidth = computed(() => {
    const width = viewports.find((viewport) => viewport.key === theViewportKey.value)?.width ?? 0
    return width ? `${width}px` : '100%'
 })
+
+/*
+ * A frame only where it is needed: a shared link (the teammate tries the widths), a width (media queries
+ * follow the frame, not this window) and a comparison (each version at its own width). Otherwise the
+ * prototype is rendered here, in the shell's own page.
+ */
+const isFramed = computed(() => isShare.value || theViewportKey.value !== 'fluid' || props.frames.length > 1)
+
+function inlineTarget(path: string) {
+   const { key, load, chrome, label } = resolveTarget(path)
+   return { targetKey: key, load, chrome, label }
+}
+
+// Dialogs teleport to <body>: without a frame, the dark class goes there too
+watchEffect(() => applyTheme(!isFramed.value && theTheme.value === 'dark' ? 'dark' : 'light'))
+onBeforeUnmount(() => applyTheme('light'))
 
 /** Only the hash changes between scenarios and themes: the frame updates without reloading. */
 function frameUrl(path: string) {
@@ -305,6 +336,39 @@ function frameUrl(path: string) {
    border-radius: 8px;
    background: var(--color-background);
    box-shadow: var(--shell-shadow);
+}
+
+/*
+ * The prototype without a frame: this box stands for the frame's window. It scrolls, it takes back the
+ * product's text settings from the shell's, and the app chrome fills it instead of the real window.
+ * No containment here: a prototype's tooltip is placed against the window (position: fixed).
+ */
+.proto-viewer__slot--inline {
+   flex: 1 1 0;
+}
+
+.proto-viewer__inline {
+   width: 100%;
+   overflow: auto;
+   isolation: isolate;
+   color: var(--color-foreground);
+   font-size: var(--text-base);
+   line-height: var(--text-base--line-height);
+   letter-spacing: normal;
+
+   :deep(.ez-app-shell) {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+   }
+
+   :deep(.ez-app-shell__body) {
+      flex: 1;
+   }
+
+   :deep(.ez-app-shell__nav) {
+      height: auto;
+   }
 }
 
 .proto-viewer__panel {

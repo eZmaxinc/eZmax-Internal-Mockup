@@ -28,12 +28,13 @@
    letter-spacing: -0.003em;
 }
 
-.shell :focus-visible {
+/* Not inside a prototype shown without a frame (ProtoViewer): it keeps the product's own look */
+.shell :focus-visible:not(.proto-viewer__inline *) {
    outline: 2px solid var(--shell-fg);
    outline-offset: 1px;
 }
 
-.shell a {
+.shell a:not(.proto-viewer__inline *) {
    color: inherit;
 }
 

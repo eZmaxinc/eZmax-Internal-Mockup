@@ -54,6 +54,8 @@ const props = defineProps<{
    chrome: 'app' | 'none'
    label: string
    theme: FrameTheme
+   /** Rendered by the shell itself, without a frame: the shell's dev bar does the switching */
+   embedded?: boolean
    /** Dev only: where this version lives in the shell */
    shellUrl?: string
    /** Dev only: the latest version of the task, when this page shows an earlier one */
@@ -69,7 +71,7 @@ const emit = defineEmits<{
 const theModule = shallowRef<ProtoModule | null>(null)
 const theError = ref('')
 const theRenderKey = ref(0)
-const isStandalone = window.parent === window
+const isStandalone = !props.embedded && window.parent === window
 
 const theScenarioNames = computed(() => Object.keys(theModule.value?.scenarios ?? {}))
 

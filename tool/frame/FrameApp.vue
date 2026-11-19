@@ -16,9 +16,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue'
 import FrameRoot from './FrameRoot.vue'
-import GalleryPage from './GalleryPage.vue'
+import { resolveTarget } from './target'
 import { applyTheme, parseTheme, type FrameTheme } from './theme'
-import { getTask, loadModule, type ProtoChrome, type ProtoMeta } from '@/registry'
+import type { ProtoChrome } from '@/registry'
 
 /**
  * Hash routes:
@@ -32,7 +32,7 @@ function readHash() {
    const [path, query = ''] = window.location.hash.replace(/^#/, '').split('?')
    const params = new URLSearchParams(query)
    return {
-      segments: path.split('/').filter(Boolean),
+      path,
       scenario: params.get('scenario') ?? '',
       chrome: params.get('chrome') as ProtoChrome | null,
       theme: parseTheme(params.get('theme')),
@@ -46,43 +46,7 @@ window.addEventListener('hashchange', onHashChange)
 watchEffect(() => applyTheme(theRoute.value.theme))
 onBeforeUnmount(() => window.removeEventListener('hashchange', onHashChange))
 
-const theTarget = computed(() => {
-   const [kind, id, version] = theRoute.value.segments
-
-   if (kind === 'p' && id && version) {
-      const task = getTask(id)
-      const meta: Partial<ProtoMeta> = task?.meta ?? {}
-      const latest = task?.versions.at(-1)?.id
-      return {
-         shellUrl: `${import.meta.env.BASE_URL}p/${id}/${version}`,
-         newer: latest && latest !== version ? { id: latest, url: `${import.meta.env.BASE_URL}p/${id}/${latest}` } : null,
-         key: `p/${id}/${version}`,
-         load: () => loadModule(`prototypes/${id}/${version}`),
-         chrome: theRoute.value.chrome ?? meta.chrome ?? 'app',
-         label: `${id} · ${version}`,
-      }
-   }
-
-   if (kind === 'e' && id) {
-      return {
-         shellUrl: `${import.meta.env.BASE_URL}e/${id}`,
-         newer: null,
-         key: `e/${id}`,
-         load: () => loadModule(`blueprint/patterns/${id}`),
-         chrome: theRoute.value.chrome ?? 'app',
-         label: `exemple · ${id}`,
-      }
-   }
-
-   return {
-      shellUrl: `${import.meta.env.BASE_URL}gallery`,
-      newer: null,
-      key: 'gallery',
-      load: async () => ({ component: GalleryPage, scenarios: { default: () => ({}) } }),
-      chrome: 'none' as ProtoChrome,
-      label: 'galerie',
-   }
-})
+const theTarget = computed(() => resolveTarget(theRoute.value.path, theRoute.value.chrome))
 
 /** Changes one query parameter of the hash, keeping the others (empty value = removed). */
 function setParam(key: string, value: string) {
