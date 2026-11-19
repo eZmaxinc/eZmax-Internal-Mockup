@@ -3,8 +3,11 @@
 
    <div v-else class="home">
       <header class="home__top">
-         <h1>Mockups</h1>
-         <span class="shell-count">{{ theTasks.length }}</span>
+         <!-- The eZmax mark, then the name of the place -->
+         <h1 class="home__brand">
+            <img :src="theMarkUrl" alt="" width="26" height="26">
+            <span class="home__brand-text">Mockups</span>
+         </h1>
          <copy-button class="home__hint" text="yarn mockup new" outlined />
       </header>
 
@@ -64,6 +67,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { STATUS_LABEL as statusLabel, listPatterns, listTasks, type MockupStatus } from '@/registry'
+import theMarkUrl from '../assets/ezmax-mark.svg'
 import CopyButton from '../CopyButton.vue'
 import RootGateView from './RootGateView.vue'
 import { isEditingTarget } from '../sidebar-hotkey'
@@ -138,7 +142,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
 .home__top {
    display: flex;
-   align-items: baseline;
+   align-items: center;
    gap: 8px;
    margin-bottom: 20px;
 
@@ -147,6 +151,16 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       font-size: 20px;
       font-weight: 600;
       letter-spacing: -0.02em;
+   }
+}
+
+.home__brand {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+
+   img {
+      display: block;
    }
 }
 
