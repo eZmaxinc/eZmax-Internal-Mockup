@@ -12,7 +12,7 @@
       <ez-page-content>
          <ez-page-sections>
             <!-- Général -->
-            <ez-page-section id="general" :title="$gettext('Général')">
+            <ez-page-section id="general" :label="$gettext('Général')" icon="info" hide-label>
                <ez-card :title="$gettext('Informations')" toc-id="general-info">
                   <template #actions>
                      <ez-badge :tone="theType.isActive ? 'success' : 'neutral'" :label="theType.isActive ? $gettext('Actif') : $gettext('Inactif')" dot />
@@ -38,7 +38,7 @@
             </ez-page-section>
 
             <!-- Sécurité et accès -->
-            <ez-page-section id="security" :title="$gettext('Sécurité et accès')">
+            <ez-page-section id="security" :label="$gettext('Sécurité et accès')" icon="shieldLock">
                <ez-card :title="$gettext('Accès aux dossiers')" toc-id="security-access">
                   <ez-info :data="theAccessData" />
                </ez-card>
@@ -53,7 +53,7 @@
             </ez-page-section>
 
             <!-- Notifications -->
-            <ez-page-section id="notifications" :title="$gettext('Notifications')">
+            <ez-page-section id="notifications" :label="$gettext('Notifications')" icon="notifications">
                <ez-card :title="$gettext('Envoi du suivi')" toc-id="notifications-follow-up">
                   <ez-info :data="theFollowUpData" />
                </ez-card>
@@ -68,14 +68,14 @@
             </ez-page-section>
 
             <!-- Personnalisation -->
-            <ez-page-section id="customization" :title="$gettext('Personnalisation')">
+            <ez-page-section id="customization" :label="$gettext('Personnalisation')" icon="palette">
                <ez-card :title="$gettext('Signatures et formulaires')" toc-id="customization-signatures">
                   <ez-info :data="theSignatureData" />
                </ez-card>
             </ez-page-section>
 
             <!-- Avancé -->
-            <ez-page-section id="advanced" :title="$gettext('Avancé')">
+            <ez-page-section id="advanced" :label="$gettext('Avancé')" icon="tune">
                <ez-card :title="$gettext('Validation des PDF/A')" toc-id="advanced-pdfa">
                   <template #actions>
                      <ez-badge :tone="theType.pdfa.isActive ? 'success' : 'neutral'" :label="theType.pdfa.isActive ? $gettext('Actif') : $gettext('Inactif')" dot />
