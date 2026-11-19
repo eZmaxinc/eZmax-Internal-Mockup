@@ -527,19 +527,19 @@ const theSelectedRun = computed(() =>
    theData.value.runs.find((run) => run.id === theUI.selectedRunId) ?? null,
 )
 
-function startRunExecution(branchName: string, moduleId: string, suiteType: TestSuiteType) {
+function startRunExecution(branchName: string, moduleIds: string[], suiteType: TestSuiteType) {
    const branchMeta = theData.value.branches.find((branch) => branch.name === branchName)
-   const moduleMeta = theData.value.modules.find((mod) => mod.id === moduleId)
+   const moduleLabel = formatModuleSelectionLabel(moduleIds, theData.value.modules)
    const nextId = theData.value.runs.reduce((max, run) => Math.max(max, run.id), 1048) + 1
-   const totalTests = moduleId === 'all' ? 412 : suiteType === 'unit' ? 68 : 124
+   const totalTests = moduleIds.length >= theData.value.modules.length ? 412 : suiteType === 'api' ? 68 : 124
 
    const newRun: TestRun = {
       id: nextId,
       code: `#RUN-${nextId}`,
       branch: branchName,
       commitSha: branchMeta?.lastCommitSha ?? 'd4e5f60',
-      moduleId,
-      moduleLabel: moduleMeta?.label ?? moduleId,
+      moduleIds: [...moduleIds],
+      moduleLabel,
       suiteType,
       requestedBy: theData.value.currentUser,
       environment: 'ci-runner-02',
@@ -650,7 +650,7 @@ function advanceRunningTests() {
          run.suites = [
             {
                id: `${run.id}-suite-1`,
-               name: `${run.moduleId}-unit`,
+               name: `${run.moduleIds[0] ?? 'all'}-api`,
                passed: Math.ceil(run.totalTests * 0.6),
                failed: 0,
                skipped: 0,
@@ -659,7 +659,7 @@ function advanceRunningTests() {
             },
             {
                id: `${run.id}-suite-2`,
-               name: `${run.moduleId}-integration`,
+               name: `${run.moduleIds[0] ?? 'all'}-e2e`,
                passed: Math.floor(run.totalTests * 0.4),
                failed: 0,
                skipped: 0,
@@ -684,7 +684,7 @@ watch(theData, () => {
    theUI.isDialogOpen = false
    theUI.selectedRunId = null
    theErrors.branch = ''
-   theErrors.moduleId = ''
+   theErrors.moduleIds = ''
    onResetFilters()
 })
 

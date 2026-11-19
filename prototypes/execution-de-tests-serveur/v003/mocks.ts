@@ -375,7 +375,7 @@ function createExecutedRuns(): TestRun[] {
          commitSha: '9c3a71f',
          moduleIds: ['ezsign-api', 'ezsign-webhooks'],
          moduleLabel: 'API REST v2 — Endpoints publics',
-         suiteType: 'integration',
+         suiteType: 'api',
          requestedBy: 'Marc-André Desalliers',
          environment: 'ci-runner-01',
          startedAt: daysAgoAt(0, 11, 42),
@@ -441,7 +441,7 @@ function createExecutedRuns(): TestRun[] {
          commitSha: '51ef09c',
          moduleIds: ['ezsign-notifications'],
          moduleLabel: 'Notifications — Courriels et SMS',
-         suiteType: 'unit',
+         suiteType: 'api',
          requestedBy: 'Marc-André Desalliers',
          environment: 'ci-runner-02',
          startedAt: daysAgoAt(1, 13, 10),
@@ -482,7 +482,7 @@ function createExecutedRuns(): TestRun[] {
 
    return rawRuns.map((run) => ({
       ...run,
-      suites: buildSuitesForRun(run.moduleId, run.passedTests, run.failedTests, run.skippedTests),
+      suites: buildSuitesForRun(run.moduleIds[0] ?? 'all', run.passedTests, run.failedTests, run.skippedTests),
       logLines: buildLogLines(run),
    }))
 }

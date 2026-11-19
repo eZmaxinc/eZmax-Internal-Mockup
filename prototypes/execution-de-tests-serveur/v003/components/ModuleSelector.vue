@@ -44,8 +44,9 @@
          </div>
 
          <ez-icon
-            :name="isOpen ? ez.icons.chevronUp : ez.icons.chevronDown"
-            class="w-4 h-4 text-foreground-muted shrink-0"
+            :name="ez.icons.chevronDown"
+            class="w-4 h-4 text-foreground-muted shrink-0 transition-transform"
+            :class="isOpen ? 'rotate-180' : ''"
          />
       </div>
 
