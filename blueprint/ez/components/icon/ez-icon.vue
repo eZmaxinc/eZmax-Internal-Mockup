@@ -3,27 +3,27 @@
       class="ez-icon"
       :width="size"
       :height="size"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      :viewBox="theGlyph.viewBox"
+      fill="currentColor"
       aria-hidden="true"
    >
-      <path :d="iconPaths[name]" />
+      <path v-for="(thePath, index) in theGlyph.paths" :key="index" :d="thePath.d" :style="thePath.style" />
    </svg>
 </template>
 
 <script setup lang="ts">
-import { iconPaths, type IconName } from '../../icons'
+import { computed } from 'vue'
+import { iconPaths, parseIcon, type IconName } from '../../icons'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
+   /** A key of ez.icons; its glyph is production's (@quasar/extras, Material Symbols Outlined) */
    name: IconName
    size?: number
 }>(), {
    size: 18,
 })
+
+const theGlyph = computed(() => parseIcon(iconPaths[props.name]))
 </script>
 
 <style scoped>
