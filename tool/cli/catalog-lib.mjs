@@ -191,7 +191,10 @@ function vueFiles(dir) {
 }
 
 export function buildCatalog() {
-   const primitives = vueFiles(COMPONENTS_DIR).map((file) => extractComponent(file, { tier: 'primitive' }))
+   // Only ez-*.vue: a file without the prefix is a private piece of its family (info/info-element-boxed.vue), imported by it
+   const primitives = vueFiles(COMPONENTS_DIR)
+      .filter((file) => basename(file).startsWith('ez-'))
+      .map((file) => extractComponent(file, { tier: 'primitive' }))
    const domain = vueFiles(DOMAIN_DIR).map((file) => extractComponent(file, {
       tier: 'domain',
       object: relative(DOMAIN_DIR, file).split(/[\\/]/)[0],

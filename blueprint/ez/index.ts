@@ -29,4 +29,11 @@ export { PROTO_TODAY, protoToday } from './today'
 export { useAppShell } from './components/app-shell/app-shell'
 export type { EzTableColumn } from './components/table/ez-table.vue'
 export type { EzFieldOption } from './components/field/ez-field.vue'
-export type { EzInfoItem } from './components/info-list/ez-info-list.vue'
+/** The items of the former ez-info-list (removed: ez-info replaces it); kept for the versions that import the type */
+export interface EzInfoItem {
+   label: string
+   value?: string | number | null
+   key?: string
+}
+export { defineLayoutComposition, type ILayoutCol, type ILayoutSection, type TLayoutColumns, type TLayoutDirection, type TLayoutGap, type TLayoutSpan } from './components/layout/layout'
+export { infoToComposition, type IInfoCategory, type IInfoCategoryItems, type IInfoMetric, type IInfoValue, type TInfoCol, type TInfoEntry, type TInfoTone } from './components/info/info'

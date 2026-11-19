@@ -106,16 +106,6 @@
                      <template #cell-dueAt="{ row }">{{ formatDate(row.dueAt) }}</template>
                   </ez-table>
                </ez-card>
-               <ez-card title="ez-info-list" toc-id="data-info">
-                  <ez-layout>
-                     <ez-layout-col :cols="{ base: 12, md: 6 }">
-                        <ez-info-list :items="infoItems" />
-                     </ez-layout-col>
-                     <ez-layout-col :cols="{ base: 12, md: 6 }">
-                        <ez-info-list :items="infoItems" inline />
-                     </ez-layout-col>
-                  </ez-layout>
-               </ez-card>
             </ez-page-section>
 
             <ez-page-section id="overlays" title="Overlays">
@@ -133,7 +123,7 @@
 
             <!-- Automatic: every catalog component the sections above don't show, with its example when it has one -->
             <ez-page-section v-if="theOtherComponents.length" id="others" title="Autres composants" subtitle="Automatique: les composants du catalogue absents des sections ci-dessus, avec leur exemple (ez-….example.vue, à côté du composant)">
-               <ez-card v-for="theComponent in theOtherComponents" :key="theComponent.tag" :title="theComponent.tag" :subtitle="theComponent.object ?? theComponent.tier" :toc-id="`others-${theComponent.tag}`">
+               <ez-card v-for="theComponent in theOtherComponents" :key="theComponent.tag" :title="theComponent.tag" :toc-id="`others-${theComponent.tag}`">
                   <component :is="theComponent.example" v-if="theComponent.example" />
                   <p v-else class="m-0 text-sm text-foreground-muted">Pas encore d'exemple: {{ theComponent.file.replace(/\.vue$/, '.example.vue') }}</p>
                </ez-card>
@@ -156,10 +146,12 @@ import gallerySource from './GalleryPage.vue?raw'
 const examples = import.meta.glob<Component>('../../blueprint/ez/components/**/*.example.vue', { eager: true, import: 'default' })
 const exampleOf = (tag: string) => Object.entries(examples).find(([path]) => path.endsWith(`/${tag}.example.vue`))?.[1]
 
-// Components this page already shows by hand (any <ez-… tag in its own template) are not repeated
+// Components this page already shows by hand (any <ez-… tag in its own template) are not repeated, unless the page
+// only uses them for its own layout (no card titled with their tag) and they have an example (ez-layout)
 const shownByHand = new Set(gallerySource.match(/<ez-[a-z-]+/g)?.map((tag) => tag.slice(1)))
+const demoedByHand = new Set(gallerySource.match(/title="ez-[a-z-]+"/g)?.map((title) => title.slice(7, -1)))
 const theOtherComponents = catalog.components
-   .filter((component) => !shownByHand.has(component.tag))
+   .filter((component) => !demoedByHand.has(component.tag) && (!shownByHand.has(component.tag) || exampleOf(component.tag)))
    .map((component) => ({ ...component, object: 'object' in component ? String(component.object) : null, example: exampleOf(component.tag) }))
 
 const colorTokens = [
@@ -183,11 +175,6 @@ const columns: EzTableColumn[] = [
 ]
 const rows = makeFolders(4)
 
-const infoItems = [
-   { label: 'Créé le', value: '28 oct. 2026' },
-   { label: 'Propriétaire', value: 'Marie Tremblay' },
-   { label: 'Signataires', value: '3' },
-]
 </script>
 
 <style scoped>

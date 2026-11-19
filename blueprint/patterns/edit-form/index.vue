@@ -4,16 +4,16 @@
       <ez-page-content>
          <form @submit.prevent="save">
             <ez-layout>
-               <ez-layout-col :cols="{ base: 12, md: 8 }">
+               <ez-layout-col :span="{ xs: 12, md: 8 }">
                   <ez-card :title="$gettext('Informations')">
                      <ez-layout>
                         <ez-layout-col>
                            <ez-field v-model="theForm.name" :label="$gettext('Nom du dossier')" required :error="theErrors.name" />
                         </ez-layout-col>
-                        <ez-layout-col :cols="{ base: 12, md: 6 }">
+                        <ez-layout-col :span="{ xs: 12, md: 6 }">
                            <ez-field v-model="theForm.language" :label="$gettext('Langue des courriels')" type="select" :options="languageOptions" />
                         </ez-layout-col>
-                        <ez-layout-col :cols="{ base: 12, md: 6 }">
+                        <ez-layout-col :span="{ xs: 12, md: 6 }">
                            <ez-field v-model="theForm.dueAt" :label="$gettext('Échéance')" type="date" :hint="$gettext('Le dossier expire à cette date')" />
                         </ez-layout-col>
                         <ez-layout-col>
@@ -44,9 +44,9 @@
                   </ez-card>
                </ez-layout-col>
 
-               <ez-layout-col :cols="{ base: 12, md: 4 }" first-below-md>
+               <ez-layout-col :span="{ xs: 12, md: 4 }" first-below-md>
                   <ez-card :title="$gettext('Résumé')">
-                     <ez-info-list inline :items="theSummary" />
+                     <ez-info :data="theSummary" />
                      <template #footer>
                         <ez-btn variant="flat" :label="$gettext('Annuler')" />
                         <ez-btn variant="primary" type="submit" :loading="isSaving" :label="$gettext('Enregistrer')" />
@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
-import { gettext, useScenario } from '@ez'
+import { gettext, useScenario, type IInfoCategory } from '@ez'
 import { scenarios } from './mocks'
 
 const theData = useScenario(scenarios)
@@ -74,9 +74,14 @@ const languageOptions = [
    { label: 'English', value: 'en' },
 ]
 
-const theSummary = computed(() => [
-   { label: gettext('Signataires'), value: theForm.value.signers.length },
-   { label: gettext('Langue'), value: theForm.value.language === 'fr' ? 'Français' : 'English' },
+const theSummary = computed<IInfoCategory[]>(() => [
+   {
+      name: 'summary',
+      items: [
+         { key: 'signers', label: gettext('Signataires'), value: theForm.value.signers.length, col: 6 },
+         { key: 'language', label: gettext('Langue'), value: theForm.value.language === 'fr' ? 'Français' : 'English', col: 6 },
+      ],
+   },
 ])
 
 function save() {

@@ -9,9 +9,10 @@ import EzEmptyState from './components/empty-state/ez-empty-state.vue'
 import EzField from './components/field/ez-field.vue'
 import EzHeading from './components/heading/ez-heading.vue'
 import EzIcon from './components/icon/ez-icon.vue'
-import EzInfoList from './components/info-list/ez-info-list.vue'
+import EzInfo from './components/info/ez-info.vue'
 import EzLayout from './components/layout/ez-layout.vue'
 import EzLayoutCol from './components/layout/ez-layout-col.vue'
+import EzLayoutComposition from './components/layout/ez-layout-composition.vue'
 import EzMessageImportant from './components/message-important/ez-message-important.vue'
 import EzPage from './components/page/ez-page.vue'
 import EzPageContent from './components/page/ez-page-content.vue'
@@ -21,6 +22,7 @@ import EzPageSections from './components/page-sections/ez-page-sections.vue'
 import EzPageToc from './components/page-sections/ez-page-toc.vue'
 import EzReveal from './components/reveal/ez-reveal.vue'
 import EzTable from './components/table/ez-table.vue'
+import EzTooltip from './components/tooltip/ez-tooltip.vue'
 
 export const components = {
    EzAppShell,
@@ -33,9 +35,10 @@ export const components = {
    EzField,
    EzHeading,
    EzIcon,
-   EzInfoList,
+   EzInfo,
    EzLayout,
    EzLayoutCol,
+   EzLayoutComposition,
    EzMessageImportant,
    EzPage,
    EzPageContent,
@@ -45,6 +48,7 @@ export const components = {
    EzPageToc,
    EzReveal,
    EzTable,
+   EzTooltip,
 }
 
 declare module 'vue' {
@@ -59,9 +63,10 @@ declare module 'vue' {
       EzField: typeof EzField
       EzHeading: typeof EzHeading
       EzIcon: typeof EzIcon
-      EzInfoList: typeof EzInfoList
+      EzInfo: typeof EzInfo
       EzLayout: typeof EzLayout
       EzLayoutCol: typeof EzLayoutCol
+      EzLayoutComposition: typeof EzLayoutComposition
       EzMessageImportant: typeof EzMessageImportant
       EzPage: typeof EzPage
       EzPageContent: typeof EzPageContent
@@ -71,5 +76,6 @@ declare module 'vue' {
       EzPageToc: typeof EzPageToc
       EzReveal: typeof EzReveal
       EzTable: typeof EzTable
+      EzTooltip: typeof EzTooltip
    }
 }

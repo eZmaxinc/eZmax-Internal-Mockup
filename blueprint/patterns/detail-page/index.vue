@@ -20,7 +20,7 @@
 
             <ez-page-section id="summary" :title="$gettext('Résumé')">
                <ez-card :title="$gettext('Informations')" toc-id="summary-info">
-                  <ez-info-list :items="[...theInfoLeft, ...theInfoRight]" tiles />
+                  <ez-info :data="theInfoData" />
                </ez-card>
             </ez-page-section>
 
@@ -44,13 +44,17 @@
                   v-for="theDocument in theFolder.documents"
                   :key="theDocument.id"
                   :title="theDocument.name"
-                  :subtitle="$gettext('%{pages} pages', { pages: theDocument.pageCount })"
                   :icon="ez.icons.file"
                   :toc-id="`document-${theDocument.id}`"
                >
                   <template #actions>
                      <ez-btn variant="flat" size="sm" :icon="ez.icons.eye" :label="$gettext('Aperçu')" />
                   </template>
+                  <ez-badge
+                     outline
+                     :label="$gettext('%{pages} pages', { pages: theDocument.pageCount })"
+                     class="mr-2"
+                  />
                   <ez-badge
                      :tone="theDocument.isComplete() ? 'success' : 'info'"
                      :label="$gettext('%{done} / %{total} signatures', { done: theDocument.signaturesDone, total: theDocument.signaturesRequired })"
@@ -64,7 +68,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatDate, formatDateTime, gettext, useScenario, type EzTableColumn } from '@ez'
+import { formatDate, formatDateTime, gettext, useScenario, type EzTableColumn, type IInfoCategory } from '@ez'
 import { scenarios } from './mocks'
 
 const theData = useScenario(scenarios)
@@ -76,13 +80,23 @@ const signerColumns: EzTableColumn[] = [
    { key: 'lastActivityAt', label: 'Dernière activité', align: 'right' },
 ]
 
-const theInfoLeft = computed(() => [
-   { label: gettext('Propriétaire'), value: theFolder.value.owner },
-   { label: gettext('Créé le'), value: formatDate(theFolder.value.createdAt) },
-])
-
-const theInfoRight = computed(() => [
-   { label: gettext('Échéance'), value: formatDate(theFolder.value.dueAt) },
-   { label: gettext('Documents'), value: theFolder.value.documents.length },
+// The tiles of the card: the same objects as production's theInfoData (ez-info)
+const theInfoData = computed<IInfoCategory[]>(() => [
+   {
+      name: 'summary',
+      items: [
+         { key: 'name', label: gettext('Nom du dossier'), value: theFolder.value.name, col: 12 },
+         { key: 'owner', label: gettext('Propriétaire'), value: theFolder.value.owner },
+         { key: 'created', label: gettext('Créé le'), value: formatDate(theFolder.value.createdAt) },
+         { key: 'due', label: gettext('Échéance'), value: formatDate(theFolder.value.dueAt) },
+         // A count needs room for its label beside the box: half a row until lg
+         {
+            key: 'documents',
+            label: gettext('Documents'),
+            value: { amount: theFolder.value.documents.length, unit: theFolder.value.documents.length > 1 ? gettext('fichiers') : gettext('fichier') },
+            col: { xs: 12, sm: 6, lg: 3 },
+         },
+      ],
+   },
 ])
 </script>

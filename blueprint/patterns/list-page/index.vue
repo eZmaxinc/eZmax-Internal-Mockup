@@ -8,7 +8,7 @@
          refresh
       />
       <ez-page-content>
-         <ez-card :title="$gettext('Liste des dossiers')" :subtitle="$gettext('%{count} dossiers', { count: theFiltered.length })">
+         <ez-card :title="$gettext('Liste des dossiers')">
             <div class="list-page__filters || flex flex-wrap items-end gap-3 mb-4">
                <ez-field
                   v-model="theFilters.search"

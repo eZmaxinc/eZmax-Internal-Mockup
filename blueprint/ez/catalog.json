@@ -272,7 +272,7 @@
                "required": false,
                "values": null,
                "default": null,
-               "doc": null
+               "doc": "A line under the title"
             },
             {
                "name": "icon",
@@ -310,6 +310,7 @@
             "footer"
          ],
          "uses": [
+            "ez-heading",
             "ez-icon"
          ]
       },
@@ -633,7 +634,7 @@
                "required": true,
                "values": null,
                "default": null,
-               "doc": null
+               "doc": "A key of ez.icons; its glyph is production's (@quasar/extras, Material Symbols Outlined)"
             },
             {
                "name": "size",
@@ -650,45 +651,41 @@
          "uses": []
       },
       {
-         "tag": "ez-info-list",
-         "name": "EzInfoList",
+         "tag": "ez-info",
+         "name": "EzInfo",
          "tier": "primitive",
-         "file": "blueprint/ez/components/info-list/ez-info-list.vue",
+         "file": "blueprint/ez/components/info/ez-info.vue",
          "description": null,
          "props": [
             {
-               "name": "items",
-               "attr": "items",
-               "type": "EzInfoItem[]",
+               "name": "data",
+               "attr": "data",
+               "type": "IInfoCategory[]",
                "required": true,
                "values": null,
                "default": null,
-               "doc": null
+               "doc": "The categories, in order: titled groups of items (IInfoCategory[], the same objects as production)"
             },
             {
-               "name": "inline",
-               "attr": "inline",
-               "type": "boolean",
+               "name": "as",
+               "attr": "as",
+               "type": "string",
                "required": false,
                "values": null,
-               "default": null,
-               "doc": "Label and value side by side"
-            },
-            {
-               "name": "tiles",
-               "attr": "tiles",
-               "type": "boolean",
-               "required": false,
-               "values": null,
-               "default": null,
-               "doc": "Each pair in a bordered tile, side by side when there is room: the information of a detail page in production"
+               "default": "'div'",
+               "doc": "Renders as another element"
             }
          ],
          "emits": [],
          "slots": [
-            "value-<…>"
+            "slot",
+            "field"
          ],
-         "uses": []
+         "uses": [
+            "ez-heading",
+            "ez-icon",
+            "ez-layout"
+         ]
       },
       {
          "tag": "ez-layout",
@@ -698,13 +695,67 @@
          "description": null,
          "props": [
             {
+               "name": "columns",
+               "attr": "columns",
+               "type": "TLayoutColumns",
+               "required": false,
+               "values": null,
+               "default": "12",
+               "doc": "Columns of the grid: a count, or counts per threshold ({ xs: 1, md: 2 })"
+            },
+            {
                "name": "gap",
                "attr": "gap",
-               "type": "string",
+               "type": "TLayoutGap",
                "required": false,
                "values": null,
                "default": "'var(--card-gap, var(--space-gap-md))'",
-               "doc": null
+               "doc": "A number is a multiple of 0.25rem (4 → 1rem), a string any length; { row, column } for two gaps"
+            },
+            {
+               "name": "direction",
+               "attr": "direction",
+               "type": "TLayoutDirection",
+               "required": false,
+               "values": null,
+               "default": "'grid'",
+               "doc": "grid (default): 12 columns · subgrid: the columns of the parent · wrap: side by side, wrapping · stack: one below the other"
+            },
+            {
+               "name": "span",
+               "attr": "span",
+               "type": "TLayoutSpan",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Place in a parent ez-layout, when this one is nested without an ez-layout-col"
+            },
+            {
+               "name": "container",
+               "attr": "container",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "true: the descendants measure their thresholds on this element, not on the window; false: on the window again"
+            },
+            {
+               "name": "debug",
+               "attr": "debug",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Outlines the grid and labels each column, for this layout and the ones inside"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'div'",
+               "doc": "Renders as another element (section, ul…)"
             }
          ],
          "emits": [],
@@ -721,13 +772,22 @@
          "description": null,
          "props": [
             {
-               "name": "cols",
-               "attr": "cols",
-               "type": "Span",
+               "name": "span",
+               "attr": "span",
+               "type": "TLayoutSpan",
                "required": false,
                "values": null,
-               "default": "12",
-               "doc": "Columns out of 12. Number, or per breakpoint: { base: 12, md: 8 } (md ≥ 1024px, lg ≥ 1440px, as in production)"
+               "default": "undefined",
+               "doc": "Columns out of the parent's (12): a count, or counts per threshold ({ xs: 12, md: 8 }); none = the whole row"
+            },
+            {
+               "name": "cols",
+               "attr": "cols",
+               "type": "TLegacyLayoutCols",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Before production's span: { base: 12, md: 8 }, base being xs. Kept for the existing prototypes; prefer span"
             },
             {
                "name": "firstBelowMd",
@@ -736,7 +796,34 @@
                "required": false,
                "values": null,
                "default": null,
-               "doc": "Production pattern: right column goes first under md"
+               "doc": "The column goes first below md (1024px): the right column of a form, in production"
+            },
+            {
+               "name": "container",
+               "attr": "container",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "true: the descendants measure their thresholds on this column, not on the window"
+            },
+            {
+               "name": "name",
+               "attr": "name",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Its label in debug mode"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'div'",
+               "doc": "Renders as another element (section, li…)"
             }
          ],
          "emits": [],
@@ -744,6 +831,49 @@
             "default"
          ],
          "uses": []
+      },
+      {
+         "tag": "ez-layout-composition",
+         "name": "EzLayoutComposition",
+         "tier": "primitive",
+         "file": "blueprint/ez/components/layout/ez-layout-composition.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "composition",
+               "attr": "composition",
+               "type": "TLayoutCompositionDefinition<T>",
+               "required": true,
+               "values": null,
+               "default": null,
+               "doc": "The definition: defineLayoutComposition((t) => [...sections], options)"
+            },
+            {
+               "name": "debug",
+               "attr": "debug",
+               "type": "boolean",
+               "required": false,
+               "values": null,
+               "default": "undefined",
+               "doc": "Outlines every grid and labels every column"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'div'",
+               "doc": "Renders as another element"
+            }
+         ],
+         "emits": [],
+         "slots": [],
+         "uses": [
+            "ez-heading",
+            "ez-layout",
+            "ez-layout-col"
+         ]
       },
       {
          "tag": "ez-message-important",
@@ -1166,6 +1296,48 @@
          "uses": [
             "ez-empty-state"
          ]
+      },
+      {
+         "tag": "ez-tooltip",
+         "name": "EzTooltip",
+         "tier": "primitive",
+         "file": "blueprint/ez/components/tooltip/ez-tooltip.vue",
+         "description": null,
+         "props": [
+            {
+               "name": "title",
+               "attr": "title",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "A short title, in bold"
+            },
+            {
+               "name": "text",
+               "attr": "text",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": null,
+               "doc": "The explanation; the slot `content` replaces it"
+            },
+            {
+               "name": "as",
+               "attr": "as",
+               "type": "string",
+               "required": false,
+               "values": null,
+               "default": "'span'",
+               "doc": "Renders as another element"
+            }
+         ],
+         "emits": [],
+         "slots": [
+            "default",
+            "content"
+         ],
+         "uses": []
       }
    ]
 }

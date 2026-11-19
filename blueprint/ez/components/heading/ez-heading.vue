@@ -51,9 +51,9 @@ const tag = computed(() => props.as ?? DEFAULT_TAGS[props.variant])
    --ez-heading-color: var(--color-foreground);
 }
 
+/* The title of a card (ez-card draws its own with this variant): the size and weight of the base, as in the app */
 .ez-heading--card {
-   --ez-heading-size: var(--text-base);
-   --ez-heading-color: var(--color-foreground);
+   --ez-heading-size: var(--text-lg);
 }
 
 .ez-heading--group {

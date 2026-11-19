@@ -41,12 +41,18 @@ Un outil de travail sérieux et dense, pour des gens qui traitent des dossiers �
 
 Les valeurs vivent dans `blueprint/tokens/ez-tokens.css`, la source partagée avec le mono. Elles partent des couleurs de la marque (charbon, marine, accent, et les quatre couleurs de statut); un aplat teinté est `surface-{sens}`, le texte posé dessus `foreground-{sens}`.
 
+## Icônes
+
+- Celles de l'app: Material Symbols Outlined, du package `@quasar/extras` (MDI pour les quelques-unes où l'app prend MDI). Un trait plein, sobre, à 18 px par défaut.
+- Une icône a le sens qu'elle a dans l'app: le glyphe de `ez.icons.<clé>` est celui que la prod donne au même usage (`blueprint/ez/icons.ts`).
+- Jamais une icône dessinée à la main ni un autre jeu (Lucide, Heroicons…).
+
 ## Do / don't
 
 - ✅ Un bouton primaire par zone; les autres en `secondary` ou `flat`.
 - ✅ Les états vides ont un titre, une phrase et, si possible, l'action pour en sortir.
 - ✅ Les tableaux: colonnes alignées à gauche, nombres et dates à droite, statut en badge plein (`solid`).
-- ✅ Une fiche: les informations en tuiles (`ez-info-list tiles`), la navigation à droite.
+- ✅ Une fiche: les informations en tuiles (`ez-info`), la navigation à droite.
 - ❌ Pas de couleur inventée, pas d'ombre forte, pas de coins très arrondis.
 - ❌ Pas d'icône seule sans libellé ou infobulle pour une action importante.
 - ❌ Pas de modale pour ce qui peut être fait sur la page.

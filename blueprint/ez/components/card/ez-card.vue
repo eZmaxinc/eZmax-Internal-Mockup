@@ -8,10 +8,10 @@
       <header v-if="title || $slots.actions || $slots.header" class="ez-card__header">
          <slot name="header">
             <div class="ez-card__titles">
-               <h3 class="ez-card__title">
-                  <ez-icon v-if="icon" :name="icon" class="ez-card__icon" />
+               <EzHeading variant="card" class="ez-card__title">
+                  <EzIcon v-if="icon" :name="icon" class="ez-card__icon" />
                   {{ title }}
-               </h3>
+               </EzHeading>
                <p v-if="subtitle" class="ez-card__subtitle">{{ subtitle }}</p>
             </div>
          </slot>
@@ -29,11 +29,13 @@
 </template>
 
 <script setup lang="ts">
+import EzHeading from '../heading/ez-heading.vue'
 import EzIcon from '../icon/ez-icon.vue'
 import type { IconName } from '../../icons'
 
 defineProps<{
    title?: string
+   /** A line under the title */
    subtitle?: string
    icon?: IconName
    /** No body padding — for tables and lists that touch the edges */
@@ -47,7 +49,7 @@ defineProps<{
 @reference "../../../tokens/ez-tokens.css";
 
 /*
- * Self-contained: copies into the mono as is. Needs only ez-tokens.css, ez-icon.vue and icons.ts.
+ * Self-contained: copies into the mono as is. Needs only ez-tokens.css, ez-heading.vue, ez-icon.vue and icons.ts.
  * Its knob is read here with a scale step as fallback, never defined; a project sets --card-padding (and
  * the app's --sizing-toolbar-height) on :root or a parent only to change it.
  */
@@ -58,6 +60,7 @@ defineProps<{
    --ez-card-radius: var(--radius-sm);
    --ez-card-shadow: var(--shadow-card);
    --ez-card-muted: var(--color-foreground-muted);
+   --ez-card-subtitle: var(--color-foreground-subtle);
    --ez-card-divider: var(--color-border-muted);
 
    background: var(--ez-card-background);
@@ -88,24 +91,24 @@ defineProps<{
    padding-bottom: var(--ez-card-padding);
 }
 
+/* The size, weight and color come from ez-heading (variant card); here only the icon beside the text */
 .ez-card__title {
    display: flex;
    align-items: center;
    gap: var(--space-gap-sm);
-   margin: 0;
-   font-size: var(--text-lg);
-   line-height: var(--text-lg--line-height);
-   font-weight: 400;
-   color: var(--ez-card-muted);
 }
 
 .ez-card__icon {
    color: var(--ez-card-muted);
 }
 
+.ez-card__titles {
+   min-width: 0;
+}
+
 .ez-card__subtitle {
    margin: 2px 0 0;
-   color: var(--ez-card-muted);
+   color: var(--ez-card-subtitle);
    font-size: var(--text-sm);
 }
 
