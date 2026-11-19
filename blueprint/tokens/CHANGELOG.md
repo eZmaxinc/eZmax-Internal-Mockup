@@ -2,6 +2,18 @@
 
 Le plus récent en haut. `yarn mockup tokens bump` ajoute les entrées. Copie vers le mono: `COPY.md`.
 
+## 2.2.2 — 2026-11-19
+
+- Texte tertiaire (--color-foreground-subtle): le gris neutre de l'app (#757575, grey-6 de Quasar) au lieu de slate-500 (#71808e), dans les deux thèmes. Nouvelle primitive --prim-grey-600.
+
+## 2.2.1 — 2026-11-19
+
+- Texte secondaire (--color-foreground-muted): le gris neutre de l'app (#616161, grey-8 de Quasar) au lieu de slate-600 (#576775, bleuté); en sombre, #bdbdbd (grey-4) au lieu de slate-300. Nouvelles primitives --prim-grey-400 et --prim-grey-700.
+
+## 2.2.0 — 2026-11-19
+
+- Nouveau token --shadow-raised: une petite ombre sans anneau, pour une boîte posée sur une tuile (le compte d'ez-info), le shadow de Tailwind en prod.
+
 ## 2.1.1 — 2026-11-18
 
 - Fond de l'app: le gris pâle de la marque (`#f1f3f4`), plus proche de l'app (`#f5f5f5` à l'écran) que `#e2e5e8`. Thème sombre inchangé.

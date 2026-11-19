@@ -1,5 +1,5 @@
 /*
- * ez-tokens 2.1.1 — 2026-11-18
+ * ez-tokens 2.2.2 — 2026-11-19
  * Source: ez-proto, blueprint/tokens/ez-tokens.css. Copied by hand into the mono: never edit the copy.
  * Changes: blueprint/tokens/CHANGELOG.md · Copy procedure: blueprint/tokens/COPY.md
  *
@@ -42,6 +42,11 @@
    --prim-slate-900: #1a232d;
    --prim-slate-950: #11151c;
    --prim-ink: #11151c; /* shadows and backdrop, always mixed with transparency */
+
+   /* Grey — the true neutrals of Quasar, for secondary text as in the app (the steps of Material) */
+   --prim-grey-400: #bdbdbd; /* Quasar grey-4 */
+   --prim-grey-600: #757575; /* Quasar grey-6: hints and metadata in the app */
+   --prim-grey-700: #616161; /* ◆ Quasar grey-8: the secondary text of production (card titles, labels) */
 
    /* Indigo — the action color */
    --prim-indigo-50: #eff1f5;
@@ -128,8 +133,8 @@
 
    /* Text and icons */
    --color-foreground: var(--prim-slate-900);
-   --color-foreground-muted: var(--prim-slate-600); /* descriptions, labels */
-   --color-foreground-subtle: var(--prim-slate-500); /* hints, placeholders, metadata */
+   --color-foreground-muted: var(--prim-grey-700); /* descriptions, labels, card titles: neutral, as in the app */
+   --color-foreground-subtle: var(--prim-grey-600); /* hints, placeholders, metadata: neutral, as in the app */
    --color-foreground-inverse: var(--prim-white); /* on surface-inverse */
    --color-foreground-accent: var(--prim-indigo-600); /* on surface-accent */
    --color-foreground-positive: var(--prim-green-700); /* on surface-positive */
@@ -192,6 +197,7 @@
 
    /* Elevation */
    --shadow-card: 0 1px 2px color-mix(in srgb, var(--prim-ink) 6%, transparent), 0 0 0 1px color-mix(in srgb, var(--prim-ink) 4%, transparent);
+   --shadow-raised: 0 1px 3px color-mix(in srgb, var(--prim-ink) 10%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--prim-ink) 10%, transparent); /* a small box lifted off a tile, no ring (Tailwind's shadow in production) */
    --shadow-overlay: 0 12px 32px color-mix(in srgb, var(--prim-ink) 18%, transparent), 0 2px 6px color-mix(in srgb, var(--prim-ink) 8%, transparent);
 }
 
@@ -214,8 +220,8 @@
    --color-overlay: color-mix(in srgb, var(--prim-ink) 65%, transparent);
 
    --color-foreground: var(--prim-slate-50);
-   --color-foreground-muted: var(--prim-slate-300);
-   --color-foreground-subtle: var(--prim-slate-500);
+   --color-foreground-muted: var(--prim-grey-400);
+   --color-foreground-subtle: var(--prim-grey-600);
    --color-foreground-inverse: var(--prim-slate-50);
    --color-foreground-accent: var(--prim-indigo-300);
    --color-foreground-positive: var(--prim-green-300);
@@ -236,5 +242,6 @@
    --color-info: var(--prim-cyan-500);
 
    --shadow-card: 0 1px 2px color-mix(in srgb, var(--prim-ink) 40%, transparent), 0 0 0 1px color-mix(in srgb, var(--prim-white) 6%, transparent);
+   --shadow-raised: 0 1px 3px color-mix(in srgb, var(--prim-ink) 40%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--prim-ink) 40%, transparent);
    --shadow-overlay: 0 12px 32px color-mix(in srgb, var(--prim-ink) 60%, transparent), 0 0 0 1px color-mix(in srgb, var(--prim-white) 8%, transparent);
 }
