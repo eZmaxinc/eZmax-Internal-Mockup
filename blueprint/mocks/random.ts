@@ -31,10 +31,10 @@ export const folderNames = [
    'Avenant au contrat',
 ] as const
 
-import { PROTO_TODAY } from '../ez/today'
+import { MOCKUP_TODAY } from '../ez/today'
 
-/** The prototypes' fixed « today » (PROTO_TODAY of @ez), so screenshots stay stable. */
-export const MOCK_TODAY = PROTO_TODAY
+/** The mockups' fixed « today » (MOCKUP_TODAY of @ez), so screenshots stay stable. */
+export const MOCK_TODAY = MOCKUP_TODAY
 
 /** A date `days` away from MOCK_TODAY (negative = past). Use it for every date in mocks. */
 export function daysFromToday(days: number): Date {

@@ -1,7 +1,7 @@
 /*
- * The shell's own look: neutral, quiet, light only. It is the tool around the prototypes, so it does
- * not wear the eZsign brand (the prototypes do, inside their frame): one glance tells which is which.
- * Everything here is scoped to .shell and named --shell-*; nothing leaks into blueprint/ or a prototype.
+ * The shell's own look: neutral, quiet, light only. It is the tool around the mockups, so it does
+ * not wear the eZsign brand (the mockups do, inside their frame): one glance tells which is which.
+ * Everything here is scoped to .shell and named --shell-*; nothing leaks into blueprint/ or a mockup.
  */
 .shell {
    --shell-bg: #fafafa;
@@ -28,13 +28,13 @@
    letter-spacing: -0.003em;
 }
 
-/* Not inside a prototype shown without a frame (ProtoViewer): it keeps the product's own look */
-.shell :focus-visible:not(.proto-viewer__inline *) {
+/* Not inside a mockup shown without a frame (MockupViewer): it keeps the product's own look */
+.shell :focus-visible:not(.mockup-viewer__inline *) {
    outline: 2px solid var(--shell-fg);
    outline-offset: 1px;
 }
 
-.shell a:not(.proto-viewer__inline *) {
+.shell a:not(.mockup-viewer__inline *) {
    color: inherit;
 }
 

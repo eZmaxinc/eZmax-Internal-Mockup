@@ -333,7 +333,7 @@ export function gapStyle(gap: TLayoutGap): string {
    return `--layout-gap: ${gapToCss(gap)}`
 }
 
-// ─── Before production's API (ez-proto ≤ tokens 2.1) ───────────
+// ─── Before production's API (ez-mockup ≤ tokens 2.1) ───────────
 
 /** The `cols` of the former ez-layout-col: `{ base, md, lg }`, `base` being production's `xs` */
 export type TLegacyLayoutCols = number | { base?: number, md?: number, lg?: number }

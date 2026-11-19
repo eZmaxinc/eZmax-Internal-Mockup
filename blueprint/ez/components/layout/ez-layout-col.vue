@@ -30,7 +30,7 @@ const theParentLayout = inject(LAYOUT_KEY, null)
 const props = withDefaults(defineProps<{
    /** Columns out of the parent's (12): a count, or counts per threshold ({ xs: 12, md: 8 }); none = the whole row */
    span?: TLayoutSpan
-   /** Before production's span: { base: 12, md: 8 }, base being xs. Kept for the existing prototypes; prefer span */
+   /** Before production's span: { base: 12, md: 8 }, base being xs. Kept for the existing mockups; prefer span */
    cols?: TLegacyLayoutCols
    /** The column goes first below md (1024px): the right column of a form, in production */
    firstBelowMd?: boolean
@@ -83,7 +83,7 @@ if (theParentLayout) {
 @reference "../../../tokens/ez-tokens.css";
 
 /*
- * The placement is in layout.css. Here, what ez-proto adds to production: the cards of a column stack with the
+ * The placement is in layout.css. Here, what ez-mockup adds to production: the cards of a column stack with the
  * gap of the cards (--card-gap), and a column can go first below md.
  */
 .ez-layout-col {

@@ -1,5 +1,5 @@
 /**
- * Exports one prototype version as a single self-contained, interactive HTML file.
+ * Exports one mockup version as a single self-contained, interactive HTML file.
  *   yarn mockup export [tâche] [version] [--quiet]    (default version: the chosen one, else the latest)
  * Output: exports/<tâche>-<version>.html
  */
@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { EXPORTS, PROTOTYPES, ROOT, TOOL, aliases, fail, listVersions, parseArgs, readMeta, resolveTask } from '../lib.mjs'
+import { EXPORTS, MOCKUPS, ROOT, TOOL, aliases, fail, listVersions, parseArgs, readMeta, resolveTask } from '../lib.mjs'
 
 const USAGE = 'Usage: yarn mockup export <tâche> [version]'
 
@@ -22,13 +22,13 @@ export async function run(argv) {
 
    if (!versions.includes(versionId)) fail(`Version inconnue « ${versionId} » pour ${taskId}.`, `Versions: ${versions.join(', ')}`)
 
-   const folder = join(PROTOTYPES, taskId, versionId).replaceAll('\\', '/')
+   const folder = join(MOCKUPS, taskId, versionId).replaceAll('\\', '/')
    const hasMocks = existsSync(join(folder, 'mocks.ts'))
    const label = `${meta.title} · ${versionId}`
 
-   const VIRTUAL_ID = 'virtual:ez-proto-target'
+   const VIRTUAL_ID = 'virtual:ez-mockup-target'
    const targetPlugin = {
-      name: 'ez-proto-target',
+      name: 'ez-mockup-target',
       resolveId: (id) => (id === VIRTUAL_ID ? `\0${VIRTUAL_ID}` : null),
       load: (id) => {
          if (id !== `\0${VIRTUAL_ID}`) return null
@@ -42,7 +42,7 @@ export async function run(argv) {
       },
    }
 
-   const outDir = join(ROOT, 'node_modules', '.ez-proto-export')
+   const outDir = join(ROOT, 'node_modules', '.ez-mockup-export')
 
    await build({
       configFile: false,

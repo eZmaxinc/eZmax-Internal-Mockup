@@ -1,6 +1,6 @@
 /*
  * ez-tokens 2.2.2 — 2026-11-19
- * Source: ez-proto, blueprint/tokens/ez-tokens.css. Copied by hand into the mono: never edit the copy.
+ * Source: ez-mockup, blueprint/tokens/ez-tokens.css. Copied by hand into the mono: never edit the copy.
  * Changes: blueprint/tokens/CHANGELOG.md · Copy procedure: blueprint/tokens/COPY.md
  *
  * Three layers, references go one way only (component → semantic → primitive → raw value):

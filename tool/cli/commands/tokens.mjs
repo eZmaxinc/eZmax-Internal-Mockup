@@ -5,7 +5,7 @@
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { BLUEPRINT, PATTERNS, PROTOTYPES, TOOL, fail, flagString, parseArgs, rel, today } from '../lib.mjs'
+import { BLUEPRINT, PATTERNS, MOCKUPS, TOOL, fail, flagString, parseArgs, rel, today } from '../lib.mjs'
 import { migrate } from '../token-renames.mjs'
 import { CHANGELOG_FILE, HEADER, SHARED_FILE, readVersion } from '../tokens-lib.mjs'
 
@@ -59,7 +59,7 @@ function bump(level, message) {
 }
 
 function migrateAll() {
-   const roots = [join(BLUEPRINT, 'ez'), PATTERNS, PROTOTYPES, TOOL]
+   const roots = [join(BLUEPRINT, 'ez'), PATTERNS, MOCKUPS, TOOL]
    const files = roots.flatMap(walk).filter((file) => /\.(vue|ts|css)$/.test(file))
    const changed = []
 
@@ -78,7 +78,7 @@ function migrateAll() {
    }
    console.log(`✓ ${changed.length} fichier(s) migré(s):`)
    changed.forEach((file) => console.log(`  ${file}`))
-   if (changed.some((file) => file.startsWith('prototypes/'))) {
+   if (changed.some((file) => file.startsWith('mockups/'))) {
       console.log('\n  Des versions existantes ont été réécrites: seulement les noms de tokens, pour qu\'elles s\'affichent encore.')
    }
 }

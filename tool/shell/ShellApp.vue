@@ -2,13 +2,13 @@
    <div class="shell">
       <!--
          The left panel follows what is on screen. The dashboard has none: it lists everything itself.
-         A prototype: the way back, the task, its versions. A reference or the gallery: the way back and the others.
-         Slides away when closed: the prototype gets all the width. Toggled from the dev bar or with [
+         A mockup: the way back, the task, its versions. A reference or the gallery: the way back and the others.
+         Slides away when closed: the mockup gets all the width. Toggled from the dev bar or with [
       -->
       <aside v-if="!isHome && !isShare" class="shell__sidebar" :class="{ 'is-closed': !theSidebarOpen }" :inert="!theSidebarOpen" aria-label="Navigation">
          <router-link :to="linkWithHome('/')" class="shell-btn shell__back">
             <ez-icon name="back" :size="14" />
-            <span>Prototypes</span>
+            <span>Mockups</span>
          </router-link>
 
          <template v-if="theTask">
@@ -122,7 +122,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { STATUS_LABEL, currentVersion, getTask, listPatterns, type ProtoStatus } from '@/registry'
+import { STATUS_LABEL, currentVersion, getTask, listPatterns, type MockupStatus } from '@/registry'
 import CopyButton from './CopyButton.vue'
 import { listenSidebarShortcut, useSidebar } from './sidebar'
 import { useShareMode } from './share'
@@ -141,11 +141,11 @@ const theTask = computed(() => (typeof route.params.taskId === 'string' ? getTas
 const theVersion = computed(() => currentVersion(theTask.value, typeof route.params.versionId === 'string' ? route.params.versionId : undefined))
 /** Newest first. The retained version keeps its place: its star tells it apart. */
 const theVersions = computed(() => [...(theTask.value?.versions ?? [])].reverse())
-const thePath = computed(() => `prototypes/${theTask.value?.id}/${theVersion.value?.id}`)
+const thePath = computed(() => `mockups/${theTask.value?.id}/${theVersion.value?.id}`)
 
 /** Changing the status or retaining a version writes meta.json: only the dev server can. */
 const canChoose = import.meta.env.DEV
-const STATUSES = Object.keys(STATUS_LABEL) as ProtoStatus[]
+const STATUSES = Object.keys(STATUS_LABEL) as MockupStatus[]
 const theStatusOpen = ref(false)
 const theChoosing = ref(false)
 const theChooseError = ref('')
@@ -153,14 +153,14 @@ const theChooseError = ref('')
 const theChosenTarget = computed(() => theTask.value?.meta.chosen ?? theVersion.value?.id)
 
 /** Runs `mockup status` through the dev server. A click on a star passes its version. */
-async function setStatus(status: ProtoStatus, versionId?: string) {
+async function setStatus(status: MockupStatus, versionId?: string) {
    if (!theTask.value) return
    const version = versionId ?? (status === 'chosen' ? theChosenTarget.value : undefined)
    theStatusOpen.value = false
    theChoosing.value = true
    theChooseError.value = ''
    const query = new URLSearchParams({ task: theTask.value.id, status, ...(version ? { version } : {}) })
-   const response = await fetch(`/__proto/status?${query}`, { method: 'POST' })
+   const response = await fetch(`/__mockup/status?${query}`, { method: 'POST' })
    // On success the server reloads the shell, with the new status and the full star on the retained version
    if (!response.ok) {
       theChooseError.value = (await response.text()) || 'Impossible de changer le statut.'
@@ -193,7 +193,7 @@ onBeforeUnmount(listenSidebarShortcut())
    background: var(--shell-surface);
    border-right: 1px solid var(--shell-border);
 
-   /* Slides out of the layout instead of vanishing: the prototype grows as the drawer leaves */
+   /* Slides out of the layout instead of vanishing: the mockup grows as the drawer leaves */
    transition: margin-left 180ms ease, visibility 0s;
 
    &.is-closed {

@@ -1,7 +1,7 @@
 <template>
    <div v-if="theTask" class="task-view">
       <!-- The task and its versions are in the shell's left panel; the notes in the panel on the right -->
-      <proto-viewer v-if="theVersion" :frames="theFrames" :scenario-names="theScenarioNames">
+      <mockup-viewer v-if="theVersion" :frames="theFrames" :scenario-names="theScenarioNames">
          <template #devbar-start>
             <label v-if="otherVersions.length" class="shell-field">
                <span>Comparer</span>
@@ -25,7 +25,7 @@
             <a
                v-if="isDev"
                class="shell-btn shell-btn--icon"
-               :href="`/__proto/export?task=${theTask.id}&version=${theVersion.id}`"
+               :href="`/__mockup/export?task=${theTask.id}&version=${theVersion.id}`"
                :download="`${theTask.id}-${theVersion.id}.html`"
                aria-label="Exporter"
                title="Exporter: télécharger cette version en un fichier HTML autonome et interactif"
@@ -50,7 +50,7 @@
                <div class="markdown" v-html="renderMarkdown(theTask.brief)" />
             </section>
          </template>
-      </proto-viewer>
+      </mockup-viewer>
 
       <ez-empty-state v-else title="Aucune version" text="Lancer yarn mockup iterate pour créer une version." icon="file" />
    </div>
@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
-import ProtoViewer from '../ProtoViewer.vue'
+import MockupViewer from '../MockupViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
 import { shareUrl } from '../share'
@@ -85,7 +85,7 @@ watchEffect(() => {
    }
 })
 
-const theScenarioNames = useScenarioNames(() => theVersion.value && `prototypes/${props.taskId}/${theVersion.value.id}`)
+const theScenarioNames = useScenarioNames(() => theVersion.value && `mockups/${props.taskId}/${theVersion.value.id}`)
 
 const theCompareWith = ref('')
 watch(() => props.taskId, () => (theCompareWith.value = ''))

@@ -1,7 +1,7 @@
 /**
  * yarn mockup proposals [--all]
- * What prototypes ask of the blueprint, for the team to decide:
- *   - components proposed in prototypes (components/ of a version, with a @proposal header), most requested first
+ * What mockups ask of the blueprint, for the team to decide:
+ *   - components proposed in mockups (components/ of a version, with a @proposal header), most requested first
  *   - what the latest version of each task built by hand (local components, scoped styles)
  *   - reports written in notes.md: every bullet of the « Signalements » section (Bug primitive,
  *     Bug helper, Mock manquant, Composant manquant… or any other), plus those prefixes anywhere
@@ -10,7 +10,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { spawnSync } from 'node:child_process'
-import { PROTOTYPES, ROOT, listDirs, listVersions, parseArgs, rel } from '../lib.mjs'
+import { MOCKUPS, ROOT, listDirs, listVersions, parseArgs, rel } from '../lib.mjs'
 import { buildCatalog, catalogMap, readProposal, toKebab } from '../catalog-lib.mjs'
 import { groupProposals } from '../proposals-lib.mjs'
 
@@ -54,13 +54,13 @@ export async function run(argv) {
  * their own. Nobody declares it; it is where the blueprint is missing something.
  */
 function showLocalVisuals() {
-   console.log('Créé ou rehaussé dans les prototypes (dernière version de chaque tâche)\n')
+   console.log('Créé ou rehaussé dans les mockups (dernière version de chaque tâche)\n')
    const known = catalogMap(buildCatalog())
    let found = false
-   for (const taskId of listDirs(PROTOTYPES)) {
+   for (const taskId of listDirs(MOCKUPS)) {
       const version = listVersions(taskId).at(-1)
       if (!version) continue
-      const versionDir = join(PROTOTYPES, taskId, version)
+      const versionDir = join(MOCKUPS, taskId, version)
       const componentsDir = join(versionDir, 'components')
       const components = existsSync(componentsDir) ? readdirSync(componentsDir).filter((name) => name.endsWith('.vue')).map((name) => join(componentsDir, name)) : []
       const items = []
@@ -121,9 +121,9 @@ function diffStat(original, copy) {
 /** « Signalements » of every version's notes.md, grouped by kind. */
 function showReports() {
    const reports = new Map()
-   for (const taskId of listDirs(PROTOTYPES)) {
+   for (const taskId of listDirs(MOCKUPS)) {
       for (const version of listVersions(taskId)) {
-         const file = join(PROTOTYPES, taskId, version, 'notes.md')
+         const file = join(MOCKUPS, taskId, version, 'notes.md')
          if (!existsSync(file)) continue
          for (const { kind, text } of readReports(readFileSync(file, 'utf8'))) {
             const list = reports.get(kind) ?? []

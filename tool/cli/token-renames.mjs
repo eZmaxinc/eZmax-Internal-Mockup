@@ -1,6 +1,6 @@
 /**
  * Token renames between ez-tokens versions: old name → new name (null = removed, see the message).
- * Used by `mockup check` (catches old names in prototypes and components: Tailwind would silently
+ * Used by `mockup check` (catches old names in mockups and components: Tailwind would silently
  * generate nothing for them) and by `mockup tokens migrate` (rewrites them).
  * Names are the part after --color- (and after bg-, text-, border-… in utilities).
  */

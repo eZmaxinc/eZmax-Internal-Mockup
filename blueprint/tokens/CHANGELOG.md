@@ -57,7 +57,7 @@ Première version partagée. Les couleurs sont encore provisoires (à reprendre 
 
 - Noms `{rôle}-{modifieur}`, alignés sur le contrat de couleurs de SUM et sur les noms de statut de Quasar (`positive`, `negative`, `warning`, `info`).
 - Breakpoints et rayons de la prod (`ezmax-library-quasar`): sm 600, md 1024, lg 1440, xl 1920; rayons 4, 6, 8, 12 px.
-- Les tokens de composant sortent du fichier partagé (`components.css`, propre à ez-proto).
+- Les tokens de composant sortent du fichier partagé (`components.css`, propre à ez-mockup).
 - Ombres et voile de dialogue passent par `color-mix()` sur une primitive: plus aucune valeur brute hors des primitives.
 
 Renommés (ancien → nouveau):

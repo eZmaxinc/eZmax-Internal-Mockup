@@ -4,7 +4,7 @@
  */
 import { spawnSync } from 'node:child_process'
 import { join } from 'node:path'
-import { PROTOTYPES, fail, listVersions, parseArgs, readNotesHeader, rel, resolveTask } from '../lib.mjs'
+import { MOCKUPS, fail, listVersions, parseArgs, readNotesHeader, rel, resolveTask } from '../lib.mjs'
 
 const USAGE = 'Usage: yarn mockup diff <tâche> [avant] [après]'
 
@@ -25,11 +25,11 @@ export async function run(argv) {
    }
    if (from === target) fail('Deux versions différentes requises.', USAGE)
 
-   const [fromDir, toDir] = [from, target].map((version) => rel(join(PROTOTYPES, taskId, version)))
+   const [fromDir, toDir] = [from, target].map((version) => rel(join(MOCKUPS, taskId, version)))
    console.log(`${taskId}: ${from} → ${target}\n`)
 
    const result = spawnSync('git', ['diff', '--no-index', '--color=auto', ...(flags.stat ? ['--stat'] : []), '--', fromDir, toDir], {
-      cwd: join(PROTOTYPES, '..'),
+      cwd: join(MOCKUPS, '..'),
       stdio: 'inherit',
    })
    if (result.error) fail('git est introuvable: il sert à afficher les différences.')

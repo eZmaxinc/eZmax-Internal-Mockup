@@ -14,7 +14,7 @@ git switch main && git pull
 git status --short
 ```
 
-`git status --short` doit être vide. Lancer un seul shell (`yarn dev`), l'ouvrir dans le navigateur de Cursor, puis ouvrir une conversation d'agent neuve avec `ez-proto` comme dossier racine. Noter le commit (`git rev-parse --short HEAD`) et le modèle.
+`git status --short` doit être vide. Lancer un seul shell (`yarn dev`), l'ouvrir dans le navigateur de Cursor, puis ouvrir une conversation d'agent neuve avec `ez-mockup` comme dossier racine. Noter le commit (`git rev-parse --short HEAD`) et le modèle.
 
 Coller chaque demande telle quelle, sans aider l'agent, et chronométrer jusqu'au moment où le résultat est à l'écran.
 
@@ -22,7 +22,7 @@ Coller chaque demande telle quelle, sans aider l'agent, et chronométrer jusqu'a
 
 **1. Création**, d'une interface qu'aucun patron ne couvre:
 
-> Nouveau prototype pour la tâche #90003 (https://www.goodday.work/t/TEST03): « Suivi d'un envoi groupé ». On veut voir, pour un envoi groupé, où en est chaque dossier: une vue d'ensemble de l'avancement, puis la liste des dossiers avec leur statut. Contrainte: un dossier refusé doit ressortir.
+> Nouveau mockup pour la tâche #90003 (https://www.goodday.work/t/TEST03): « Suivi d'un envoi groupé ». On veut voir, pour un envoi groupé, où en est chaque dossier: une vue d'ensemble de l'avancement, puis la liste des dossiers avec leur statut. Contrainte: un dossier refusé doit ressortir.
 
 **2. Retouche**, sans demander de version:
 
@@ -63,4 +63,4 @@ yarn mockup proposals
 |---|---|---|---|---|---|---|---|---|
 | | | | | | | | | |
 
-Un problème se corrige à un endroit précis: voir « Où modifier quoi » dans le [`README.md`](README.md). Avant de rejouer l'essai, supprimer `prototypes/90003-*`.
+Un problème se corrige à un endroit précis: voir « Où modifier quoi » dans le [`README.md`](README.md). Avant de rejouer l'essai, supprimer `mockups/90003-*`.

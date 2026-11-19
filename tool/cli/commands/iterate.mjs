@@ -6,7 +6,7 @@
  */
 import { cpSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { PROTOTYPES, VERSION_PATTERN, ask, fail, flagString, isInteractive, listVersions, notifyDevServer, parseArgs, resolveTask, today } from '../lib.mjs'
+import { MOCKUPS, VERSION_PATTERN, ask, fail, flagString, isInteractive, listVersions, notifyDevServer, parseArgs, resolveTask, today } from '../lib.mjs'
 
 const USAGE = 'Usage: yarn mockup iterate <tâche> -m "Résumé" [--from v001]'
 
@@ -28,8 +28,8 @@ export async function run(argv) {
    const max = Math.max(...versions.map((version) => Number(version.match(VERSION_PATTERN)[1])))
    const target = `v${String(max + 1).padStart(3, '0')}`
 
-   const targetDir = join(PROTOTYPES, taskId, target)
-   cpSync(join(PROTOTYPES, taskId, source), targetDir, {
+   const targetDir = join(MOCKUPS, taskId, target)
+   cpSync(join(MOCKUPS, taskId, source), targetDir, {
       recursive: true,
       filter: (path) => !path.endsWith('notes.md'),
    })
@@ -43,7 +43,7 @@ export async function run(argv) {
       '',
    ].join('\n'))
 
-   console.log(`✓ Version créée: prototypes/${taskId}/${target} (copie de ${source})`)
+   console.log(`✓ Version créée: mockups/${taskId}/${target} (copie de ${source})`)
    console.log(`  Fichiers: ${readdirSync(targetDir).join(', ')}`)
    console.log('')
    console.log(`  Ensuite: modifier ${target}/ seulement (jamais ${source}/), tenir ${target}/notes.md à jour (résumé, signalements et questions nouveaux),`)

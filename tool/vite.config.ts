@@ -4,18 +4,18 @@ import tailwindcss from '@tailwindcss/vite'
 import { spawnSync } from 'node:child_process'
 import { copyFileSync, existsSync, readFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
-import { BLUEPRINT, DEV_PORT, PROTOTYPES, ROOT, TOOL, aliases } from './paths.mjs'
+import { BLUEPRINT, DEV_PORT, MOCKUPS, ROOT, TOOL, aliases } from './paths.mjs'
 
 /**
  * Dev-only endpoint used by the shell's "Export HTML" button.
- * GET /__proto/export?task=<task>&version=<version> → single-file HTML download.
+ * GET /__mockup/export?task=<task>&version=<version> → single-file HTML download.
  */
-function protoExportEndpoint(): Plugin {
+function mockupExportEndpoint(): Plugin {
    return {
-      name: 'ez-proto-export-endpoint',
+      name: 'ez-mockup-export-endpoint',
       apply: 'serve',
       configureServer(server) {
-         server.middlewares.use('/__proto/export', (req, res) => {
+         server.middlewares.use('/__mockup/export', (req, res) => {
             const url = new URL(req.url ?? '', 'http://localhost')
             const task = url.searchParams.get('task') ?? ''
             const version = url.searchParams.get('version') ?? ''
@@ -48,24 +48,24 @@ function protoExportEndpoint(): Plugin {
 }
 
 /**
- * Vite's root is tool/, so by default it only watches tool/. Without this, a prototype created while
+ * Vite's root is tool/, so by default it only watches tool/. Without this, a mockup created while
  * the dev server runs (yarn mockup new / iterate) stays « Introuvable » until a restart: the registry's
  * import.meta.glob never hears about the new files.
  */
 function watchContentFolders(): Plugin {
    return {
-      name: 'ez-proto-watch-content',
+      name: 'ez-mockup-watch-content',
       apply: 'serve',
       configureServer(server) {
-         server.watcher.add([PROTOTYPES, BLUEPRINT])
+         server.watcher.add([MOCKUPS, BLUEPRINT])
       },
       /**
        * Tailwind does not scan a folder created after the server started: a utility used for the first
-       * time in a new prototype (mt-6) generated nothing until a restart. Rebuilding the stylesheet with
-       * every saved .vue of prototypes/ makes it look again.
+       * time in a new mockup (mt-6) generated nothing until a restart. Rebuilding the stylesheet with
+       * every saved .vue of mockups/ makes it look again.
        */
       handleHotUpdate({ file, modules, server }) {
-         if (!file.endsWith('.vue') || !file.includes('/prototypes/')) return
+         if (!file.endsWith('.vue') || !file.includes('/mockups/')) return
          const styles = [...server.moduleGraph.idToModuleMap.values()].filter((module) => module.file?.endsWith('/tool/app.css'))
          return styles.length ? [...modules, ...styles] : undefined
       },
@@ -88,16 +88,16 @@ function reloadRegistry(server: ViteDevServer): number {
 }
 
 /**
- * POST /__proto/status?task=<task>&status=<status>[&version=<version>] — the shell's « Retenir cette version »
+ * POST /__mockup/status?task=<task>&status=<status>[&version=<version>] — the shell's « Retenir cette version »
  * button. The team decision is a click of the human, not a request to the agent: it runs `mockup status`, which
  * writes meta.json, then reloads the shell.
  */
-function protoStatusEndpoint(): Plugin {
+function mockupStatusEndpoint(): Plugin {
    return {
-      name: 'ez-proto-status-endpoint',
+      name: 'ez-mockup-status-endpoint',
       apply: 'serve',
       configureServer(server) {
-         server.middlewares.use('/__proto/status', (req, res) => {
+         server.middlewares.use('/__mockup/status', (req, res) => {
             const url = new URL(req.url ?? '', 'http://localhost')
             const task = url.searchParams.get('task') ?? ''
             const status = url.searchParams.get('status') ?? ''
@@ -128,22 +128,22 @@ function protoStatusEndpoint(): Plugin {
 }
 
 /**
- * GET /__proto/refresh?dir=<task>[/<version>] — called by `mockup new` and `mockup iterate` right after they
+ * GET /__mockup/refresh?dir=<task>[/<version>] — called by `mockup new` and `mockup iterate` right after they
  * write files. On some drives (network, mapped or aliased ones) the watcher never hears about a new folder,
  * or hears it under another drive letter than the one Vite knows the files by. So this does not go through
  * the watcher: it drops the registry module, whose import.meta.glob lists are then rebuilt from the disk,
  * and reloads the pages. The new version shows up without restarting the server.
  */
-function protoRefreshEndpoint(): Plugin {
+function mockupRefreshEndpoint(): Plugin {
    return {
-      name: 'ez-proto-refresh-endpoint',
+      name: 'ez-mockup-refresh-endpoint',
       apply: 'serve',
       configureServer(server) {
-         server.middlewares.use('/__proto/refresh', (req, res) => {
+         server.middlewares.use('/__mockup/refresh', (req, res) => {
             const dir = new URL(req.url ?? '', 'http://localhost').searchParams.get('dir') ?? ''
 
             res.setHeader('Content-Type', 'application/json')
-            if (!/^[\w-]+(\/v\d{3})?$/.test(dir) || !existsSync(join(PROTOTYPES, dir))) {
+            if (!/^[\w-]+(\/v\d{3})?$/.test(dir) || !existsSync(join(MOCKUPS, dir))) {
                res.statusCode = 400
                res.end('{"ok":false}')
                return
@@ -161,7 +161,7 @@ function protoRefreshEndpoint(): Plugin {
  */
 function spaFallback404(): Plugin {
    return {
-      name: 'ez-proto-spa-404',
+      name: 'ez-mockup-spa-404',
       closeBundle() {
          const outDir = join(ROOT, 'dist')
          const indexFile = join(outDir, 'index.html')
@@ -200,7 +200,7 @@ const basePath = rawBasePath ? (rawBasePath.endsWith('/') ? rawBasePath : `${raw
 export default defineConfig({
    root: TOOL,
    base: basePath,
-   plugins: [vue(), tailwindcss(), protoExportEndpoint(), protoRefreshEndpoint(), protoStatusEndpoint(), watchContentFolders(), spaFallback404()],
+   plugins: [vue(), tailwindcss(), mockupExportEndpoint(), mockupRefreshEndpoint(), mockupStatusEndpoint(), watchContentFolders(), spaFallback404()],
    resolve: { alias: aliases },
    server: {
       port: DEV_PORT,
@@ -208,8 +208,8 @@ export default defineConfig({
       // where nobody looks (an agent then tests an old server, or starts a third one).
       strictPort: true,
       fs: { allow: [ROOT] },
-      // PROTO_POLL=1 yarn dev — for a drive that sends no file events at all (edits never show up)
-      watch: process.env.PROTO_POLL ? { usePolling: true, interval: 300 } : undefined,
+      // MOCKUP_POLL=1 yarn dev — for a drive that sends no file events at all (edits never show up)
+      watch: process.env.MOCKUP_POLL ? { usePolling: true, interval: 300 } : undefined,
    },
    preview: {
       port: DEV_PORT,

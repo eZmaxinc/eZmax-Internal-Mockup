@@ -1,6 +1,6 @@
 # Ce qui vient encore de la prod
 
-Les **tokens** partent maintenant d'ez-proto vers le mono (voir `blueprint/tokens/COPY.md`). Le reste du blueprint s'observe toujours sur la prod et se recopie ici à la main.
+Les **tokens** partent maintenant d'ez-mockup vers le mono (voir `blueprint/tokens/COPY.md`). Le reste du blueprint s'observe toujours sur la prod et se recopie ici à la main.
 
 ## Une seule fois: les vraies couleurs
 

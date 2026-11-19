@@ -1,6 +1,6 @@
 ---
-description: ez-proto — always on
+description: ez-mockup — always on
 alwaysApply: true
 ---
 
-You are working in **ez-proto**, a prototyping tool for eZsign/eZmax. Every rule lives in `AGENTS.md` at the repo root: read it before anything else and follow it. Nothing is repeated here on purpose, so that the rules cannot drift.
+You are working in **ez-mockup**, a mockup tool for eZsign/eZmax. Every rule lives in `AGENTS.md` at the repo root: read it before anything else and follow it. Nothing is repeated here on purpose, so that the rules cannot drift.

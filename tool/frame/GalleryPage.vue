@@ -1,6 +1,6 @@
 <template>
    <ez-page>
-      <ez-page-header title="Galerie ez-" subtitle="Composants disponibles pour les prototypes — voir blueprint/ez/CATALOG.md" />
+      <ez-page-header title="Galerie ez-" subtitle="Composants disponibles pour les mockups — voir blueprint/ez/CATALOG.md" />
       <ez-page-content>
          <ez-page-sections>
             <ez-page-section id="tokens" label="Tokens sémantiques" icon="palette">

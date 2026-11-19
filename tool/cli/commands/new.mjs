@@ -1,11 +1,11 @@
 /**
  * yarn mockup new "Titre" [numéro GoodDay] [lien GoodDay] [--from <patron>|vide] [--chrome none] [--owner "Nom"] [--slug <slug>]
- * Creates prototypes/<slug>/ with meta.json and v001. GoodDay is optional: kept in meta.json when given.
+ * Creates mockups/<slug>/ with meta.json and v001. GoodDay is optional: kept in meta.json when given.
  */
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import {
-   GOODDAY_NUMBER, GOODDAY_URL, PATTERNS, PROTOTYPES, TEMPLATES,
+   GOODDAY_NUMBER, GOODDAY_URL, PATTERNS, MOCKUPS, TEMPLATES,
    ask, choose, fail, flagString, gitUserName, isInteractive, listPatterns, listTasks, normalizeGoodDayUrl, notifyDevServer, parseArgs, slugify, today, writeMeta,
 } from '../lib.mjs'
 
@@ -20,7 +20,7 @@ export async function run(argv) {
    let title = positional.filter((arg) => !GOODDAY_NUMBER.test(arg) && !GOODDAY_URL.test(arg)).join(' ').trim()
 
    if (!title && !isInteractive) fail('Il manque le titre.', USAGE)
-   if (!title) title = await ask('Titre du prototype')
+   if (!title) title = await ask('Titre du mockup')
 
    // GoodDay: nice to have, never required
    if (!number && !url && isInteractive) {
@@ -38,15 +38,15 @@ export async function run(argv) {
    if (existing) {
       const latest = existing.versions.at(-1) ?? 'aucune version'
       fail(
-         `Cette tâche a déjà un prototype: prototypes/${existing.id} (dernière version: ${latest}).`,
+         `Cette tâche a déjà un mockup: mockups/${existing.id} (dernière version: ${latest}).`,
          `Ne pas le recommencer. Demander quoi faire: retoucher ${latest} en place, ou une nouvelle version (yarn mockup iterate ${existing.id} -m "…"). Un autre sujet: --slug <autre-nom>.`,
       )
    }
 
    const taskId = slug
-   const taskDir = join(PROTOTYPES, taskId)
+   const taskDir = join(MOCKUPS, taskId)
    const versionDir = join(taskDir, 'v001')
-   if (existsSync(taskDir)) fail(`prototypes/${taskId} existe déjà.`)
+   if (existsSync(taskDir)) fail(`mockups/${taskId} existe déjà.`)
 
    // Starting point: a reference pattern or the blank template
    const patterns = listPatterns()
@@ -86,11 +86,11 @@ export async function run(argv) {
       '',
    ].join('\n'))
 
-   console.log(`✓ Prototype créé: prototypes/${taskId}/v001 (départ: ${from})`)
+   console.log(`✓ Mockup créé: mockups/${taskId}/v001 (départ: ${from})`)
    if (number || url) console.log(`  GoodDay: ${[number && `#${number}`, url].filter(Boolean).join(' ')}`)
    console.log('')
    console.log('  Ensuite:')
-   console.log(`   1. Des contraintes ont été données? Les écrire dans prototypes/${taskId}/README.md (sinon, pas de README)`)
+   console.log(`   1. Des contraintes ont été données? Les écrire dans mockups/${taskId}/README.md (sinon, pas de README)`)
    console.log('   2. Construire v001/index.vue et v001/mocks.ts')
    console.log(`   3. yarn mockup check ${taskId}`)
    console.log(`   4. yarn mockup open ${taskId}`)

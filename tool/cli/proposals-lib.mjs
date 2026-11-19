@@ -1,18 +1,18 @@
 /**
- * Component proposals: prototypes/<task>/<version>/components/Ez*.vue with a header
+ * Component proposals: mockups/<task>/<version>/components/Ez*.vue with a header
  *   <!-- @proposal domain folder: why it exists -->
  */
 import { existsSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { PROTOTYPES, listDirs, listVersions } from './lib.mjs'
+import { MOCKUPS, listDirs, listVersions } from './lib.mjs'
 import { readProposal, toKebab } from './catalog-lib.mjs'
 
 /** Every proposal file, with its task, version and header. */
 export function listProposalFiles() {
    const proposals = []
-   for (const taskId of listDirs(PROTOTYPES)) {
+   for (const taskId of listDirs(MOCKUPS)) {
       for (const version of listVersions(taskId)) {
-         const dir = join(PROTOTYPES, taskId, version, 'components')
+         const dir = join(MOCKUPS, taskId, version, 'components')
          if (!existsSync(dir)) continue
          for (const name of readdirSync(dir).filter((file) => file.endsWith('.vue'))) {
             const file = join(dir, name)

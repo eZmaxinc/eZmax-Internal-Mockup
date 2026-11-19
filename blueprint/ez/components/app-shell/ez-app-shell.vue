@@ -74,7 +74,7 @@ const SKELETON_MENU_ITEMS: SkeletonMenuItem[] = [
 
 /**
  * Placeholder frame of the production shell (toolbar + collapsible left drawer):
- * places prototypes at their real position and width inside the app, with a burger toggle.
+ * places mockups at their real position and width inside the app, with a burger toggle.
  */
 const props = withDefaults(defineProps<{
    /** Shows pale grey skeleton placeholders in the left navigation drawer, shaped like the production menu */

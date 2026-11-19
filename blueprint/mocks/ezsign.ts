@@ -115,7 +115,7 @@ export class EzsignFolder {
 
    /**
     * Pushes the due date `days` days later (from the current due date, or from today without one).
-    * The mechanics only: which states may be extended is a product decision, left to the prototype.
+    * The mechanics only: which states may be extended is a product decision, left to the mockup.
     */
    extendDueDate(days: number): Date {
       const from = this.dueAt ?? daysFromToday(0)

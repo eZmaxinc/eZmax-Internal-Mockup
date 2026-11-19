@@ -1,4 +1,4 @@
-# Variant prototype
+# Variant mockup
 
 Explore an alternative to an existing version without replacing it: the next version (e.g. v003), started from the one to compare with.
 

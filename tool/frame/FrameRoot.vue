@@ -43,11 +43,11 @@
 <script setup lang="ts">
 import { computed, provide, ref, shallowRef, toRef, watch } from 'vue'
 import { scenarioKey } from '@ez'
-import type { ProtoModule } from '@/registry'
+import type { MockupModule } from '@/registry'
 import type { FrameTheme } from './theme'
 
 const props = defineProps<{
-   load: () => Promise<ProtoModule | null>
+   load: () => Promise<MockupModule | null>
    /** Changes when the target changes, to reload */
    targetKey: string
    scenario: string
@@ -68,7 +68,7 @@ const emit = defineEmits<{
    loaded: [scenarioNames: string[]]
 }>()
 
-const theModule = shallowRef<ProtoModule | null>(null)
+const theModule = shallowRef<MockupModule | null>(null)
 const theError = ref('')
 const theRenderKey = ref(0)
 const isStandalone = !props.embedded && window.parent === window

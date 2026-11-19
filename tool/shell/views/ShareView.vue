@@ -1,6 +1,6 @@
 <template>
    <!-- What was shared and nothing else: one version, or with ?version=all the versions of its task -->
-   <proto-viewer v-if="theTarget && theVersion" :frames="[`p/${theTarget.task.id}/${theVersion.id}`]" :scenario-names="theScenarioNames">
+   <mockup-viewer v-if="theTarget && theVersion" :frames="[`p/${theTarget.task.id}/${theVersion.id}`]" :scenario-names="theScenarioNames">
       <!-- ?version=all: a menu to go from one version to another. One version: nothing to add -->
       <template v-if="isAllVersions" #devbar-start>
          <label class="shell-field">
@@ -20,13 +20,13 @@
             <div v-if="theNotesRest" class="markdown" v-html="renderMarkdown(theNotesRest)" />
          </section>
       </template>
-   </proto-viewer>
+   </mockup-viewer>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import ProtoViewer from '../ProtoViewer.vue'
+import MockupViewer from '../MockupViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
 import { resolveShareTarget } from '../share'
@@ -60,7 +60,7 @@ watchEffect(() => {
    }
 })
 
-const theScenarioNames = useScenarioNames(() => (theTarget.value && theVersion.value ? `prototypes/${theTarget.value.task.id}/${theVersion.value.id}` : undefined))
+const theScenarioNames = useScenarioNames(() => (theTarget.value && theVersion.value ? `mockups/${theTarget.value.task.id}/${theVersion.value.id}` : undefined))
 
 /** The notes without their first line: the summary is shown on its own, above. */
 const theNotesRest = computed(() => {

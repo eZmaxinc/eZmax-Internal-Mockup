@@ -24,5 +24,5 @@ export function statsOf(prefix: string, stats: Stat[], options: { col?: TInfoCol
    }))
 }
 
-/** A prototype link: the list it opens is not built */
+/** A mockup link: the list it opens is not built */
 function onOpenList() {}

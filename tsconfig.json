@@ -21,5 +21,5 @@
          "@/*": ["./tool/*"]
       }
    },
-   "include": ["./blueprint/**/*", "./prototypes/**/*", "./tool/**/*.ts", "./tool/**/*.vue", "./tool/**/*.d.mts"]
+   "include": ["./blueprint/**/*", "./mockups/**/*", "./tool/**/*.ts", "./tool/**/*.vue", "./tool/**/*.d.mts"]
 }

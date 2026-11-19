@@ -117,11 +117,11 @@ function authIconOf(method: string): IconName {
 }
 
 function onBrandingClick() {
-   // Production opens the brand image; nothing to open in the prototype
+   // Production opens the brand image; nothing to open in the mockup
 }
 
 function onCountClick() {
-   // Production opens the list (groups, users); nothing to open in the prototype
+   // Production opens the list (groups, users); nothing to open in the mockup
 }
 
 const theInfoData = computed<IInfoCategory[]>(() => {

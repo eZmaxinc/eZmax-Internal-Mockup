@@ -1,18 +1,18 @@
 <template>
-   <proto-viewer v-if="theExample" :frames="[`e/${theExample.id}`]" :scenario-names="theScenarioNames">
+   <mockup-viewer v-if="theExample" :frames="[`e/${theExample.id}`]" :scenario-names="theScenarioNames">
       <template #devbar-start>
          <strong>Référence · {{ theExample.id }}</strong>
       </template>
       <template #panel>
          <div class="markdown" v-html="renderMarkdown(theExample.notes.body)" />
       </template>
-   </proto-viewer>
+   </mockup-viewer>
 </template>
 
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
-import ProtoViewer from '../ProtoViewer.vue'
+import MockupViewer from '../MockupViewer.vue'
 import { renderMarkdown } from '../markdown'
 import { useScenarioNames } from '../scenario-names'
 import { listPatterns } from '@/registry'

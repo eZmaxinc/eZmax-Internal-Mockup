@@ -1,4 +1,4 @@
-declare module 'virtual:ez-proto-target' {
+declare module 'virtual:ez-mockup-target' {
    import type { Component } from 'vue'
    import type { Scenarios } from '@ez'
 

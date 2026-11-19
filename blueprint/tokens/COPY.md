@@ -1,14 +1,14 @@
 # Copier les tokens dans le mono
 
-ez-proto est **la source** des tokens. Le mono en garde une copie, faite à la main, qu'on ne modifie jamais là-bas.
+ez-mockup est **la source** des tokens. Le mono en garde une copie, faite à la main, qu'on ne modifie jamais là-bas.
 
 ## Ce qui se copie
 
 | Fichier | Copié? | Pourquoi |
 |---|---|---|
 | `blueprint/tokens/ez-tokens.css` | **Oui, tel quel** | Primitives + sémantiques: le contrat partagé. Autonome, sans import. |
-| `blueprint/tokens/components.css` | Non | Réglages des composants `ez-` d'ez-proto; la prod a les siens. |
-| `tool/palette-reset.css` | Non | Désactive la palette Tailwind dans ez-proto seulement. |
+| `blueprint/tokens/components.css` | Non | Réglages des composants `ez-` d'ez-mockup; la prod a les siens. |
+| `tool/palette-reset.css` | Non | Désactive la palette Tailwind dans ez-mockup seulement. |
 
 ## Procédure
 
@@ -32,10 +32,10 @@ ez-proto est **la source** des tokens. Le mono en garde une copie, faite à la m
 
 ## Changer un token
 
-1. Modifier `ez-tokens.css` (jamais dans un prototype, jamais dans la copie du mono).
+1. Modifier `ez-tokens.css` (jamais dans un mockup, jamais dans la copie du mono).
 2. `yarn mockup tokens bump <patch|minor|major> -m "Ce qui change"`: met à jour l'en-tête et le CHANGELOG.
    - **patch**: une valeur change (une couleur, un rayon).
    - **minor**: un token s'ajoute.
-   - **major**: un token est renommé ou retiré. Ajouter aussi l'ancien nom dans `tool/cli/token-renames.mjs`, puis `yarn mockup tokens migrate` pour réécrire les composants, les patrons et les prototypes.
+   - **major**: un token est renommé ou retiré. Ajouter aussi l'ancien nom dans `tool/cli/token-renames.mjs`, puis `yarn mockup tokens migrate` pour réécrire les composants, les patrons et les mockups.
 3. `yarn mockup check` doit passer.
 4. Copier dans le mono (ci-dessus).

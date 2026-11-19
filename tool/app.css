@@ -3,8 +3,8 @@
 @import "../blueprint/tokens/ez-tokens.css";
 @import "../blueprint/tokens/components.css";
 
-/* Scan the blueprint, the prototypes and the tool for utility classes */
-@source "../prototypes";
+/* Scan the blueprint, the mockups and the tool for utility classes */
+@source "../mockups";
 @source "../blueprint";
 @source "./";
 

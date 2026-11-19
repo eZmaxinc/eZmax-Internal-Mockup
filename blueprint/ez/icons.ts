@@ -1,9 +1,9 @@
 /**
- * Icon registry. Keys are what prototypes use through `ez.icons.<key>` (or `icon="<key>"`).
+ * Icon registry. Keys are what mockups use through `ez.icons.<key>` (or `icon="<key>"`).
  *
  * The glyphs are production's: the same package (@quasar/extras), the same family (Material Symbols Outlined,
  * MDI where the app uses MDI), and for each key the glyph production's useIcons() gives the same use.
- * The keys are ez-proto's own; to add one, import the symbol production uses (its `useIcons()` names it).
+ * The keys are ez-mockup's own; to add one, import the symbol production uses (its `useIcons()` names it).
  * A value is Quasar's SVG format: `path|viewBox` (viewBox 0 0 24 24 when absent), several paths joined by `&&`.
  */
 import {

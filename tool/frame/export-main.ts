@@ -2,8 +2,8 @@ import { createApp, h, ref, watchEffect } from 'vue'
 import { EzPlugin } from '@ez'
 import FrameRoot from './FrameRoot.vue'
 import { applyTheme, type FrameTheme } from './theme'
-// Resolved at build time by tool/cli/commands/export.mjs to one prototype version
-import target from 'virtual:ez-proto-target'
+// Resolved at build time by tool/cli/commands/export.mjs to one mockup version
+import target from 'virtual:ez-mockup-target'
 import '@/app.css'
 
 const theScenario = ref(Object.keys(target.scenarios)[0] ?? '')

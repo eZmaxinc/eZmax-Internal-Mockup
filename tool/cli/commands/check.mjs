@@ -1,5 +1,5 @@
 /**
- * Guardrails for prototypes. Run before declaring a version done.
+ * Guardrails for mockups. Run before declaring a version done.
  *   yarn mockup check [tâche] [--no-types]
  * Errors (✗) fail the run; warnings (⚠) are printed only.
  */
@@ -7,7 +7,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, sep } from 'node:path'
 import { spawnSync } from 'node:child_process'
 import {
-   BLUEPRINT, DEMO_FOLDER, GOODDAY_URL, PATTERNS, PROTOTYPES, ROOT, STATUSES, STATUS_LABELS, TASK_FOLDER, TOOL, VERSION_PATTERN,
+   BLUEPRINT, DEMO_FOLDER, GOODDAY_URL, PATTERNS, MOCKUPS, ROOT, STATUSES, STATUS_LABELS, TASK_FOLDER, TOOL, VERSION_PATTERN,
    findTask, listDirs, listVersions, parseArgs, readMeta, rel, taskFromCwd,
 } from '../lib.mjs'
 import { ALL_RENAMES, REMOVED_HINTS, renamePattern } from '../token-renames.mjs'
@@ -24,12 +24,12 @@ export async function run(argv) {
    checkStructure(onlyTask, errors, warnings)
    checkTokenFiles(errors)
 
-   const roots = onlyTask ? [join(PROTOTYPES, onlyTask)] : [PROTOTYPES, PATTERNS]
+   const roots = onlyTask ? [join(MOCKUPS, onlyTask)] : [MOCKUPS, PATTERNS]
    const files = roots.flatMap(walk).filter((file) => /\.(vue|ts)$/.test(file))
    checkContent(files, errors, warnings)
 
-   // Token names everywhere they are read: prototypes, patterns, ez- components, the tool
-   const tokenRoots = onlyTask ? [join(PROTOTYPES, onlyTask)] : [PROTOTYPES, PATTERNS, join(BLUEPRINT, 'ez'), TOOL]
+   // Token names everywhere they are read: mockups, patterns, ez- components, the tool
+   const tokenRoots = onlyTask ? [join(MOCKUPS, onlyTask)] : [MOCKUPS, PATTERNS, join(BLUEPRINT, 'ez'), TOOL]
    const tokenFiles = tokenRoots.flatMap(walk).filter((file) => /\.(vue|ts|css)$/.test(file) && !file.includes(`${sep}blueprint${sep}tokens${sep}`) && !file.endsWith('palette-reset.css'))
    checkTokenNames(tokenFiles, errors)
 
@@ -63,8 +63,8 @@ export async function run(argv) {
 function checkStructure(onlyTask, errors, warnings) {
    const numbers = new Map()
 
-   for (const taskId of listDirs(PROTOTYPES)) {
-      const taskDir = join(PROTOTYPES, taskId)
+   for (const taskId of listDirs(MOCKUPS)) {
+      const taskDir = join(MOCKUPS, taskId)
       const where = rel(taskDir)
 
       let meta = null
@@ -112,10 +112,10 @@ function checkStructure(onlyTask, errors, warnings) {
    }
 }
 
-/* ───────────── blueprint/ changed while prototyping ───────────── */
+/* ───────────── blueprint/ changed while building a mockup ───────────── */
 
 /**
- * A prototype never needs blueprint/ to change. Uncommitted changes there are flagged so a human
+ * A mockup never needs blueprint/ to change. Uncommitted changes there are flagged so a human
  * decides: keep them (it was asked) or restore them (an agent "fixed" a primitive on its own).
  */
 function checkBlueprintUntouched(warnings) {
@@ -132,15 +132,15 @@ function checkBlueprintUntouched(warnings) {
  * draft (teammates have looked at it).
  */
 function checkCommittedVersionsUntouched(onlyTask, warnings) {
-   const result = spawnSync('git', ['status', '--porcelain', '--', 'prototypes'], { cwd: ROOT, encoding: 'utf8' })
+   const result = spawnSync('git', ['status', '--porcelain', '--', 'mockups'], { cwd: ROOT, encoding: 'utf8' })
    if (result.status !== 0 || result.error) return
    const touched = new Map()
    for (const line of result.stdout.split('\n')) {
       if (!line.trim() || line.startsWith('??')) continue
       const path = line.slice(3).trim().replace(/^"|"$/g, '').split(' -> ').pop()
-      const match = path.match(/^prototypes\/([^/]+)\/(v\d{3})\//)
+      const match = path.match(/^mockups\/([^/]+)\/(v\d{3})\//)
       if (!match || (onlyTask && match[1] !== onlyTask)) continue
-      const key = `prototypes/${match[1]}/${match[2]}`
+      const key = `mockups/${match[1]}/${match[2]}`
       touched.set(key, [...(touched.get(key) ?? []), path.split('/').pop()])
    }
    for (const [version, files] of touched) {
@@ -222,10 +222,10 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
       }
    }
 
-   for (const taskId of listDirs(PROTOTYPES)) {
+   for (const taskId of listDirs(MOCKUPS)) {
       if (onlyTask && taskId !== onlyTask) continue
       for (const version of listVersions(taskId)) {
-         const versionDir = join(PROTOTYPES, taskId, version)
+         const versionDir = join(MOCKUPS, taskId, version)
          const componentsDir = join(versionDir, 'components')
          const proposalFiles = existsSync(componentsDir) ? readdirSync(componentsDir).filter((name) => name.endsWith('.vue')).map((name) => join(componentsDir, name)) : []
 
@@ -239,7 +239,7 @@ function checkComponentsAndTemplates(onlyTask, errors, warnings) {
                locals.set(component.tag, component)
                continue
             }
-            // What a proposal lacks to enter the blueprint never blocks the prototype: it matters at promotion
+            // What a proposal lacks to enter the blueprint never blocks the mockup: it matters at promotion
             if (proposal.tier === 'domain') warnings.push(`${rel(file)}: pas de proposition métier: un composant métier se construit dans l'app. Retirer l'en-tête @proposal et l'écrire dans notes.md, sous « Signalements » (Composant métier manquant: …)`)
             const component = extractComponent(file, { tier: proposal.tier, object: proposal.object })
             locals.set(component.tag, component)
@@ -331,7 +331,7 @@ const rules = [
    {
       level: 'error',
       pattern: /--prim-[\w-]+/g,
-      message: 'token primitif: un prototype n\'utilise que les tokens sémantiques',
+      message: 'token primitif: un mockup n\'utilise que les tokens sémantiques',
    },
    {
       level: 'error',
@@ -375,7 +375,7 @@ function checkContent(files, errors, warnings) {
          // A component of the version (vNNN/components/X.vue) may read the version's own files: ../mocks
          const ownVersionFile = /[\\/]v\d{3}[\\/]components[\\/][^\\/]+$/.test(file) && /^\.\.\/[\w.-]+$/.test(specifier)
          if (!ownVersionFile && !ALLOWED_IMPORTS.some((allowed) => allowed.test(specifier))) {
-            errors.push(`${rel(file)}:${lineOf(code, match.index)}: import "${specifier}": un prototype n'importe que vue, @ez, @mocks ou les fichiers de sa propre version (jamais ../ une autre version)`)
+            errors.push(`${rel(file)}:${lineOf(code, match.index)}: import "${specifier}": un mockup n'importe que vue, @ez, @mocks ou les fichiers de sa propre version (jamais ../ une autre version)`)
          }
       }
 

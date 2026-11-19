@@ -2,7 +2,7 @@
 
 > Généré par `yarn mockup catalog` à partir de `blueprint/mocks/*.ts`. Ne pas modifier à la main: documenter le code (JSDoc), puis régénérer.
 
-Les objets métier des prototypes et leurs fabriques. Toutes les dates passent par `daysFromToday()`, pour qu'un scénario s'affiche toujours pareil. Une règle métier qui revient dans plusieurs tâches (un calcul, un état) appartient ici, pas dans un prototype: la noter « Mock manquant: … » dans `notes.md`.
+Les objets métier des mockups et leurs fabriques. Toutes les dates passent par `daysFromToday()`, pour qu'un scénario s'affiche toujours pareil. Une règle métier qui revient dans plusieurs tâches (un calcul, un état) appartient ici, pas dans un mockup: la noter « Mock manquant: … » dans `notes.md`.
 
 ## `EzsignSigner`
 
@@ -56,7 +56,7 @@ An eZsign folder: documents to sign, signers, a due date.
 | `signedCount()` | `()` | Number of signers who signed |
 | `pendingSigners()` | `()` | Signers who still have to sign |
 | `daysUntilDue()` | `(now = daysFromToday(0)): number \| null` | Days left before the due date (negative once past), null without a due date |
-| `extendDueDate()` | `(days: number): Date` | Pushes the due date `days` days later (from the current due date, or from today without one). The mechanics only: which states may be extended is a product decision, left to the prototype. |
+| `extendDueDate()` | `(days: number): Date` | Pushes the due date `days` days later (from the current due date, or from today without one). The mechanics only: which states may be extended is a product decision, left to the mockup. |
 | `isDueSoon()` | `(days = 3, now = daysFromToday(0))` | Still open and due within `days` days (3 by default), today included |
 | `stateLabel()` | `()` | French label of the state (« En signature »…) |
 | `stateTone()` | `(): BadgeTone` | ez-badge tone of the state, for `<ez-badge :tone="…stateTone()" :label="…stateLabel()">` |
@@ -75,5 +75,5 @@ An eZsign folder: documents to sign, signers, a due date.
 | `firstNames` | `const` | Pools of fake names used by the factories |
 | `lastNames` | `const` |  |
 | `folderNames` | `const` |  |
-| `MOCK_TODAY` | `const` | The prototypes' fixed « today » (PROTO_TODAY of |
+| `MOCK_TODAY` | `const` | The mockups' fixed « today » (MOCKUP_TODAY of |
 | `daysFromToday` | `(days: number): Date` | A date `days` away from MOCK_TODAY (negative = past). Use it for every date in mocks. |

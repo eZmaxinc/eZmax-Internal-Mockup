@@ -1,11 +1,11 @@
 <template>
-   <proto-viewer :frames="['gallery']" :scenario-names="[]">
+   <mockup-viewer :frames="['gallery']" :scenario-names="[]">
       <template #devbar-start>
          <strong>Galerie des composants</strong>
       </template>
-   </proto-viewer>
+   </mockup-viewer>
 </template>
 
 <script setup lang="ts">
-import ProtoViewer from '../ProtoViewer.vue'
+import MockupViewer from '../MockupViewer.vue'
 </script>

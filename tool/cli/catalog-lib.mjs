@@ -313,7 +313,7 @@ export function renderMocksApi() {
       '',
       '> Généré par `yarn mockup catalog` à partir de `blueprint/mocks/*.ts`. Ne pas modifier à la main: documenter le code (JSDoc), puis régénérer.',
       '',
-      'Les objets métier des prototypes et leurs fabriques. Toutes les dates passent par `daysFromToday()`, pour qu\'un scénario s\'affiche toujours pareil. Une règle métier qui revient dans plusieurs tâches (un calcul, un état) appartient ici, pas dans un prototype: la noter « Mock manquant: … » dans `notes.md`.',
+      'Les objets métier des mockups et leurs fabriques. Toutes les dates passent par `daysFromToday()`, pour qu\'un scénario s\'affiche toujours pareil. Une règle métier qui revient dans plusieurs tâches (un calcul, un état) appartient ici, pas dans un mockup: la noter « Mock manquant: … » dans `notes.md`.',
       '',
       renderModules(modules, { headingLevel: 2 }),
    ].join('\n')

@@ -18,7 +18,7 @@ import { computed, onBeforeUnmount, ref, watchEffect } from 'vue'
 import FrameRoot from './FrameRoot.vue'
 import { resolveTarget } from './target'
 import { applyTheme, parseTheme, type FrameTheme } from './theme'
-import type { ProtoChrome } from '@/registry'
+import type { MockupChrome } from '@/registry'
 
 /**
  * Hash routes:
@@ -34,7 +34,7 @@ function readHash() {
    return {
       path,
       scenario: params.get('scenario') ?? '',
-      chrome: params.get('chrome') as ProtoChrome | null,
+      chrome: params.get('chrome') as MockupChrome | null,
       theme: parseTheme(params.get('theme')),
       share: params.has('share'),
    }

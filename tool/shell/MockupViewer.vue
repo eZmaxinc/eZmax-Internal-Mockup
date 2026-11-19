@@ -1,31 +1,31 @@
 <template>
-   <div class="proto-viewer">
-      <div class="proto-viewer__body">
-         <div class="proto-viewer__stage" :class="{ 'proto-viewer__stage--split': frames.length > 1 }">
-            <div v-for="theFrame in frames" :key="theFrame" class="proto-viewer__slot" :class="{ 'proto-viewer__slot--inline': !isFramed }">
-               <p v-if="frames.length > 1" class="proto-viewer__slot-label">{{ theFrame.split('/').pop() }}</p>
+   <div class="mockup-viewer">
+      <div class="mockup-viewer__body">
+         <div class="mockup-viewer__stage" :class="{ 'mockup-viewer__stage--split': frames.length > 1 }">
+            <div v-for="theFrame in frames" :key="theFrame" class="mockup-viewer__slot" :class="{ 'mockup-viewer__slot--inline': !isFramed }">
+               <p v-if="frames.length > 1" class="mockup-viewer__slot-label">{{ theFrame.split('/').pop() }}</p>
                <!--
-                  Without a frame, the prototype is part of this page: a browser's element picker (Cursor's
+                  Without a frame, the mockup is part of this page: a browser's element picker (Cursor's
                   annotations) reaches into it, which it cannot do through an iframe.
                -->
-               <div v-if="!isFramed" class="proto-viewer__frame proto-viewer__inline" :class="{ [DARK_CLASS]: theTheme === 'dark' }">
+               <div v-if="!isFramed" class="mockup-viewer__frame mockup-viewer__inline" :class="{ [DARK_CLASS]: theTheme === 'dark' }">
                   <frame-root v-bind="inlineTarget(theFrame)" :scenario="theScenario" :theme="theTheme" embedded />
                </div>
                <iframe
                   v-else
-                  class="proto-viewer__frame"
+                  class="mockup-viewer__frame"
                   :src="frameUrl(theFrame)"
                   :style="{ width: theWidth }"
                   :title="theFrame"
                />
             </div>
          </div>
-         <aside v-if="$slots.panel" class="proto-viewer__panel" :class="{ 'is-closed': !theNotesOpen }" :inert="!theNotesOpen">
+         <aside v-if="$slots.panel" class="mockup-viewer__panel" :class="{ 'is-closed': !theNotesOpen }" :inert="!theNotesOpen">
             <slot name="panel" />
          </aside>
       </div>
 
-      <footer class="proto-viewer__devbar">
+      <footer class="mockup-viewer__devbar">
          <!-- Hides or shows the shell's left panel; a shared link (?share) has none -->
          <button
             v-if="!isShare"
@@ -39,7 +39,7 @@
             <panel-icon side="left" :open="theSidebarOpen" />
          </button>
 
-         <span v-if="!isShare" class="proto-viewer__divider" />
+         <span v-if="!isShare" class="mockup-viewer__divider" />
 
          <!-- A width needs a frame: offered in a shared link, and to come back from a width the address asked for -->
          <div v-if="isShare || theViewportKey !== 'fluid'" class="shell-segmented" role="group" aria-label="Largeur">
@@ -56,7 +56,7 @@
             </button>
          </div>
 
-         <div class="shell-segmented" role="group" aria-label="Thème du prototype">
+         <div class="shell-segmented" role="group" aria-label="Thème du mockup">
             <button
                v-for="theOption in themes"
                :key="theOption.key"
@@ -79,7 +79,7 @@
          <slot name="devbar-start" />
 
          <!-- Right end of the bar: what leaves the page (export), then the notes toggle -->
-         <div class="proto-viewer__devbar-end">
+         <div class="mockup-viewer__devbar-end">
             <slot name="devbar-end" :scenario="theScenario" />
 
             <!-- Mirror of the left toggle, at the right end -->
@@ -157,8 +157,8 @@ function pick<T extends string>(value: string, allowed: readonly T[]): T | undef
 // On arrival, what the address does not say comes from the viewer's remembered choices
 const theScenario = ref(pick(queryValue('scenario'), props.scenarioNames) ?? props.scenarioNames[0] ?? '')
 // The remembered width counts in a shared link only: elsewhere a width comes from the address alone
-const theViewportKey = ref<ViewportKey>(pick(queryValue('width'), viewportKeys) ?? (isShare.value ? readStored('ez-proto:viewport', viewportKeys, 'fluid') : 'fluid'))
-const theTheme = ref<ThemeKey>(pick(queryValue('theme'), themeKeys) ?? readStored('ez-proto:theme', themeKeys, 'light'))
+const theViewportKey = ref<ViewportKey>(pick(queryValue('width'), viewportKeys) ?? (isShare.value ? readStored('ez-mockup:viewport', viewportKeys, 'fluid') : 'fluid'))
+const theTheme = ref<ThemeKey>(pick(queryValue('theme'), themeKeys) ?? readStored('ez-mockup:theme', themeKeys, 'light'))
 
 function writeAddress() {
    if (route.path === '/') return // leaving for the dashboard: nothing to say there
@@ -192,11 +192,11 @@ watch(() => ({ path: route.path, query: route.query }), (now, before) => {
 })
 
 watch(theViewportKey, (key) => {
-   if (isShare.value) store('ez-proto:viewport', key)
+   if (isShare.value) store('ez-mockup:viewport', key)
 })
-watch(theTheme, (key) => store('ez-proto:theme', key))
+watch(theTheme, (key) => store('ez-mockup:theme', key))
 
-/** Per-viewer preferences, remembered across prototypes; storage may be unavailable. */
+/** Per-viewer preferences, remembered across mockups; storage may be unavailable. */
 function readStored<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
    try {
       const stored = localStorage.getItem(key) as T | null
@@ -224,7 +224,7 @@ const theWidth = computed(() => {
 /*
  * A frame only where it is needed: a shared link (the teammate tries the widths), a width (media queries
  * follow the frame, not this window) and a comparison (each version at its own width). Otherwise the
- * prototype is rendered here, in the shell's own page.
+ * mockup is rendered here, in the shell's own page.
  */
 const isFramed = computed(() => isShare.value || theViewportKey.value !== 'fluid' || props.frames.length > 1)
 
@@ -254,7 +254,7 @@ function frameUrl(path: string) {
  * Fills the space left by the page header (flex: 1 1 0 wins over height in a flex column)
  * and never grows past it: only the stage and the panel scroll, the dev bar stays at the bottom.
  */
-.proto-viewer {
+.mockup-viewer {
    display: flex;
    flex: 1 1 0;
    flex-direction: column;
@@ -264,7 +264,7 @@ function frameUrl(path: string) {
 }
 
 /* Dev bar: viewer controls, always visible at the bottom, full width */
-.proto-viewer__devbar {
+.mockup-viewer__devbar {
    flex-shrink: 0;
    z-index: 10;
    display: flex;
@@ -276,27 +276,27 @@ function frameUrl(path: string) {
    border-top: 1px solid var(--shell-border);
 }
 
-.proto-viewer__divider {
+.mockup-viewer__divider {
    width: 1px;
    height: 16px;
    background: var(--shell-border);
 }
 
-.proto-viewer__devbar-end {
+.mockup-viewer__devbar-end {
    display: flex;
    align-items: center;
    gap: 4px;
    margin-left: auto;
 }
 
-.proto-viewer__body {
+.mockup-viewer__body {
    display: flex;
    flex: 1;
    min-height: 0;
    overflow: hidden;
 }
 
-.proto-viewer__stage {
+.mockup-viewer__stage {
    display: flex;
    flex: 1;
    gap: 12px;
@@ -306,7 +306,7 @@ function frameUrl(path: string) {
    background: var(--shell-bg);
 }
 
-.proto-viewer__slot {
+.mockup-viewer__slot {
    display: flex;
    flex-direction: column;
    flex: 1 0 auto;
@@ -314,12 +314,12 @@ function frameUrl(path: string) {
    min-width: 0;
 }
 
-.proto-viewer__stage--split .proto-viewer__slot {
+.mockup-viewer__stage--split .mockup-viewer__slot {
    flex: 1 1 0;
    overflow-x: auto;
 }
 
-.proto-viewer__slot-label {
+.mockup-viewer__slot-label {
    align-self: flex-start;
    margin: 0 0 6px 2px;
    color: var(--shell-fg-muted);
@@ -328,7 +328,7 @@ function frameUrl(path: string) {
    font-weight: 600;
 }
 
-.proto-viewer__frame {
+.mockup-viewer__frame {
    flex: 1;
    max-width: none;
    min-height: 480px;
@@ -339,15 +339,15 @@ function frameUrl(path: string) {
 }
 
 /*
- * The prototype without a frame: this box stands for the frame's window. It scrolls, it takes back the
+ * The mockup without a frame: this box stands for the frame's window. It scrolls, it takes back the
  * product's text settings from the shell's, and the app chrome fills it instead of the real window.
- * No containment here: a prototype's tooltip is placed against the window (position: fixed).
+ * No containment here: a mockup's tooltip is placed against the window (position: fixed).
  */
-.proto-viewer__slot--inline {
+.mockup-viewer__slot--inline {
    flex: 1 1 0;
 }
 
-.proto-viewer__inline {
+.mockup-viewer__inline {
    width: 100%;
    overflow: auto;
    isolation: isolate;
@@ -371,14 +371,14 @@ function frameUrl(path: string) {
    }
 }
 
-.proto-viewer__panel {
+.mockup-viewer__panel {
    flex: 0 0 320px;
    overflow-y: auto;
    padding: 16px;
    background: var(--shell-surface);
    border-left: 1px solid var(--shell-border);
 
-   /* Slides out of the layout instead of vanishing: the prototype grows as the drawer leaves */
+   /* Slides out of the layout instead of vanishing: the mockup grows as the drawer leaves */
    transition: margin-right 180ms ease, visibility 0s;
 
    &.is-closed {

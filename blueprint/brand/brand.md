@@ -1,6 +1,6 @@
 # Brand eZsign — mood board
 
-> Ce fichier est lu par l'agent avant chaque prototype. Garder court, concret, vérifiable.
+> Ce fichier est lu par l'agent avant chaque mockup. Garder court, concret, vérifiable.
 > **À compléter par l'équipe**: les sections marquées `TODO` doivent refléter la prod.
 
 ## En une phrase

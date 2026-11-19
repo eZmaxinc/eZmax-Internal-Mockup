@@ -8,17 +8,17 @@ Composants enregistrés globalement: on les utilise directement dans les templat
 |---|---|---|
 | Ex. | `ez-btn`, `ez-card`, `ez-badge`, `ez-table` | aucun pour l'instant |
 | Connaît | rien du métier: props visuelles (`variant`, `tone`) | un objet métier (`folder`, `signer`…) |
-| Naît | dans un prototype, puis promu ici (`yarn mockup promote`), puis reporté dans l'app | dans l'app (`ezmax-library-quasar`), puis reflété ici; jamais proposé ni promu par un prototype |
+| Naît | dans un mockup, puis promu ici (`yarn mockup promote`), puis reporté dans l'app | dans l'app (`ezmax-library-quasar`), puis reflété ici; jamais proposé ni promu par un mockup |
 | Contient | le visuel: CSS et tokens | des primitives assemblées; pas de couleur, bordure, ombre ni arrondi |
 
-**Ordre de préférence dans un prototype**: un composant métier existant → des primitives assemblées (avec les méthodes du mock: `folder.stateTone()`, `folder.stateLabel()`) → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
+**Ordre de préférence dans un mockup**: un composant métier existant → des primitives assemblées (avec les méthodes du mock: `folder.stateTone()`, `folder.stateLabel()`) → ce qui n'existe pas, le construire dans la version (voir « Manque quelque chose? » plus bas).
 
 Les props `icon` prennent une clé de `ez.icons` (`:icon="ez.icons.send"` ou `icon="send"`). Les glyphes sont ceux de l'app: le même package (`@quasar/extras`), la même famille (Material Symbols Outlined, MDI là où l'app prend MDI), et pour chaque clé le glyphe que la prod donne au même usage. Jamais une icône dessinée à la main ni un autre jeu: une icône qui manque s'ajoute dans `blueprint/ez/icons.ts` en important le symbole que la prod utilise. Liste: `add back calendar check chevronDown chevronRight clock close delete download edit error eye file filter folder home inbox info mail menu more refresh search send settings signature success user users warning`.
 
 ## Structure de page
 
 ### `ez-app-shell`
-Cadre qui simule le shell de prod (barre du haut foncée avec bouton menu burger + tiroir de gauche blanc rétractable, aux dimensions de la prod), pour placer le prototype à sa vraie position et largeur. Ajouté automatiquement quand `meta.json` a `"chrome": "app"` (défaut); `"none"` pour un écran hors de l'app. Ne pas l'utiliser dans un prototype.
+Cadre qui simule le shell de prod (barre du haut foncée avec bouton menu burger + tiroir de gauche blanc rétractable, aux dimensions de la prod), pour placer le mockup à sa vraie position et largeur. Ajouté automatiquement quand `meta.json` a `"chrome": "app"` (défaut); `"none"` pour un écran hors de l'app. Ne pas l'utiliser dans un mockup.
 
 ### `ez-page` > `ez-page-header` + `ez-page-content`
 Toute page commence ainsi.
@@ -122,7 +122,7 @@ Un glyphe de l'app (`@quasar/extras`, Material Symbols Outlined), plein, dans la
 - `name` (une clé de `ez.icons`), `size` (défaut 18)
 
 ### `ez-reveal`
-Réduit un contenu long sur téléphone (moins de 640 px): il garde le haut, fond le bas et le dévoile au toucher (« Voir plus », puis « Réduire »). Au-dessus de 640 px, le contenu s'affiche en entier. Pour un visuel secondaire qui prendrait tout l'écran sur mobile (une frise, un schéma), pas pour du contenu qu'on doit lire en premier. **Propre à ez-proto** (promu depuis la tâche du cycle de vie, v009).
+Réduit un contenu long sur téléphone (moins de 640 px): il garde le haut, fond le bas et le dévoile au toucher (« Voir plus », puis « Réduire »). Au-dessus de 640 px, le contenu s'affiche en entier. Pour un visuel secondaire qui prendrait tout l'écran sur mobile (une frise, un schéma), pas pour du contenu qu'on doit lire en premier. **Propre à ez-mockup** (promu depuis la tâche du cycle de vie, v009).
 - `collapsed-height` (défaut `10rem`), `fade-to`: `surface` (dans une carte) ou `muted` (sur un panneau `surface-muted`), `expand-label`, `collapse-label`; slot `default`
 
 ## Formulaires
@@ -161,7 +161,7 @@ Aucun pour l'instant. Un composant métier (qui connaît un dossier, un signatai
 
 Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>`, `<textarea>` ou `<table>` brut, ni de carte, de badge ou de dialogue refait à la main. Ce qui n'existe pas (une ligne du temps, un tableau de bord, un canevas…) se construit dans la version, en HTML avec un style `scoped` fait seulement de tokens.
 
-- **Un morceau local**: `prototypes/<tâche>/vNNN/components/FolderTimeline.vue`, importé par `index.vue`. Aucun en-tête, libre dans son balisage et son style. Il peut lire les fichiers de sa version (`../mocks`).
+- **Un morceau local**: `mockups/<tâche>/vNNN/components/FolderTimeline.vue`, importé par `index.vue`. Aucun en-tête, libre dans son balisage et son style. Il peut lire les fichiers de sa version (`../mocks`).
 - **Un composant rehaussé**: un `ez-` existant à qui il manque quelque chose (une prop, un slot, un état). Copier son fichier (`blueprint/ez/components/card/ez-card.vue`) dans `components/` sous le nom `EzCard.vue`, retirer ses imports relatifs (les `ez-` sont globaux), modifier la copie, l'importer dans `index.vue`: dans cette version, elle remplace l'original.
 - **Une proposition de primitive**, seulement si le morceau servirait clairement à d'autres tâches, ou sur demande: il se nomme `Ez…`, ne connaît aucun objet métier et commence par son en-tête.
 
@@ -174,7 +174,7 @@ Ce qui existe ici s'utilise tel quel: jamais de `<button>`, `<input>`, `<select>
 
 - `@proposal primitive`, puis pourquoi il existe. `mockup check` vérifie qu'il suit les règles d'une primitive.
 - **Un composant métier manquant** (un bouton « Soumettre » qui connaît le dossier, une liste de signataires): le construire localement, sans en-tête, et l'écrire dans `notes.md`, sous « Signalements »: `Composant métier manquant: …`. Il se construit ensuite dans l'app; il n'est jamais proposé ni promu ici.
-- Rien de tout ça ne bloque le prototype. `yarn mockup proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn mockup promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), dans son dossier `blueprint/ez/components/<nom>/` (comme dans l'app: `ez-<nom>.vue`), avec une démo générée à côté, `ez-<nom>.example.vue`, à ajuster.
+- Rien de tout ça ne bloque le mockup. `yarn mockup proposals` liste ce qui a été créé, rehaussé et proposé dans toutes les tâches. Un humain décide de ce qui entre dans le blueprint: `yarn mockup promote <tâche> <version> <Nom>` (un composant rehaussé remplace l'original). Seulement sur demande. Un composant promu apparaît tout seul dans la galerie (« Autres composants »), dans son dossier `blueprint/ez/components/<nom>/` (comme dans l'app: `ez-<nom>.vue`), avec une démo générée à côté, `ez-<nom>.example.vue`, à ajuster.
 
 <!-- api:start — généré par yarn mockup catalog, ne pas modifier à la main -->
 
@@ -327,7 +327,7 @@ Slots: `défaut`
 | Prop | Type | Défaut | |
 |---|---|---|---|
 | `span` | `TLayoutSpan` | `undefined` | Columns out of the parent's (12): a count, or counts per threshold ({ xs: 12, md: 8 }); none = the whole row |
-| `cols` | `TLegacyLayoutCols` | `undefined` | Before production's span: { base: 12, md: 8 }, base being xs. Kept for the existing prototypes; prefer span |
+| `cols` | `TLegacyLayoutCols` | `undefined` | Before production's span: { base: 12, md: 8 }, base being xs. Kept for the existing mockups; prefer span |
 | `first-below-md` | `boolean` |  | The column goes first below md (1024px): the right column of a form, in production |
 | `container` | `boolean` | `undefined` | true: the descendants measure their thresholds on this column, not on the window |
 | `name` | `string` | `undefined` | Its label in debug mode |
@@ -472,9 +472,9 @@ Dans les templates, `$gettext` et `ez.icons` sont disponibles sans import.
 | `useScenario` | `(scenarios: Scenarios<T>): Ref<T>` | Returns the data of the scenario selected in the shell, as local state. Mutating it (e.g. removing a row) is fine: switching scenario rebuilds it. |
 | `formatDate` | `(value: Date \| string \| null \| undefined): string` | « 6 nov. 2026 »; « — » when empty |
 | `formatDateTime` | `(value: Date \| string \| null \| undefined): string` | « 6 nov. 2026, 10 h 00 »; « — » when empty |
-| `formatRelative` | `(value: Date \| string \| null \| undefined, now: Date = PROTO_TODAY): string` | « dans 3 jours », « hier », counted from the prototypes' today (PROTO_TODAY); « — » when empty |
-| `PROTO_TODAY` | `const` | The prototypes' « today »: a fixed date, so a scenario always shows the same dates and delays (« dans 3 jours ») whatever day it is opened. Mock dates (daysFromToday) and formatRelative use it. |
-| `protoToday` | `(): Date` | A copy of PROTO_TODAY, safe to mutate |
-| `gettext` | `(message: string, params?: Record<string, string \| number>): string` | Passthrough stub for production's `$gettext`. Keeps prototype code shaped like production: `$gettext('Envoyer à %{name}', { name })`. |
+| `formatRelative` | `(value: Date \| string \| null \| undefined, now: Date = MOCKUP_TODAY): string` | « dans 3 jours », « hier », counted from the mockups' today (MOCKUP_TODAY); « — » when empty |
+| `MOCKUP_TODAY` | `const` | The mockups' « today »: a fixed date, so a scenario always shows the same dates and delays (« dans 3 jours ») whatever day it is opened. Mock dates (daysFromToday) and formatRelative use it. |
+| `mockupToday` | `(): Date` | A copy of MOCKUP_TODAY, safe to mutate |
+| `gettext` | `(message: string, params?: Record<string, string \| number>): string` | Passthrough stub for production's `$gettext`. Keeps mockup code shaped like production: `$gettext('Envoyer à %{name}', { name })`. |
 
 <!-- api:end -->

@@ -1,4 +1,4 @@
-/** Light / dark theme of the prototype frame. Dark = the class Quasar's Dark plugin puts on <body>. */
+/** Light / dark theme of the mockup frame. Dark = the class Quasar's Dark plugin puts on <body>. */
 export type FrameTheme = 'light' | 'dark'
 
 export const DARK_CLASS = 'body--dark'

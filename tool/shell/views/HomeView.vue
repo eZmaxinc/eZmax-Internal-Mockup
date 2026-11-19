@@ -3,7 +3,7 @@
 
    <div v-else class="home">
       <header class="home__top">
-         <h1>Prototypes</h1>
+         <h1>Mockups</h1>
          <span class="shell-count">{{ theTasks.length }}</span>
          <copy-button class="home__hint" text="yarn mockup new" outlined />
       </header>
@@ -29,7 +29,7 @@
          </div>
       </div>
 
-      <nav class="home__list" aria-label="Prototypes">
+      <nav class="home__list" aria-label="Mockups">
          <router-link v-for="theTask in theVisibleTasks" :key="theTask.id" class="home__row" :to="linkWithHome(`/p/${theTask.id}`)">
             <span class="home__number shell-mono">{{ theTask.number }}</span>
             <span class="home__title">{{ theTask.title }}</span>
@@ -42,7 +42,7 @@
          </router-link>
 
          <p v-if="!theVisibleTasks.length" class="home__empty">
-            {{ theTasks.length ? 'Aucun prototype ne correspond.' : 'Aucun prototype. Créer le premier: yarn mockup new' }}
+            {{ theTasks.length ? 'Aucun mockup ne correspond.' : 'Aucun mockup. Créer le premier: yarn mockup new' }}
          </p>
       </nav>
 
@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { STATUS_LABEL as statusLabel, listPatterns, listTasks, type ProtoStatus } from '@/registry'
+import { STATUS_LABEL as statusLabel, listPatterns, listTasks, type MockupStatus } from '@/registry'
 import CopyButton from '../CopyButton.vue'
 import RootGateView from './RootGateView.vue'
 import { isEditingTarget } from '../sidebar-hotkey'
@@ -78,7 +78,7 @@ function linkWithHome(path: string) {
    return route.query.home === 'true' ? { path, query: { home: 'true' } } : path
 }
 
-const theUI = reactive({ search: '', status: 'all' as ProtoStatus | 'all' })
+const theUI = reactive({ search: '', status: 'all' as MockupStatus | 'all' })
 const theSearchInput = ref<HTMLInputElement>()
 
 const dateFormat = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'short' })
@@ -97,7 +97,7 @@ const theTasks = computed(() => listTasks().map((task) => ({
 
 const filters = computed(() => [
    { key: 'all' as const, label: 'Tous', count: theTasks.value.length },
-   ...(Object.keys(statusLabel) as ProtoStatus[])
+   ...(Object.keys(statusLabel) as MockupStatus[])
       .map((status) => ({ key: status, label: statusLabel[status], count: theTasks.value.filter((task) => task.status === status).length }))
       .filter((filter) => filter.count),
 ])

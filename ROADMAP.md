@@ -9,7 +9,7 @@ Le critère: le temps entre la demande et le changement à l'écran. Tout ce qui
 - [ ] Jouer [`ESSAI.md`](ESSAI.md) sur le poste de travail, après `git pull` et un shell relancé
 - [ ] Mesurer `yarn mockup check` sur le poste en RDP (5 s en local): au-delà de 15 s, cloner le dépôt sur un disque local plutôt que `G:\`
 - [ ] Vérifier sur le dépôt en `G:\` qu'une version créée s'affiche sans relancer le shell
-- [ ] Vérifier que l'agent lit et clique dans le prototype à travers le cadre du shell. Si oui, retirer la barre du bas de `frame.html`; sinon, lui redonner `frame.html` pour les interactions
+- [ ] Vérifier que l'agent lit et clique dans le mockup à travers le cadre du shell. Si oui, retirer la barre du bas de `frame.html`; sinon, lui redonner `frame.html` pour les interactions
 - [ ] Essayer le « click and comment » du navigateur de Cursor: l'agent retrouve-t-il la bonne ligne de `index.vue`?
 
 ## 2. Ressembler à la prod
@@ -31,8 +31,8 @@ Référence: les captures de `blueprint/brand/screens/`.
 - [ ] Une vraie tâche GoodDay, de la demande à la version retenue, par un dev qui n'a pas construit l'outil
 - [ ] Une première vraie promotion (`yarn mockup promote`) d'un composant créé ou rehaussé
 - [ ] Faire valider par le team lead: c'est le dev qui marque les versions; l'agent peut inventer avec les tokens
-- [ ] Décider où vivent les prototypes: ce dépôt sur `main`, ou une branche par tâche
-- [x] Sortir les prototypes d'essai (90001, 90002, démo) de `main`
+- [ ] Décider où vivent les mockups: ce dépôt sur `main`, ou une branche par tâche
+- [x] Sortir les mockups d'essai (90001, 90002, démo) de `main`
 
 ## 4. Ménage de l'outil
 

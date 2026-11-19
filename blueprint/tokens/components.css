@@ -1,5 +1,5 @@
 /*
- * Component tokens — ez-proto only, NOT copied into the mono.
+ * Component tokens — ez-mockup only, NOT copied into the mono.
  * Knobs for the ez- components. Names follow production when they exist there.
  * A self-contained component reads its knobs in its own file, with a scale step of ez-tokens.css as fallback:
  * --btn-height, --btn-height-sm, --btn-padding-x (ez-btn), --card-padding (ez-card, ez-dialog), --card-gap

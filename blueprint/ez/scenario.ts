@@ -1,7 +1,7 @@
 import { inject, ref, watch, type InjectionKey, type Ref } from 'vue'
 
 /** Provided by the frame: the scenario currently selected in the shell. */
-export const scenarioKey: InjectionKey<Ref<string>> = Symbol('ez-proto-scenario')
+export const scenarioKey: InjectionKey<Ref<string>> = Symbol('ez-mockup-scenario')
 
 export type Scenarios<T> = Record<string, () => T>
 

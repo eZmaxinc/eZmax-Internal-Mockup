@@ -9,7 +9,7 @@
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { PROTOTYPES, ROOT, fail, findTask, flagString, listVersions, parseArgs, rel } from '../lib.mjs'
+import { MOCKUPS, ROOT, fail, findTask, flagString, listVersions, parseArgs, rel } from '../lib.mjs'
 import { CATALOG_MD, COMPONENTS_DIR, PROPOSAL_HEADER, buildCatalog, catalogMap, readProposal, toKebab, toPascal, validateTier } from '../catalog-lib.mjs'
 import { run as regenerateCatalog } from './catalog.mjs'
 
@@ -24,7 +24,7 @@ export async function run(argv) {
    if (!listVersions(taskId).includes(version)) fail(`Version inconnue « ${version} ».`, `Versions: ${listVersions(taskId).join(', ')}`)
 
    const sourceName = componentInput.startsWith('ez-') ? toPascal(componentInput) : componentInput.replace(/\.vue$/, '')
-   const source = join(PROTOTYPES, taskId, version, 'components', `${sourceName}.vue`)
+   const source = join(MOCKUPS, taskId, version, 'components', `${sourceName}.vue`)
    if (!existsSync(source)) fail(`Composant introuvable: ${rel(source)}`, 'Voir: yarn mockup proposals')
 
    // In the blueprint every component is an ez- one: FolderTimeline becomes EzFolderTimeline
@@ -90,7 +90,7 @@ export async function run(argv) {
    if (original) {
       console.log(`   1. Relire le changement: git diff ${rel(target)}`)
       console.log('   2. Mettre sa fiche à jour dans blueprint/ez/CATALOG.md si son usage change')
-      console.log('   3. Les autres prototypes l\'utilisent maintenant: les regarder dans le shell')
+      console.log('   3. Les autres mockups l\'utilisent maintenant: les regarder dans le shell')
    }
    else {
       console.log('   0. Le relire selon « Composants du blueprint » dans AGENTS.md (conventions de l\'app: prop `as`, is/has, on…)')

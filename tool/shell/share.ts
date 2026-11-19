@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { getTask, listTasks, type ProtoTask } from '@/registry'
+import { getTask, listTasks, type MockupTask } from '@/registry'
 
 /**
  * Share links: `/mockup/<taskId>` (or `/mockup/<taskId>/<versionId>`, and legacy `/s/<code>`)
@@ -15,12 +15,12 @@ export function useShareMode() {
 }
 
 export interface ShareTarget {
-   task: ProtoTask
+   task: MockupTask
    versionId: string
 }
 
 /** Default version for a clean `/mockup/<taskId>` URL: retained version when valid, else latest. */
-export function defaultShareVersionId(task: ProtoTask): string {
+export function defaultShareVersionId(task: MockupTask): string {
    if (task.meta.chosen && task.versions.some((item) => item.id === task.meta.chosen)) {
       return task.meta.chosen
    }
@@ -37,7 +37,7 @@ export function shareCode(taskId: string, versionId: string): string {
    return hash.toString(36).padStart(7, '0')
 }
 
-/** The task and version a code stands for, or null when no prototype has that code. */
+/** The task and version a code stands for, or null when no mockup has that code. */
 export function resolveShareCode(code: string): ShareTarget | null {
    for (const task of listTasks()) {
       const version = task.versions.find((item) => shareCode(task.id, item.id) === code)

@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { join, relative, sep } from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { createInterface } from 'node:readline/promises'
-import { DEV_PORT, PATTERNS, PROTOTYPES, ROOT } from '../paths.mjs'
+import { DEV_PORT, PATTERNS, MOCKUPS, ROOT } from '../paths.mjs'
 
 export * from '../paths.mjs'
 
@@ -93,22 +93,22 @@ export function listDirs(path) {
 }
 
 export function listVersions(taskId) {
-   return listDirs(join(PROTOTYPES, taskId)).filter((name) => VERSION_PATTERN.test(name))
+   return listDirs(join(MOCKUPS, taskId)).filter((name) => VERSION_PATTERN.test(name))
 }
 
 export const listPatterns = () => listDirs(PATTERNS)
 
 export function readMeta(taskId) {
-   return JSON.parse(readFileSync(join(PROTOTYPES, taskId, 'meta.json'), 'utf8'))
+   return JSON.parse(readFileSync(join(MOCKUPS, taskId, 'meta.json'), 'utf8'))
 }
 
 export function writeMeta(taskId, meta) {
-   writeFileSync(join(PROTOTYPES, taskId, 'meta.json'), `${JSON.stringify(meta, null, 3)}\n`)
+   writeFileSync(join(MOCKUPS, taskId, 'meta.json'), `${JSON.stringify(meta, null, 3)}\n`)
 }
 
 /** All tasks with a readable meta.json, most recent first. */
 export function listTasks() {
-   return listDirs(PROTOTYPES)
+   return listDirs(MOCKUPS)
       .map((id) => {
          try {
             return { id, meta: readMeta(id), versions: listVersions(id) }
@@ -123,7 +123,7 @@ export function listTasks() {
 
 /** Reads the `--- key: value ---` header of a notes.md. */
 export function readNotesHeader(taskId, versionId) {
-   const file = join(PROTOTYPES, taskId, versionId, 'notes.md')
+   const file = join(MOCKUPS, taskId, versionId, 'notes.md')
    if (!existsSync(file)) return {}
    const match = readFileSync(file, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)
    return Object.fromEntries((match?.[1] ?? '').split(/\r?\n/).map((line) => {
@@ -137,10 +137,10 @@ export function readNotesHeader(taskId, versionId) {
 /** Task folder containing the directory the command was launched from (yarn sets INIT_CWD). */
 export function taskFromCwd() {
    const cwd = process.env.INIT_CWD ?? process.cwd()
-   const path = relative(PROTOTYPES, cwd)
+   const path = relative(MOCKUPS, cwd)
    if (!path || path.startsWith('..')) return null
    const [taskId] = path.split(sep)
-   return existsSync(join(PROTOTYPES, taskId, 'meta.json')) ? taskId : null
+   return existsSync(join(MOCKUPS, taskId, 'meta.json')) ? taskId : null
 }
 
 /**
@@ -212,14 +212,14 @@ export function normalizeGoodDayUrl(value) {
 }
 
 /**
- * Tells the running shell that files were just written under prototypes/<dir>, so they show up without a
+ * Tells the running shell that files were just written under mockups/<dir>, so they show up without a
  * restart even where the file watcher is deaf. Silent when no shell runs; says so when the shell that
  * answers is too old to know the endpoint (started before an update: it must be restarted).
  */
 export async function notifyDevServer(dir) {
    const origin = `http://localhost:${DEV_PORT}`
    try {
-      const response = await fetch(`${origin}/__proto/refresh?dir=${encodeURIComponent(dir)}`, { signal: AbortSignal.timeout(1500) })
+      const response = await fetch(`${origin}/__mockup/refresh?dir=${encodeURIComponent(dir)}`, { signal: AbortSignal.timeout(1500) })
       const answer = response.ok ? await response.json().catch(() => null) : null
       if (answer?.ok) console.log(`  Shell prévenu (${origin}): la version est visible sans le relancer.`)
       else console.log(`  ⚠ Le shell sur ${origin} date d'avant une mise à jour: l'arrêter et relancer yarn dev.`)

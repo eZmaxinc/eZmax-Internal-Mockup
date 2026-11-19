@@ -1,7 +1,7 @@
-/** Message the prototype frame sends to the shell when [ is pressed inside it. */
-export const SIDEBAR_MESSAGE = 'ez-proto:toggle-sidebar'
+/** Message the mockup frame sends to the shell when [ is pressed inside it. */
+export const SIDEBAR_MESSAGE = 'ez-mockup:toggle-sidebar'
 /** Same for ], which toggles the notes panel on the right. */
-export const NOTES_MESSAGE = 'ez-proto:toggle-notes'
+export const NOTES_MESSAGE = 'ez-mockup:toggle-notes'
 
 /** True while typing: the [ key then belongs to the field, not to the shell. */
 export function isEditingTarget(target: EventTarget | null): boolean {

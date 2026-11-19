@@ -13,13 +13,13 @@ const COMMANDS = {
    check: 'Vérifie les règles (brand, structure, imports, types)',
    export: 'Exporte une version en HTML autonome',
    catalog: "Régénère le catalogue des composants (API, enregistrement, CATALOG.md)",
-   proposals: "Composants proposés dans les prototypes",
+   proposals: "Composants proposés dans les mockups",
    promote: "Fait entrer dans blueprint/ez un composant créé, rehaussé ou proposé dans une version (décision humaine)",
    tokens: 'Version des tokens partagés, nouvelle version, migration des noms',
 }
 
 const HELP = `
-mockup — maquettes ez-proto
+mockup — maquettes ez-mockup
 
 Usage: yarn mockup <commande> [arguments]
 

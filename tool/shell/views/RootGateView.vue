@@ -5,7 +5,7 @@
       <main class="gate__container">
          <div class="gate__brand">
             <span class="gate__brand-mark" aria-hidden="true">eZ</span>
-            <span class="gate__brand-name">Prototypes</span>
+            <span class="gate__brand-name">Mockups</span>
          </div>
 
          <section class="gate__card" :class="{ 'gate__card--notfound': isNotFound }">
@@ -46,7 +46,7 @@
                   La page demandée n’existe pas ou l’adresse est incomplète. Vérifiez le lien reçu par courriel ou dans GoodDay et réessayez.
                </template>
                <template v-else>
-                  L’annuaire complet n’est pas ouvert à la racine. Pour consulter un prototype, ouvrez directement le lien de partage qui vous a été transmis.
+                  L’annuaire complet n’est pas ouvert à la racine. Pour consulter un mockup, ouvrez directement le lien de partage qui vous a été transmis.
                </template>
             </p>
 
@@ -59,7 +59,7 @@
 
             <div v-if="isDev" class="gate__actions">
                <router-link to="/" class="gate__back-btn">
-                  Retour à l’index des prototypes
+                  Retour à l’index des mockups
                </router-link>
             </div>
          </section>
