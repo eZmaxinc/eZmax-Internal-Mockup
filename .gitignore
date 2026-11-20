@@ -24,7 +24,9 @@ dist-ssr
 *.sw?
 
 # ez-mockup
-exports
+# yarn mockup export: one HTML file beside its version. Ignored, so Tailwind does not scan it
+# and mockup check does not see a frozen version as edited.
+mockups/*/v*/*.html
 .env
 .env.*
 

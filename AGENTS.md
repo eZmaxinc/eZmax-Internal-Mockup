@@ -137,7 +137,7 @@ This file is the only place the rules live: `.cursor/rules`, `.cursor/commands` 
 **Export** (`/export-mockup`)
 1. Identify the task and version (default: the `chosen` version, else the latest).
 2. `yarn mockup check <task>`, fix every ✗, then `yarn mockup export <task> [version]`.
-3. Report the path, `exports/<task>-<version>.html`: one file, offline, with the scenario switcher.
+3. Report the path, `mockups/<task>/<version>/<task>-<version>.html`: one file, offline, with the scenario switcher.
 
 **Team decision**: the human retains a version themselves, in the shell: the star (☆) on the line of the version, in the left panel. The status of the task is changed there too, by a click on it. Don't do it for them, and don't spend a turn on it. `yarn mockup status <task> review|chosen|archived [vNNN]` is for the other statuses, or when the user asks you to; set `chosen` only when the user says which version is retained.
 
@@ -156,7 +156,7 @@ yarn mockup status <task> review|chosen|archived [vNNN]   # team decision, in me
 yarn mockup list [--status review] [--mine] [--all]
 yarn mockup diff <task> [v001] [v002]
 yarn mockup check [task]                                  # rules + types
-yarn mockup export <task> [version]                       # → exports/<task>-<version>.html
+yarn mockup export <task> [version]                       # → mockups/<task>/<version>/<task>-<version>.html
 yarn mockup proposals                                     # components proposed in mockups, most requested first
 yarn mockup catalog                                       # regenerate the catalog after a change in blueprint/ez (only when asked)
 yarn mockup tokens [bump patch|minor|major -m "…"]         # shared tokens: version, changelog (only when asked)

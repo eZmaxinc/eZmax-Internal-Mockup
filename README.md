@@ -53,7 +53,7 @@ Le tableau de bord liste les mockups, les patrons de référence et la galerie d
 | `yarn mockup diff <tâche> [avant] [après]` | Ce qui a changé entre deux versions |
 | `yarn mockup status <tâche> <statut> [version]` | `draft`, `review`, `chosen` (avec la version retenue) ou `archived`. Aussi d'un clic dans le shell: le statut de la tâche ouvre la liste des statuts, et l'étoile (☆) sur la ligne d'une version la retient |
 | `yarn mockup list` | Les tâches et leur état (`--status review`, `--mine`, `--all`) |
-| `yarn mockup export <tâche> [version]` | `exports/<tâche>-<version>.html`, un seul fichier, interactif |
+| `yarn mockup export <tâche> [version]` | `mockups/<tâche>/<version>/<tâche>-<version>.html`, un seul fichier, interactif |
 | `yarn mockup proposals` | Ce que les mockups ont créé, rehaussé ou proposé, et leurs signalements |
 | `yarn mockup promote <tâche> <version> <Nom>` | Fait entrer un composant d'une version dans `blueprint/ez` (un rehaussé remplace l'original) |
 | `yarn mockup catalog` | Régénère le catalogue après un changement dans `blueprint/ez` |

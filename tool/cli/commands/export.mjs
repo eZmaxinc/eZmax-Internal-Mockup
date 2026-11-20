@@ -1,15 +1,15 @@
 /**
  * Exports one mockup version as a single self-contained, interactive HTML file.
  *   yarn mockup export [tâche] [version] [--quiet]    (default version: the chosen one, else the latest)
- * Output: exports/<tâche>-<version>.html
+ * Output: mockups/<tâche>/<version>/<tâche>-<version>.html, beside the version it shows (gitignored)
  */
 import { build } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
+import { copyFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
-import { EXPORTS, MOCKUPS, ROOT, TOOL, aliases, fail, listVersions, parseArgs, readMeta, resolveTask } from '../lib.mjs'
+import { MOCKUPS, ROOT, TOOL, aliases, fail, listVersions, parseArgs, readMeta, resolveTask } from '../lib.mjs'
 
 const USAGE = 'Usage: yarn mockup export <tâche> [version]'
 
@@ -57,8 +57,8 @@ export async function run(argv) {
       },
    })
 
-   mkdirSync(EXPORTS, { recursive: true })
-   const output = join(EXPORTS, `${taskId}-${versionId}.html`)
+   // Named after the task too, so the file still says what it is once sent or downloaded
+   const output = join(MOCKUPS, taskId, versionId, `${taskId}-${versionId}.html`)
    copyFileSync(join(outDir, 'export.html'), output)
 
    if (!flags.quiet) console.log(`✓ Exporté: ${taskId}/${versionId}`)

@@ -12,7 +12,6 @@ export const ROOT = join(TOOL, '..')
 export const BLUEPRINT = join(ROOT, 'blueprint')
 export const MOCKUPS = join(ROOT, 'mockups')
 export const PATTERNS = join(BLUEPRINT, 'patterns')
-export const EXPORTS = join(ROOT, 'exports')
 export const TEMPLATES = join(TOOL, 'cli', 'templates')
 
 export const aliases = {
