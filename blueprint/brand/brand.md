@@ -48,6 +48,17 @@ Les valeurs vivent dans `blueprint/tokens/ez-tokens.css`, la source partagée av
 - Jamais une icône dessinée à la main ni un autre jeu (Lucide, Heroicons…).
 - Pas d'icône devant un titre de groupe (« À traiter », « Dates et statut »): le texte seul. Une icône sert une action, un statut, une entrée de navigation (les sections de la TOC).
 
+## Mouvement
+
+Des micro-animations, toujours, jamais un film d'action: le mouvement aide à suivre ce qui change, il ne se donne pas en spectacle.
+
+- Chaque changement d'état visible a la sienne: un menu qui s'ouvre, un survol, un chevron qui tourne, un panneau qui se déplie.
+- Court: 80 à 150 ms, la sortie plus rapide que l'entrée; `ease-out` en entrant.
+- Petit: un fondu, un glissement de 4 px depuis ce qui l'ouvre, un chevron qui tourne de 180°. Seulement l'opacité, le déplacement et les couleurs.
+- Jamais de rebond, de zoom depuis zéro, ni de séquence en cascade.
+- Toujours `@media (prefers-reduced-motion: reduce)`, qui coupe l'animation.
+- Référence: le menu de `ez-btn-dropdown` (mockup `bouton-menu-deroulant`).
+
 ## Do / don't
 
 - ✅ Un bouton primaire par zone; les autres en `secondary` ou `flat`.
